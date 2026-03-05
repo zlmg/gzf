@@ -3,7 +3,7 @@
     <h1 class="text-3xl font-bold mb-6 text-center">公租房房源列表</h1>
 
     <!-- 筛选条件 -->
-    <div class="bg-gray-50 p-4 rounded-lg shadow-sm mb-6">
+    <div class="bg-gray-50 p-4 rounded-lg shadow-sm mb-6 flex flex-col gap-2">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- 区域筛选 -->
         <div>
@@ -20,22 +20,6 @@
               :value="district"
             />
           </el-select>
-        </div>
-
-        <!-- 价格区间筛选 -->
-        <div>
-          <label class="block text-sm font-medium mb-1">价格区间</label>
-          <el-slider
-            v-model="priceRange"
-            range
-            :min="0"
-            :max="6000"
-            :step="100"
-          />
-          <div class="flex justify-between text-xs text-gray-500 mt-1">
-            <span>{{ priceRange[0] }}元</span>
-            <span>{{ priceRange[1] }}元</span>
-          </div>
         </div>
 
         <!-- 户型筛选 -->
@@ -61,7 +45,44 @@
           <el-select v-model="sortBy" placeholder="请选择排序方式">
             <el-option value="price_asc" label="价格从低到高" />
             <el-option value="price_desc" label="价格从高到低" />
+            <el-option value="kezu_asc" label="可租套数从少到多" />
+            <el-option value="kezu_desc" label="可租套数从多到少" />
           </el-select>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- 价格区间筛选 -->
+        <div>
+          <label class="block text-sm font-medium mb-1">价格区间</label>
+          <el-slider
+            v-model="priceRange"
+            range
+            :min="0"
+            :max="6000"
+            :step="100"
+            class="px-2"
+          />
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>{{ priceRange[0] }}元</span>
+            <span>{{ priceRange[1] }}元</span>
+          </div>
+        </div>
+
+
+        <!-- 可租套数筛选 -->
+        <div>
+          <label class="block text-sm font-medium mb-1">可租套数</label>
+          <el-slider
+            v-model="kezuCountRange"
+            range
+            :min="0"
+            :max="50"
+            :step="1"
+          />
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>{{ kezuCountRange[0] }}套</span>
+            <span>{{ kezuCountRange[1] }}套</span>
+          </div>
         </div>
       </div>
 
@@ -94,9 +115,12 @@
         <div class="p-4">
           <h3 class="text-lg font-semibold mb-2">{{ house.projectName }}</h3>
           <p class="text-gray-600 text-sm mb-2">{{ house.location }}</p>
-          <div class="flex justify-between text-sm text-gray-500 mb-3">
+          <div class="flex justify-between text-sm text-gray-500 mb-1">
             <span>区域：{{ house.layout }}</span>
             <span>户型：{{ house.roomType }}室</span>
+          </div>
+          <div class="text-sm mb-3" :class="house.kezuCount > 0 ? 'text-green-600' : 'text-gray-400'">
+            可租{{ house.kezuCount }}套
           </div>
           <div class="flex justify-between">
             <el-button
@@ -176,6 +200,7 @@ const filters = ref({
 });
 
 const priceRange = ref([0, 6000]);
+const kezuCountRange = ref([0, 50]);
 const sortBy = ref("");
 
 // 上拉加载
@@ -230,11 +255,20 @@ const filteredHouses = computed(() => {
     });
   }
 
+  // 可租套数筛选
+  result = result.filter((house) => {
+    return house.kezuCount >= kezuCountRange.value[0] && house.kezuCount <= kezuCountRange.value[1];
+  });
+
   // 排序
   if (sortBy.value === "price_asc") {
     result.sort((a, b) => a.minRent - b.minRent);
   } else if (sortBy.value === "price_desc") {
     result.sort((a, b) => b.minRent - a.minRent);
+  } else if (sortBy.value === "kezu_asc") {
+    result.sort((a, b) => a.kezuCount - b.kezuCount);
+  } else if (sortBy.value === "kezu_desc") {
+    result.sort((a, b) => b.kezuCount - a.kezuCount);
   }
 
   return result;
@@ -260,6 +294,7 @@ const resetFilters = () => {
     roomType: "",
   };
   priceRange.value = [0, 6000];
+  kezuCountRange.value = [0, 50];
   sortBy.value = "";
   currentPage.value = 1;
   loading.value = false;

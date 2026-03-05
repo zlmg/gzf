@@ -25,6 +25,9 @@
         </div>
         <div>
           <p class="text-gray-600"><strong>租金：</strong>{{ house.minRent }}-{{ house.maxRent }}元/月</p>
+          <p :class="house.kezuCount > 0 ? 'text-green-600' : 'text-gray-600'">
+            <strong>可租套数：</strong>{{ house.kezuCount }}套
+          </p>
           <p class="text-gray-600"><strong>经度：</strong>{{ house.longitude }}</p>
           <p class="text-gray-600"><strong>纬度：</strong>{{ house.latitude }}</p>
         </div>
