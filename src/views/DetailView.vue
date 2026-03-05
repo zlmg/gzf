@@ -62,12 +62,16 @@
       </div>
       
       <!-- 操作按钮 -->
-      <div class="flex justify-center mt-8">
+      <div class="flex justify-center mt-8 gap-4">
         <el-button type="primary" size="large" @click="addToCompare(house)" :disabled="isInCompare(house.projectNo)">
           {{ isInCompare(house.projectNo) ? '已加入对比' : '加入对比' }}
         </el-button>
-        <el-button size="large" @click="goToCompare" class="ml-4" :disabled="!isInCompare(house.projectNo)">
-          去对比
+        <el-button type="warning" size="large" @click="addToFavorite(house)">
+          <el-icon v-if="isFavorite(house.projectNo)"><Star /></el-icon>
+          {{ isFavorite(house.projectNo) ? '已收藏' : '收藏' }}
+        </el-button>
+        <el-button size="large" @click="goToFavorite">
+          我的收藏
         </el-button>
       </div>
     </div>
@@ -83,11 +87,14 @@
 import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useHouseStore } from '../stores/house'
+import { useFavoriteStore } from '../stores/favorite'
 import { ArrowLeft, House, Sunny, Star, InfoFilled } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
 const houseStore = useHouseStore()
+const favoriteStore = useFavoriteStore()
 
 const houseId = computed(() => route.params.id as string)
 
@@ -103,8 +110,26 @@ const isInCompare = (id: string) => {
   return houseStore.isInCompare(id)
 }
 
-const goToCompare = () => {
-  router.push('/compare')
+const addToFavorite = (house: any) => {
+  const success = favoriteStore.addFavorite(
+    house.projectNo,
+    house.projectName,
+    house.location,
+    getImageUrl(house.thumbnail.split(',')[0])
+  )
+  if (success) {
+    ElMessage.success('收藏成功')
+  } else {
+    ElMessage.warning('已收藏')
+  }
+}
+
+const isFavorite = (id: string) => {
+  return favoriteStore.isFavorite(id)
+}
+
+const goToFavorite = () => {
+  router.push('/favorite')
 }
 
 const getImageUrl = (path: string) => {
@@ -115,6 +140,7 @@ onMounted(() => {
   if (houseStore.houses.length === 0) {
     houseStore.loadHouses()
   }
+  favoriteStore.loadFavorites()
 })
 </script>
 

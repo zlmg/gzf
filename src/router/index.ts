@@ -18,6 +18,11 @@ const router = createRouter({
       path: '/compare',
       name: 'compare',
       component: () => import('../views/CompareView.vue')
+    },
+    {
+      path: '/favorite',
+      name: 'favorite',
+      component: () => import('../views/FavoriteView.vue')
     }
   ]
 })
