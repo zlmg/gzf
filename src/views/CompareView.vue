@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElButton, ElEmpty, ElTable, ElTableColumn, ElTag } from 'element-plus'
+import { ElButton, ElEmpty, ElTag } from 'element-plus'
 import { useCompareStore } from '@/stores/compare'
 import { formatPriceRange, formatRoomType, formatOpenQueue } from '@/utils/format'
 

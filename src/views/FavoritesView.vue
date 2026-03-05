@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElButton, ElEmpty } from 'element-plus'
-import { useFavoriteStore, type FavoriteItem } from '@/stores/favorite'
+import { useFavoriteStore } from '@/stores/favorite'
 import { formatPriceRange, formatRoomType, formatOpenQueue } from '@/utils/format'
 
 const router = useRouter()

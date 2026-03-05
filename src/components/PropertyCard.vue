@@ -18,6 +18,7 @@ const mainImage = computed(() => {
   if (!props.property.thumbnail) return ''
   const images = props.property.thumbnail.split(',')
   const path = images[0]
+  if (!path || !path.trim()) return ''
   if (path.startsWith('http')) return path
   return `${IMAGE_BASE_URL}${path}`
 })

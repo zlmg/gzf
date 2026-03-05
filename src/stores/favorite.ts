@@ -138,6 +138,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
     if (!thumbnail) return ''
     const images = thumbnail.split(',')
     const path = images[0]
+    if (!path) return ''
     if (path.startsWith('http')) return path
     return `${IMAGE_BASE_URL}${path}`
   }

@@ -1,7 +1,6 @@
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { usePropertyStore } from '@/stores/property'
 import { useFilterStore } from '@/stores/filter'
-import type { Property } from '@/types/property'
 
 export const useProperty = () => {
   const propertyStore = usePropertyStore()

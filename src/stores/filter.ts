@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import type { Property, FilterState, SortField, SortOrder } from '@/types/property'
 
 const STORAGE_KEY = 'gzf-filters'

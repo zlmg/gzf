@@ -3,7 +3,8 @@
     "allow": [
       "Bash(pnpm add:*)",
       "Bash(npx tailwindcss init:*)",
-      "Bash(pnpm exec tailwindcss init:*)"
+      "Bash(pnpm exec tailwindcss init:*)",
+      "Bash(pnpm run build)"
     ]
   }
 }
