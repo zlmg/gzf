@@ -1,6 +1,6 @@
 <template>
   <div class="w-full max-w-[1200px] mx-auto min-h-screen p-4">
-    <h1 class="text-3xl font-bold mb-6 text-center">宝山公租房房源列表</h1>
+    <h1 class="text-3xl font-bold mb-6 text-center">宝山公租房房源</h1>
 
     <!-- 筛选条件 -->
     <div class="bg-gray-50 p-4 rounded-lg shadow-sm mb-6 flex flex-col gap-2">
