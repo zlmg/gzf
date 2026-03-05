@@ -125,18 +125,17 @@
         </div>
       </div>
     </div>
-
-    <!-- 分页 -->
-    <div class="mt-8 flex justify-center">
-      <el-pagination
-        v-model:current-page="currentPage"
-        v-model:page-size="pageSize"
-        :page-sizes="[12, 24, 36]"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="filteredHouses.length"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+    
+    <!-- 上拉加载状态 -->
+    <div class="py-6 text-center">
+      <el-skeleton v-if="loading" :rows="1" animated />
+      <div v-else-if="error" class="text-red-500">
+        <p>加载失败，请重试</p>
+        <el-button type="primary" size="small" @click="loadMore">重试</el-button>
+      </div>
+      <div v-else-if="finished" class="text-gray-500">
+        已显示全部内容
+      </div>
     </div>
 
     <!-- 操作按钮组 -->
@@ -159,7 +158,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useHouseStore } from "../stores/house";
 import { useFavoriteStore } from "../stores/favorite";
@@ -179,9 +178,12 @@ const filters = ref({
 const priceRange = ref([0, 6000]);
 const sortBy = ref("");
 
-// 分页
+// 上拉加载
 const currentPage = ref(1);
-const pageSize = ref(12);
+const pageSize = ref(20);
+const loading = ref(false);
+const finished = ref(false);
+const error = ref(false);
 
 // 计算属性
 const houses = computed(() => houseStore.houses);
@@ -238,16 +240,18 @@ const filteredHouses = computed(() => {
   return result;
 });
 
-// 分页后的房源
+// 上拉加载后的房源
 const paginatedHouses = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value;
-  const end = start + pageSize.value;
-  return filteredHouses.value.slice(start, end);
+  const end = currentPage.value * pageSize.value;
+  return filteredHouses.value.slice(0, end);
 });
 
 // 方法
 const applyFilters = () => {
   currentPage.value = 1;
+  loading.value = false;
+  finished.value = false;
+  error.value = false;
 };
 
 const resetFilters = () => {
@@ -258,16 +262,12 @@ const resetFilters = () => {
   priceRange.value = [0, 6000];
   sortBy.value = "";
   currentPage.value = 1;
+  loading.value = false;
+  finished.value = false;
+  error.value = false;
 };
 
-const handleSizeChange = (size: number) => {
-  pageSize.value = size;
-  currentPage.value = 1;
-};
 
-const handleCurrentChange = (current: number) => {
-  currentPage.value = current;
-};
 
 const viewDetail = (id: string) => {
   router.push(`/detail/${id}`);
@@ -311,10 +311,55 @@ const goToFavorite = () => {
   router.push("/favorite");
 };
 
-// 初始化
+// 加载更多
+const loadMore = () => {
+  if (loading.value) return;
+  
+  loading.value = true;
+  
+  // 模拟网络请求延迟
+  setTimeout(() => {
+    try {
+      currentPage.value++;
+      
+      // 检查是否已加载全部数据
+      const start = (currentPage.value - 1) * pageSize.value;
+      if (start >= filteredHouses.value.length) {
+        finished.value = true;
+      }
+      
+      error.value = false;
+    } catch (err) {
+      error.value = true;
+    } finally {
+      loading.value = false;
+    }
+  }, 1000);
+};
+
+// 滚动事件处理
+const handleScroll = () => {
+  if (loading.value || finished.value) return;
+  
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+  const clientHeight = document.documentElement.clientHeight || window.innerHeight;
+  
+  // 当滚动到距离底部 100px 时触发加载
+  if (scrollTop + clientHeight >= scrollHeight - 100) {
+    loadMore();
+  }
+};
+
+// 初始化和清理
 onMounted(() => {
   houseStore.loadHouses();
   favoriteStore.loadFavorites();
+  window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
 });
 </script>
 
