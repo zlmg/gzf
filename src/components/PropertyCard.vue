@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 import type { Property } from '@/types/property'
 import { formatPriceRange, formatRoomType, formatOpenQueue, truncateText } from '@/utils/format'
 import { useCompareStore } from '@/stores/compare'
+import FavoriteButton from './FavoriteButton.vue'
 
 const props = defineProps<{
   property: Property
@@ -56,6 +57,14 @@ const handleToggleCompare = (e: Event) => {
         </svg>
       </div>
       <div class="absolute top-2 right-2 flex gap-2">
+        <button
+          @click.stop.prevent
+          class="p-1.5 bg-white/80 backdrop-blur-sm rounded-full hover:bg-white transition-colors shadow-sm"
+        >
+          <FavoriteButton :property="property" size="small" />
+        </button>
+      </div>
+      <div class="absolute top-2 left-2 flex gap-2">
         <span
           v-if="isAvailable"
           class="px-2 py-1 text-xs font-medium bg-green-500 text-white rounded"

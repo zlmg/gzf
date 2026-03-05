@@ -5,3 +5,4 @@ export const pinia = createPinia()
 export * from './property'
 export * from './filter'
 export * from './compare'
+export * from './favorite'

@@ -17,6 +17,11 @@ const router = createRouter({
       path: '/compare',
       name: 'compare',
       component: () => import('@/views/CompareView.vue')
+    },
+    {
+      path: '/favorites',
+      name: 'favorites',
+      component: () => import('@/views/FavoritesView.vue')
     }
   ],
   scrollBehavior(to, from, savedPosition) {

@@ -4,7 +4,9 @@ import { useRoute, useRouter, RouterLink } from 'vue-router'
 import { ElButton, ElSkeleton, ElTag, ElDescriptions, ElDescriptionsItem } from 'element-plus'
 import { usePropertyStore } from '@/stores/property'
 import { useCompareStore } from '@/stores/compare'
+import { useFavoriteStore } from '@/stores/favorite'
 import ImageGallery from '@/components/ImageGallery.vue'
+import FavoriteButton from '@/components/FavoriteButton.vue'
 import { formatPriceRange, formatRoomType, formatOpenQueue } from '@/utils/format'
 import type { Property } from '@/types/property'
 
@@ -12,6 +14,7 @@ const route = useRoute()
 const router = useRouter()
 const propertyStore = usePropertyStore()
 const compareStore = useCompareStore()
+const favoriteStore = useFavoriteStore()
 
 const property = ref<Property | null>(null)
 const loading = ref(true)
@@ -155,7 +158,13 @@ onMounted(async () => {
           </ElDescriptions>
 
           <!-- Action buttons -->
-          <div class="flex items-center gap-4">
+          <div class="flex flex-wrap items-center gap-4">
+            <FavoriteButton
+              v-if="property"
+              :property="property"
+              size="large"
+              :show-text="true"
+            />
             <ElButton
               :type="isInCompare ? 'primary' : 'default'"
               size="large"
@@ -170,6 +179,11 @@ onMounted(async () => {
             <RouterLink to="/compare">
               <ElButton v-if="compareStore.compareList.length > 0" type="primary" size="large">
                 查看对比 ({{ compareStore.compareList.length }})
+              </ElButton>
+            </RouterLink>
+            <RouterLink to="/favorites">
+              <ElButton v-if="favoriteStore.count > 0" type="danger" plain size="large">
+                查看收藏 ({{ favoriteStore.count }})
               </ElButton>
             </RouterLink>
           </div>
