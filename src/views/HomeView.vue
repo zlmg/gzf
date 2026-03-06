@@ -45,7 +45,7 @@ const setupObserver = () => {
 
   observer = new IntersectionObserver(
     (entries) => {
-      if (entries[0].isIntersecting && hasMore.value && !isLoadingMore.value) {
+      if (entries[0] && entries[0].isIntersecting && hasMore.value && !isLoadingMore.value) {
         loadMore()
       }
     },
@@ -110,7 +110,7 @@ watch(loadMoreTrigger, (el) => {
           placeholder="排序字段"
           clearable
           size="small"
-          class="flex-1 min-w-0 max-w-[140px]"
+          class="flex-1 min-w-0 max-w-[120px]"
           @change="handleSortChange"
         >
           <ElOption label="价格" value="price" />
