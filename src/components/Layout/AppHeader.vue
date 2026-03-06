@@ -17,7 +17,7 @@ const closeMobileMenu = () => {
 
 <template>
   <header class="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
-    <div class="container mx-auto px-4 py-3 md:py-4">
+    <div class="container-app py-3 md:py-4">
       <div class="flex items-center justify-between">
         <!-- Logo and Title -->
         <RouterLink

@@ -2,7 +2,7 @@
 
 <template>
   <footer class="bg-gray-100 border-t border-gray-200 mt-auto">
-    <div class="container mx-auto px-4 py-6">
+    <div class="container-app py-6">
       <div
         class="flex flex-col md:flex-row items-center justify-between text-gray-600 text-sm"
       >

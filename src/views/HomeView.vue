@@ -90,7 +90,7 @@ watch(loadMoreTrigger, (el) => {
 
 <template>
   <div class="min-h-screen bg-gray-50 overflow-x-hidden">
-    <div class="container mx-auto px-4 py-6 max-w-full">
+    <div class="container-app py-6">
       <!-- Page header -->
       <div class="mb-6">
         <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">公租房房源列表</h1>

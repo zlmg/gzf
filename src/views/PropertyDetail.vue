@@ -72,7 +72,7 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="container mx-auto px-4 py-6">
+    <div class="container-app py-6">
       <!-- Back button -->
       <div class="mb-6">
         <button

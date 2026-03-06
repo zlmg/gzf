@@ -4,7 +4,8 @@
       "Bash(pnpm add:*)",
       "Bash(npx tailwindcss init:*)",
       "Bash(pnpm exec tailwindcss init:*)",
-      "Bash(pnpm run build)"
+      "Bash(pnpm run build)",
+      "mcp__ide__getDiagnostics"
     ]
   }
 }

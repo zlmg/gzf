@@ -37,7 +37,7 @@ const formatDate = (timestamp: number): string => {
 
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="container mx-auto px-4 py-6">
+    <div class="container-app py-6">
       <!-- Page header -->
       <div class="flex items-center justify-between mb-6">
         <div>
