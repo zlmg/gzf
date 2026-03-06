@@ -89,12 +89,12 @@ watch(loadMoreTrigger, (el) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <div class="container mx-auto px-4 py-6">
+  <div class="min-h-screen bg-gray-50 overflow-x-hidden">
+    <div class="container mx-auto px-4 py-6 max-w-full">
       <!-- Page header -->
       <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">公租房房源列表</h1>
-        <p class="text-gray-600">
+        <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">公租房房源列表</h1>
+        <p class="text-gray-600 text-sm md:text-base">
           共找到 <span class="font-semibold text-blue-600">{{ total }}</span> 套房源
         </p>
       </div>
@@ -103,32 +103,30 @@ watch(loadMoreTrigger, (el) => {
       <PropertyFilter />
 
       <!-- Sort and view controls -->
-      <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center gap-3">
-          <span class="text-sm text-gray-700 font-medium">排序:</span>
-          <ElSelect
-            v-model="sortField"
-            placeholder="选择排序字段"
-            clearable
-            size="small"
-            class="w-40"
-            @change="handleSortChange"
-          >
-            <ElOption label="价格" value="price" />
-            <ElOption label="可租数量" value="kezuCount" />
-          </ElSelect>
-          <ElSelect
-            v-model="sortOrder"
-            placeholder="选择方向"
-            :disabled="!sortField"
-            size="small"
-            class="w-32"
-            @change="handleSortChange"
-          >
-            <ElOption label="升序 ↑" value="asc" />
-            <ElOption label="降序 ↓" value="desc" />
-          </ElSelect>
-        </div>
+      <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-4">
+        <span class="text-sm text-gray-700 font-medium shrink-0">排序:</span>
+        <ElSelect
+          v-model="sortField"
+          placeholder="排序字段"
+          clearable
+          size="small"
+          class="flex-1 min-w-0 max-w-[140px]"
+          @change="handleSortChange"
+        >
+          <ElOption label="价格" value="price" />
+          <ElOption label="可租数量" value="kezuCount" />
+        </ElSelect>
+        <ElSelect
+          v-model="sortOrder"
+          placeholder="方向"
+          :disabled="!sortField"
+          size="small"
+          class="flex-1 min-w-0 max-w-[120px]"
+          @change="handleSortChange"
+        >
+          <ElOption label="升序 ↑" value="asc" />
+          <ElOption label="降序 ↓" value="desc" />
+        </ElSelect>
       </div>
 
       <!-- Loading state -->

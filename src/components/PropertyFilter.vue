@@ -57,15 +57,15 @@ watch(() => localFilters.value.keyword, (newVal) => {
 </script>
 
 <template>
-  <div class="bg-white rounded-xl shadow-md p-4 mb-6">
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-lg font-semibold text-gray-800">筛选条件</h2>
+  <div class="bg-white rounded-xl shadow-md p-3 md:p-4 mb-6 overflow-x-hidden">
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+      <h2 class="text-base md:text-lg font-semibold text-gray-700">筛选条件</h2>
       <div class="flex items-center gap-2">
         <ElButton size="small" @click="resetFilters">重置</ElButton>
-        <ElButton type="primary" size="small" @click="applyFilters">应用筛选</ElButton>
+        <ElButton type="primary" size="small" @click="applyFilters">应用</ElButton>
         <button
           @click="isExpanded = !isExpanded"
-          class="text-gray-500 hover:text-gray-700 transition-colors ml-2"
+          class="text-gray-500 hover:text-gray-700 transition-colors p-1"
         >
           <svg
             class="w-5 h-5 transition-transform"
@@ -81,10 +81,10 @@ watch(() => localFilters.value.keyword, (newVal) => {
     </div>
 
     <!-- Always visible filters -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-4">
       <!-- Keyword search -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">关键词搜索</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1">关键词</label>
         <ElInput
           v-model="localFilters.keyword"
           placeholder="项目名称或地址"
@@ -95,7 +95,7 @@ watch(() => localFilters.value.keyword, (newVal) => {
       <!-- Price range -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">
-          价格范围: ¥{{ localFilters.priceRange[0] }} - ¥{{ localFilters.priceRange[1] }}
+          价格: ¥{{ localFilters.priceRange[0] }} - ¥{{ localFilters.priceRange[1] }}
         </label>
         <ElSlider
           v-model="localFilters.priceRange"
@@ -107,12 +107,12 @@ watch(() => localFilters.value.keyword, (newVal) => {
       </div>
 
       <!-- Available only -->
-      <div class="flex items-center">
+      <div class="flex items-center pt-1">
         <ElCheckbox
           v-model="localFilters.onlyAvailable"
           @change="() => filterStore.updateFilters({ onlyAvailable: localFilters.onlyAvailable })"
         >
-          仅显示可租房源
+          仅显示可租
         </ElCheckbox>
       </div>
     </div>
