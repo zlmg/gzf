@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useProperty } from '@/composables/useProperty'
 import { useFilterStore } from '@/stores/filter'
-import { ElPagination, ElSelect, ElOption, ElEmpty, ElSkeleton } from 'element-plus'
+import { ElSelect, ElOption, ElEmpty, ElSkeleton } from 'element-plus'
 import PropertyCard from '@/components/PropertyCard.vue'
 import PropertyFilter from '@/components/PropertyFilter.vue'
 import CompareBar from '@/components/CompareBar.vue'
@@ -11,44 +11,80 @@ import type { SortField, SortOrder } from '@/types/property'
 const { filteredProperties, loading, error, fetchProperties } = useProperty()
 const filterStore = useFilterStore()
 
-const currentPage = ref(1)
-const pageSize = ref(12)
+const pageSize = 12
+const displayedCount = ref(pageSize)
+const isLoadingMore = ref(false)
+const loadMoreTrigger = ref<HTMLElement | null>(null)
+let observer: IntersectionObserver | null = null
 
 const sortField = ref<SortField>('')
 const sortOrder = ref<SortOrder>('asc')
 
-const paginatedProperties = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value
-  const end = start + pageSize.value
-  return filteredProperties.value.slice(start, end)
+const displayedProperties = computed(() => {
+  return filteredProperties.value.slice(0, displayedCount.value)
 })
 
 const total = computed(() => filteredProperties.value.length)
 
-const handlePageChange = (page: number) => {
-  currentPage.value = page
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+const hasMore = computed(() => displayedCount.value < total.value)
+
+const loadMore = () => {
+  if (isLoadingMore.value || !hasMore.value) return
+  isLoadingMore.value = true
+  // 模拟加载延迟，提升用户体验
+  setTimeout(() => {
+    displayedCount.value += pageSize
+    isLoadingMore.value = false
+  }, 300)
 }
 
-const handleSizeChange = (size: number) => {
-  pageSize.value = size
-  currentPage.value = 1
+const setupObserver = () => {
+  if (observer) {
+    observer.disconnect()
+  }
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting && hasMore.value && !isLoadingMore.value) {
+        loadMore()
+      }
+    },
+    { threshold: 0.1 }
+  )
+
+  if (loadMoreTrigger.value) {
+    observer.observe(loadMoreTrigger.value)
+  }
 }
 
 const handleSortChange = () => {
   filterStore.setSort(sortField.value, sortOrder.value)
 }
 
-// Reset to first page when filters change
+// Reset when filters change
 watch(
   () => filteredProperties.value.length,
   () => {
-    currentPage.value = 1
+    displayedCount.value = pageSize
   }
 )
 
 onMounted(() => {
   fetchProperties()
+  setupObserver()
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+  }
+})
+
+// Re-observe when trigger element changes
+watch(loadMoreTrigger, (el) => {
+  if (el && observer) {
+    observer.observe(el)
+  }
 })
 </script>
 
@@ -68,14 +104,14 @@ onMounted(() => {
 
       <!-- Sort and view controls -->
       <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center gap-4">
-          <span class="text-sm text-gray-600">排序:</span>
+        <div class="flex items-center gap-3">
+          <span class="text-sm text-gray-700 font-medium">排序:</span>
           <ElSelect
             v-model="sortField"
             placeholder="选择排序字段"
             clearable
-            size="default"
-            class="w-36"
+            size="small"
+            class="w-40"
             @change="handleSortChange"
           >
             <ElOption label="价格" value="price" />
@@ -83,14 +119,14 @@ onMounted(() => {
           </ElSelect>
           <ElSelect
             v-model="sortOrder"
-            placeholder="排序方向"
+            placeholder="选择方向"
             :disabled="!sortField"
-            size="default"
-            class="w-28"
+            size="small"
+            class="w-32"
             @change="handleSortChange"
           >
-            <ElOption label="升序" value="asc" />
-            <ElOption label="降序" value="desc" />
+            <ElOption label="升序 ↑" value="asc" />
+            <ElOption label="降序 ↓" value="desc" />
           </ElSelect>
         </div>
       </div>
@@ -123,25 +159,34 @@ onMounted(() => {
       >
         <TransitionGroup name="list">
           <PropertyCard
-            v-for="property in paginatedProperties"
+            v-for="property in displayedProperties"
             :key="property.projectNo"
             :property="property"
           />
         </TransitionGroup>
       </div>
 
-      <!-- Pagination -->
-      <div v-if="total > pageSize" class="flex justify-center mt-8">
-        <ElPagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[12, 24, 36, 48]"
-          :total="total"
-          layout="total, sizes, prev, pager, next, jumper"
-          background
-          @current-change="handlePageChange"
-          @size-change="handleSizeChange"
-        />
+      <!-- Load more trigger -->
+      <div
+        v-if="hasMore && !loading"
+        ref="loadMoreTrigger"
+        class="flex justify-center items-center py-8"
+      >
+        <div v-if="isLoadingMore" class="flex items-center gap-2 text-gray-500">
+          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>加载中...</span>
+        </div>
+        <div v-else class="text-gray-400 text-sm">
+          下拉加载更多
+        </div>
+      </div>
+
+      <!-- End of list -->
+      <div v-if="!hasMore && total > 0 && !loading" class="text-center py-8 text-gray-400 text-sm">
+        已加载全部房源
       </div>
     </div>
 
