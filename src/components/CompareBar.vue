@@ -25,8 +25,41 @@ const clearAll = () => {
       v-if="isVisible"
       class="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.15)] z-50"
     >
-      <div class="container mx-auto px-4 py-3">
-        <div class="flex items-center justify-between">
+      <div class="container-app py-3">
+        <!-- Mobile layout -->
+        <div class="flex md:hidden items-center justify-between gap-2">
+          <div class="flex items-center gap-2 min-w-0">
+            <div class="flex -space-x-1">
+              <div
+                v-for="(item, index) in compareStore.compareList.slice(0, 4)"
+                :key="item.projectNo"
+                class="w-8 h-8 rounded-full border-2 border-white bg-gray-100 overflow-hidden flex-shrink-0"
+                :style="{ zIndex: 4 - index }"
+              >
+                <img
+                  v-if="item.images[0]"
+                  :src="item.images[0]"
+                  :alt="item.projectName"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            <span class="text-sm text-gray-700 truncate">
+              已选 <span class="font-semibold text-blue-600">{{ count }}</span> 个
+            </span>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <ElButton size="small" @click="clearAll">
+              清空
+            </ElButton>
+            <ElButton type="primary" size="small" @click="goToCompare">
+              对比
+            </ElButton>
+          </div>
+        </div>
+
+        <!-- Desktop layout -->
+        <div class="hidden md:flex items-center justify-between">
           <div class="flex items-center gap-4">
             <div class="flex items-center gap-2">
               <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
