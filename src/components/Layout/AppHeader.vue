@@ -16,7 +16,7 @@ const closeMobileMenu = () => {
 </script>
 
 <template>
-  <header class="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
     <div class="container-app py-3 md:py-4">
       <div class="flex items-center justify-between">
         <!-- Logo and Title -->
@@ -36,9 +36,12 @@ const closeMobileMenu = () => {
         <nav class="hidden md:flex items-center space-x-4">
           <RouterLink
             to="/"
-            class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors"
+            class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
             active-class="bg-white/20"
           >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            </svg>
             房源列表
           </RouterLink>
           <RouterLink
@@ -60,9 +63,12 @@ const closeMobileMenu = () => {
           </RouterLink>
           <RouterLink
             to="/compare"
-            class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors"
+            class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
             active-class="bg-white/20"
           >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
             房源对比
           </RouterLink>
         </nav>
@@ -95,10 +101,13 @@ const closeMobileMenu = () => {
           <div class="flex flex-col space-y-1">
             <RouterLink
               to="/"
-              class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
+              class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
               active-class="bg-white/20"
               @click="closeMobileMenu"
             >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+              </svg>
               房源列表
             </RouterLink>
             <RouterLink
@@ -121,10 +130,13 @@ const closeMobileMenu = () => {
             </RouterLink>
             <RouterLink
               to="/compare"
-              class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
+              class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
               active-class="bg-white/20"
               @click="closeMobileMenu"
             >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
               房源对比
             </RouterLink>
           </div>

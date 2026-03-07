@@ -8,7 +8,7 @@ import FavoriteNotification from '@/components/FavoriteNotification.vue'
 <template>
   <div class="min-h-screen flex flex-col bg-gray-50">
     <AppHeader />
-    <main class="flex-1">
+    <main class="flex-1 pt-16 md:pt-20">
       <RouterView v-slot="{ Component }">
         <Transition name="fade" mode="out-in">
           <component :is="Component" />
