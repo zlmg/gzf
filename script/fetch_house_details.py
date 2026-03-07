@@ -63,6 +63,23 @@ UPDATE_FIELDS = {
     'supply', 'roomTypeCount', 'district', 'openingDate', 'totalArea'
 }
 
+# 中文数字到阿拉伯数字的映射
+CHINESE_TO_ARABIC = {
+    '一': '1',
+    '二': '2',
+    '三': '3',
+    '四': '4',
+    '五': '5',
+    '六': '6',
+    '七': '7',
+    '八': '8',
+    '九': '9',
+    '十': '10'
+}
+
+# 房型详情API地址
+ROOM_TYPE_API_URL = 'https://www.bsgzf.com.cn/api/oms/projects/getRoomTypeByProject'
+
 def load_json_file():
     """加载JSON文件"""
     try:
@@ -114,6 +131,52 @@ def generate_headers():
     }
     
     return headers
+
+def fetch_room_type_details(project_name, room_type):
+    """通过API获取房型详情数据"""
+    try:
+        # 生成请求头
+        headers = generate_headers()
+        
+        # 使用FormData格式提交请求
+        form_data = {
+            'projectName': project_name,
+            'roomType': room_type
+        }
+        response = requests.post(ROOM_TYPE_API_URL, data=form_data, headers=headers, timeout=30)
+        
+        # 检查响应状态码
+        response.raise_for_status()
+        
+        # 解析响应数据
+        api_response = response.json()
+        
+        # 检查API返回状态
+        if api_response.get('code') != 0:
+            logging.error(f"房型API返回错误 (projectName: {project_name}, roomType: {room_type}): {api_response.get('message', '未知错误')}")
+            return None
+        
+        # 提取data字段中的详细数据
+        detail_data = api_response.get('data')
+        if not detail_data:
+            logging.error(f"房型API返回数据为空 (projectName: {project_name}, roomType: {room_type})")
+            return None
+        
+        logging.info(f"成功获取房型详情数据 (projectName: {project_name}, roomType: {room_type})")
+        return detail_data
+    except requests.exceptions.RequestException as e:
+        logging.error(f"请求房型API失败 (projectName: {project_name}, roomType: {room_type}): {str(e)}")
+        return None
+    except json.JSONDecodeError as e:
+        logging.error(f"解析房型API响应失败 (projectName: {project_name}, roomType: {room_type}): {str(e)}")
+        return None
+    except Exception as e:
+        logging.error(f"处理房型API响应失败 (projectName: {project_name}, roomType: {room_type}): {str(e)}")
+        return None
+
+def convert_chinese_to_arabic(chinese_num):
+    """将中文数字转换为阿拉伯数字"""
+    return CHINESE_TO_ARABIC.get(chinese_num, chinese_num)
 
 def fetch_house_detail(project_no):
     """通过API获取房源详细数据"""
@@ -242,6 +305,43 @@ def update_house_details():
                 
                 logging.info(f"成功更新房源 {project_no} 的 {updated_fields} 个字段")
                 success_count += 1
+                
+                # 获取房型详情数据
+                project_name = house.get('projectName')
+                room_type_infos = house.get('roomTypeInfos')
+                
+                if project_name and room_type_infos:
+                    # 处理roomTypeInfos，可能包含多个房型，如"一,二"
+                    room_types = [rt.strip() for rt in room_type_infos.split(',')]
+                    room_type_details = []
+                    
+                    for room_type_chinese in room_types:
+                        # 将中文数字转换为阿拉伯数字
+                        room_type_arabic = convert_chinese_to_arabic(room_type_chinese)
+                        logging.info(f"获取房型详情 (projectName: {project_name}, roomType: {room_type_arabic})")
+                        
+                        # 获取房型详情数据
+                        room_detail = fetch_room_type_details(project_name, room_type_arabic)
+                        if room_detail:
+                            room_type_details.extend(room_detail)
+                        
+                        # 添加20秒固定间隔 + 0-10秒随机间隔
+                        fixed_interval = 20
+                        random.seed(datetime.now().timestamp())
+                        random_interval = random.randint(0, 10)
+                        total_interval = fixed_interval + random_interval
+                        
+                        logging.info(f"等待{total_interval}秒后处理下一个房型... (固定20秒 + 随机{random_interval}秒)")
+                        time.sleep(total_interval)
+                    
+                    # 存储房型详情数据
+                    if room_type_details:
+                        house['roomTypeDetails'] = room_type_details
+                        logging.info(f"成功存储 {len(room_type_details)} 条房型详情数据")
+                    else:
+                        logging.warning(f"未获取到房型详情数据 (projectNo: {project_no})")
+                else:
+                    logging.warning(f"缺少projectName或roomTypeInfos (projectNo: {project_no})")
                 
                 # 立即保存更新后的数据（原子写入）
                 save_json_file_atomic(data, project_no)
