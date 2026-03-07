@@ -65,9 +65,12 @@ export const useFilterStore = defineStore('filter', () => {
       result = result.filter(p => filters.value.layout.includes(p.layout))
     }
 
-    // Filter by room type (户型)
+    // Filter by room type (户型) - 支持逗号分隔的多个户型
     if (filters.value.roomType.length > 0) {
-      result = result.filter(p => filters.value.roomType.includes(p.roomType))
+      result = result.filter(p => {
+        const types = p.roomType.split(',')
+        return filters.value.roomType.some(t => types.includes(t))
+      })
     }
 
     // Filter by price range

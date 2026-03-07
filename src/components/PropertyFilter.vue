@@ -17,6 +17,9 @@ const availableStatusOptions: { label: string; value: AvailableStatus }[] = [
   { label: '无房', value: 'unavailable' }
 ]
 
+// 固定的户型选项
+const roomTypeOptions = ['一', '二', '三', '四', '五']
+
 const propertyStore = usePropertyStore()
 const filterStore = useFilterStore()
 
@@ -32,7 +35,16 @@ const localFilters = ref({
 const isExpanded = ref(false)
 
 const layouts = computed(() => propertyStore.getUniqueLayouts)
-const roomTypes = computed(() => propertyStore.getUniqueRoomTypes)
+
+const toggleRoomType = (type: string) => {
+  const index = localFilters.value.roomType.indexOf(type)
+  if (index > -1) {
+    localFilters.value.roomType.splice(index, 1)
+  } else {
+    localFilters.value.roomType.push(type)
+  }
+  filterStore.updateFilters({ roomType: [...localFilters.value.roomType] })
+}
 
 const maxPrice = computed(() => {
   const prices = propertyStore.properties.map(p => p.maxRent || p.minRent || 0)
@@ -96,8 +108,8 @@ watch(() => localFilters.value.keyword, (newVal) => {
       </div>
     </div>
 
-    <!-- Always visible filters -->
-    <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-10">
+    <!-- First row: 关键词、区域、户型 -->
+    <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-6">
       <!-- Keyword search -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">关键词</label>
@@ -108,21 +120,52 @@ watch(() => localFilters.value.keyword, (newVal) => {
         />
       </div>
 
-      <!-- Price range -->
+      <!-- Area filter -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          价格: ¥{{ localFilters.priceRange[0] }} - ¥{{ localFilters.priceRange[1] }}
-        </label>
-        <ElSlider
-          class="px-2"
-          v-model="localFilters.priceRange"
-          range
-          :max="maxPrice"
-          :step="100"
-          @change="() => filterStore.updateFilters({ priceRange: localFilters.priceRange })"
-        />
+        <label class="block text-sm font-medium text-gray-700 mb-1">区域</label>
+        <ElSelect
+          v-model="localFilters.layout"
+          multiple
+          collapse-tags-tooltip
+          placeholder="选择区域"
+          class="w-full"
+          @change="() => filterStore.updateFilters({ layout: localFilters.layout })"
+        >
+          <ElOption
+            v-for="layout in layouts"
+            :key="layout"
+            :label="layout"
+            :value="layout"
+          />
+        </ElSelect>
       </div>
 
+      <!-- Room type filter -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">户型</label>
+        <div class="flex items-center gap-1">
+          <span
+            class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
+            :class="localFilters.roomType.length === 0 ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
+            @click="() => { localFilters.roomType = []; filterStore.updateFilters({ roomType: [] }) }"
+          >
+            全部
+          </span>
+          <span
+            v-for="type in roomTypeOptions"
+            :key="type"
+            class="text-sm cursor-pointer px-3 py-0.5 rounded transition-colors"
+            :class="localFilters.roomType.includes(type) ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
+            @click="toggleRoomType(type)"
+          >
+            {{ type }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second row: 可租状态、开放状态、价格 -->
+    <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-6 mt-4">
       <!-- Available status filter -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">可租状态</label>
@@ -154,51 +197,26 @@ watch(() => localFilters.value.keyword, (newVal) => {
           </span>
         </div>
       </div>
+
+      <!-- Price range -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          价格: ¥{{ localFilters.priceRange[0] }} - ¥{{ localFilters.priceRange[1] }}
+        </label>
+        <ElSlider
+          class="px-2"
+          v-model="localFilters.priceRange"
+          range
+          :max="maxPrice"
+          :step="100"
+          @change="() => filterStore.updateFilters({ priceRange: localFilters.priceRange })"
+        />
+      </div>
     </div>
 
-    <!-- Expandable filters -->
+    <!-- Expandable section (reserved for future use) -->
     <div v-show="isExpanded" class="mt-4 pt-4 border-t border-gray-200">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
-        <!-- Layout filter -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">区域</label>
-          <ElSelect
-            v-model="localFilters.layout"
-            multiple
-            collapse-tags-tooltip
-            placeholder="选择区域"
-            class="w-full"
-            @change="() => filterStore.updateFilters({ layout: localFilters.layout })"
-          >
-            <ElOption
-              v-for="layout in layouts"
-              :key="layout"
-              :label="layout"
-              :value="layout"
-            />
-          </ElSelect>
-        </div>
-
-        <!-- Room type filter -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">户型</label>
-          <ElSelect
-            v-model="localFilters.roomType"
-            multiple
-            collapse-tags-tooltip
-            placeholder="选择户型"
-            class="w-full"
-            @change="() => filterStore.updateFilters({ roomType: localFilters.roomType })"
-          >
-            <ElOption
-              v-for="type in roomTypes"
-              :key="type"
-              :label="type + '房'"
-              :value="type"
-            />
-          </ElSelect>
-        </div>
-      </div>
+      <!-- Additional filters can be added here -->
     </div>
   </div>
 </template>
