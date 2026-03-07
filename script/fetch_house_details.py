@@ -235,7 +235,7 @@ def save_json_file_atomic(data, project_no):
         os.replace(temp_file, JSON_FILE_PATH)
         
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        logging.info(f"[{timestamp}] 成功保存房源 {project_no} 的数据到JSON文件")
+        logging.info(f"---------- [{timestamp}] 成功保存房源 {project_no} 的数据到JSON文件 ----------")
         return True
     except Exception as e:
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -325,13 +325,13 @@ def update_house_details():
                         if room_detail:
                             room_type_details.extend(room_detail)
                         
-                        # 添加20秒固定间隔 + 0-10秒随机间隔
-                        fixed_interval = 20
+                        # 添加8秒固定间隔 + 0-10秒随机间隔
+                        fixed_interval = 5
                         random.seed(datetime.now().timestamp())
                         random_interval = random.randint(0, 10)
                         total_interval = fixed_interval + random_interval
                         
-                        logging.info(f"等待{total_interval}秒后处理下一个房型... (固定20秒 + 随机{random_interval}秒)")
+                        logging.info(f"等待{total_interval}秒后处理下一个房型... (固定8秒 + 随机{random_interval}秒)")
                         time.sleep(total_interval)
                     
                     # 存储房型详情数据
@@ -353,15 +353,15 @@ def update_house_details():
             failure_count += 1
             failed_projects.append({'projectNo': project_no, 'reason': 'API请求失败'})
         
-        # 添加20秒固定间隔 + 0-10秒随机间隔
-        fixed_interval = 20
+        # 添加5秒固定间隔 + 0-10秒随机间隔
+        fixed_interval = 5
         # 使用当前时间作为随机种子
         random.seed(datetime.now().timestamp())
         # 生成0-10秒的随机时间（包含0和10）
         random_interval = random.randint(0, 10)
         total_interval = fixed_interval + random_interval
         
-        logging.info(f"等待{total_interval}秒后处理下一个房源... (固定20秒 + 随机{random_interval}秒)")
+        logging.info(f"等待{total_interval}秒后处理下一个房源... (固定5秒 + 随机{random_interval}秒)")
         time.sleep(total_interval)
     
     # 输出统计信息

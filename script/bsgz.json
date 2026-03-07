@@ -1,7 +1,8 @@
 {
   "count": 68,
   "pageContent": [
-    {
+    
+  {
       "openQueue": "1",
       "thumbnail": "/group1/publicHouse/20240527/21/03/2/1671886510826.jpg,/group1/publicHouse/20240527/21/03/2/1671886511010.jpg,/group1/publicHouse/20240527/21/03/2/1671886511216.jpg,/group1/publicHouse/20240527/21/03/2/1671886511410.jpg",
       "minRent": 3572,
@@ -27,7 +28,45 @@
       "fileProjectName": "美诗邸",
       "visiblity": "1",
       "totalArea": "1541.94",
-      "roomTypeCount": "一室户(总7套),二室户(总13套)"
+      "roomTypeCount": "一室户(总7套),二室户(总13套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 39,
+          "maxRent": 3644,
+          "minRent": 3572,
+          "houseTypeList": [
+            {
+              "area": "65.88",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/43/5/1671885835499.jpg,/group1/publicHouse/20221224/20/43/5/1671885836138.jpg,/group1/publicHouse/20221224/20/43/5/1671885836780.jpg,/group1/publicHouse/20221224/20/43/5/1671885837340.jpg,/group1/publicHouse/20221224/20/43/5/1671885838064.jpg,/group1/publicHouse/20221224/20/43/5/1671885838712.jpg,/group1/publicHouse/20221224/20/44/5/1671885839352.jpg",
+              "roomLabel": "独立卫生间,独立阳台,独立厨房",
+              "houseTypeName": "一室户",
+              "roomEquipment": "床,衣柜,床头柜,空调,脱排油烟机,热水器,电磁炉,电子门锁,餐桌,餐椅",
+              "towards": "朝南",
+              "roomType": "121"
+            }
+          ],
+          "totalCount": 7.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 75,
+          "maxRent": 4311,
+          "minRent": 4123,
+          "houseTypeList": [
+            {
+              "area": "83.16",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/43/5/1671885830265.jpg,/group1/publicHouse/20221224/20/43/5/1671885830903.jpg,/group1/publicHouse/20221224/20/43/5/1671885831454.jpg,/group1/publicHouse/20221224/20/43/5/1671885832085.jpg,/group1/publicHouse/20221224/20/43/5/1671885832772.jpg,/group1/publicHouse/20221224/20/43/5/1671885833466.jpg,/group1/publicHouse/20221224/20/43/5/1671885834196.jpg,/group1/publicHouse/20221224/20/43/5/1671885834789.jpg",
+              "roomLabel": "独立卫生间,独立阳台,独立厨房",
+              "houseTypeName": "二室户",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,电子门锁,热水器",
+              "towards": "朝南",
+              "roomType": "221"
+            }
+          ],
+          "totalCount": 13.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -55,7 +94,45 @@
       "fileProjectName": "泰禾红悦苑",
       "visiblity": "1",
       "totalArea": "5326.44",
-      "roomTypeCount": "二室户(总34套),三室户(总34套)"
+      "roomTypeCount": "二室户(总34套),三室户(总34套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 52,
+          "maxRent": 4266,
+          "minRent": 4004,
+          "houseTypeList": [
+            {
+              "area": "72.37",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885876569.jpg,/group1/publicHouse/20221224/20/44/5/1671885877298.jpg,/group1/publicHouse/20221224/20/44/5/1671885878181.jpg,/group1/publicHouse/20221224/20/44/5/1671885879046.jpg,/group1/publicHouse/20221224/20/44/5/1671885879842.jpg,/group1/publicHouse/20221224/20/44/5/1671885880511.jpg,/group1/publicHouse/20221224/20/44/5/1671885881412.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 34.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 3,
+          "maxRent": 4838,
+          "minRent": 4554,
+          "houseTypeList": [
+            {
+              "area": "84.29",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885882255.jpg,/group1/publicHouse/20221224/20/44/5/1671885883095.jpg,/group1/publicHouse/20221224/20/44/5/1671885883937.jpg,/group1/publicHouse/20221224/20/44/5/1671885884669.jpg,/group1/publicHouse/20221224/20/44/5/1671885885437.jpg,/group1/publicHouse/20221224/20/44/5/1671885886425.jpg,/group1/publicHouse/20221224/20/44/5/1671885887386.jpg,/group1/publicHouse/20221224/20/44/5/1671885888229.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三室户",
+              "roomEquipment": "床,衣柜,床头柜,空调,电磁炉,脱排油烟机,热水器,电子门锁,餐桌,餐椅",
+              "towards": "朝南",
+              "roomType": "311"
+            }
+          ],
+          "totalCount": 34.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -83,7 +160,54 @@
       "fileProjectName": "融创玉兰公馆",
       "visiblity": "1",
       "totalArea": "6000.34",
-      "roomTypeCount": "二室户(总76套)"
+      "roomTypeCount": "二室户(总76套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 31,
+          "maxRent": 4006,
+          "minRent": 3227,
+          "houseTypeList": [
+            {
+              "area": "78.69",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885840087.jpg,/group1/publicHouse/20221224/20/44/5/1671885840719.jpg,/group1/publicHouse/20221224/20/44/5/1671885841361.jpg,/group1/publicHouse/20221224/20/44/5/1671885842049.jpg,/group1/publicHouse/20221224/20/44/5/1671885842757.jpg,/group1/publicHouse/20221224/20/44/5/1671885843382.jpg,/group1/publicHouse/20221224/20/44/5/1671885844273.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户A",
+              "roomEquipment": "床,床头柜,衣柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "78.7",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885844986.jpg,/group1/publicHouse/20221224/20/44/5/1671885845660.jpg,/group1/publicHouse/20221224/20/44/5/1671885846355.jpg,/group1/publicHouse/20221224/20/44/5/1671885847057.jpg,/group1/publicHouse/20221224/20/44/5/1671885847772.jpg,/group1/publicHouse/20221224/20/44/5/1671885848372.jpg",
+              "roomLabel": "独立卫生间,独立厨房,独立阳台",
+              "houseTypeName": "二室户B",
+              "roomEquipment": "床,衣柜,床头柜,餐椅,餐桌,空调,脱排油烟机,热水器,电磁炉,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "78.7",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885849181.jpg,/group1/publicHouse/20221224/20/44/5/1671885849735.jpg,/group1/publicHouse/20221224/20/44/5/1671885850536.jpg,/group1/publicHouse/20221224/20/44/5/1671885851188.jpg,/group1/publicHouse/20221224/20/44/5/1671885851765.jpg,/group1/publicHouse/20221224/20/44/5/1671885852379.jpg,/group1/publicHouse/20221224/20/44/5/1671885853034.jpg,/group1/publicHouse/20221224/20/44/5/1671885854375.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户C",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电磁炉,脱排油烟机,热水器,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "98.22",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885855076.jpg,/group1/publicHouse/20221224/20/44/5/1671885855850.jpg,/group1/publicHouse/20221224/20/44/5/1671885856661.jpg,/group1/publicHouse/20221224/20/44/5/1671885857250.jpg,/group1/publicHouse/20221224/20/44/5/1671885857893.jpg,/group1/publicHouse/20221224/20/44/5/1671885858553.jpg,/group1/publicHouse/20221224/20/44/5/1671885859250.jpg,/group1/publicHouse/20221224/20/44/5/1671885859921.jpg,/group1/publicHouse/20221224/20/44/5/1671885860655.jpg,/group1/publicHouse/20221224/20/44/5/1671885861407.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户D",
+              "roomEquipment": "衣柜,床,床头柜,餐桌,餐椅,空调,电子门锁,电磁炉,热水器,脱排油烟机",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 76.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -111,7 +235,45 @@
       "fileProjectName": "中冶锦园",
       "visiblity": "1",
       "totalArea": "3622.68",
-      "roomTypeCount": "一室户(总42套),二室户(总24套)"
+      "roomTypeCount": "一室户(总42套),二室户(总24套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 16,
+          "maxRent": 1735,
+          "minRent": 1617,
+          "houseTypeList": [
+            {
+              "area": "47.21",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885870660.jpg,/group1/publicHouse/20221224/20/44/5/1671885871414.jpg,/group1/publicHouse/20221224/20/44/5/1671885872199.jpg,/group1/publicHouse/20221224/20/44/5/1671885873036.jpg,/group1/publicHouse/20221224/20/44/5/1671885873957.jpg,/group1/publicHouse/20221224/20/44/5/1671885874853.jpg,/group1/publicHouse/20221224/20/44/5/1671885875713.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一室户",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电子门锁,脱排油烟机,电磁炉,热水器",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 42.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 6,
+          "maxRent": 2466,
+          "minRent": 2287,
+          "houseTypeList": [
+            {
+              "area": "68.34",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885862408.jpg,/group1/publicHouse/20221224/20/44/5/1671885863183.jpg,/group1/publicHouse/20221224/20/44/5/1671885864062.jpg,/group1/publicHouse/20221224/20/44/5/1671885864847.jpg,/group1/publicHouse/20221224/20/44/5/1671885865617.jpg,/group1/publicHouse/20221224/20/44/5/1671885866529.jpg,/group1/publicHouse/20221224/20/44/5/1671885867347.jpg,/group1/publicHouse/20221224/20/44/5/1671885868171.jpg,/group1/publicHouse/20221224/20/44/5/1671885868988.jpg,/group1/publicHouse/20221224/20/44/5/1671885869786.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户",
+              "roomEquipment": "床,床头柜,衣柜,餐桌,餐椅,空调,电子门锁,脱排油烟机,电磁炉,热水器",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 24.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -139,7 +301,36 @@
       "fileProjectName": "宝悦华庭",
       "visiblity": "1",
       "totalArea": "4853.7",
-      "roomTypeCount": "二室户(总60套)"
+      "roomTypeCount": "二室户(总60套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 67,
+          "maxRent": 3714,
+          "minRent": 3376,
+          "houseTypeList": [
+            {
+              "area": "82.77",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885889036.jpg,/group1/publicHouse/20221224/20/44/5/1671885889550.jpg,/group1/publicHouse/20221224/20/44/5/1671885890357.jpg,/group1/publicHouse/20221224/20/44/5/1671885891107.jpg,/group1/publicHouse/20221224/20/44/5/1671885891674.jpg,/group1/publicHouse/20221224/20/44/5/1671885892131.jpg",
+              "roomLabel": "独立厨房,独立卫生间,独立阳台",
+              "houseTypeName": "二室户A",
+              "roomEquipment": "床,衣柜,床头柜,空调,餐椅,餐桌,脱排油烟机,电磁炉,热水器",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "79.02",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885892639.jpg,/group1/publicHouse/20221224/20/44/5/1671885892830.jpg,/group1/publicHouse/20221224/20/44/5/1671885891674.jpg,/group1/publicHouse/20221224/20/44/5/1671885890357.jpg,/group1/publicHouse/20221224/20/44/5/1671885891107.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户B",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,脱排油烟机,电磁炉,宽带",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 60.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -167,7 +358,45 @@
       "fileProjectName": "绿地香颂名邸（北块）",
       "visiblity": "1",
       "totalArea": "7357.44",
-      "roomTypeCount": "二室户(总79套)"
+      "roomTypeCount": "二室户(总79套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 55,
+          "maxRent": 4302,
+          "minRent": 3328,
+          "houseTypeList": [
+            {
+              "area": "82",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885961952.jpg,/group1/publicHouse/20221224/20/46/5/1671885962232.jpg,/group1/publicHouse/20221224/20/46/5/1671885962498.jpg,/group1/publicHouse/20221224/20/46/5/1671885962688.jpg,/group1/publicHouse/20221224/20/46/5/1671885963007.jpg,/group1/publicHouse/20221224/20/46/5/1671885963271.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户A",
+              "roomEquipment": "床,衣柜,床头柜,餐椅,餐桌,脱排油烟机,热水器,电磁炉,宽带,电子门锁,空调",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "100",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885963593.jpg,/group1/publicHouse/20221224/20/46/5/1671885963873.jpg,/group1/publicHouse/20221224/20/46/5/1671885964232.jpg,/group1/publicHouse/20221224/20/46/5/1671885964500.jpg,/group1/publicHouse/20221224/20/46/5/1671885964884.jpg,/group1/publicHouse/20221224/20/46/5/1671885965398.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户B",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,脱排油烟机,热水器,电磁炉,空调,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "105",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885965780.jpg,/group1/publicHouse/20221224/20/46/5/1671885966060.jpg,/group1/publicHouse/20221224/20/46/5/1671885966287.jpg,/group1/publicHouse/20221224/20/46/5/1671885966832.jpg,/group1/publicHouse/20221224/20/46/5/1671885967312.jpg,/group1/publicHouse/20221224/20/46/5/1671885967814.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户C",
+              "roomEquipment": "床,衣柜,床头柜,餐椅,餐桌,脱排油烟机,电磁炉,热水器,空调,宽带,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 79.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -195,7 +424,45 @@
       "fileProjectName": "绿地香颂名邸（南块）",
       "visiblity": "1",
       "totalArea": "4063.36",
-      "roomTypeCount": "一室户(总28套),二室户(总28套)"
+      "roomTypeCount": "一室户(总28套),二室户(总28套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 11,
+          "maxRent": 3188,
+          "minRent": 2890,
+          "houseTypeList": [
+            {
+              "area": "70",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885980351.jpg,/group1/publicHouse/20221224/20/46/5/1671885980569.jpg,/group1/publicHouse/20221224/20/46/5/1671885980945.jpg,/group1/publicHouse/20221224/20/46/5/1671885981212.jpg,/group1/publicHouse/20221224/20/46/5/1671885981492.jpg,/group1/publicHouse/20221224/20/46/5/1671885981850.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一室户",
+              "roomEquipment": "床,衣柜,床头柜,空调,脱排油烟机,电磁炉,热水器,餐桌,餐椅,宽带,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 28.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 50,
+          "maxRent": 3265,
+          "minRent": 3078,
+          "houseTypeList": [
+            {
+              "area": "76",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885982181.jpg,/group1/publicHouse/20221224/20/46/5/1671885982403.jpg,/group1/publicHouse/20221224/20/46/5/1671885982732.jpg,/group1/publicHouse/20221224/20/46/5/1671885983276.jpg,/group1/publicHouse/20221224/20/46/5/1671885983723.jpg,/group1/publicHouse/20221224/20/46/5/1671885984029.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户",
+              "roomEquipment": "床,衣柜,床头柜,电磁炉,脱排油烟机,热水器,宽带,空调,餐桌,餐椅,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 28.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -223,7 +490,45 @@
       "fileProjectName": "中铁北宸名庭",
       "visiblity": "1",
       "totalArea": "3795.38",
-      "roomTypeCount": "一室户(总28套),三室户(总28套)"
+      "roomTypeCount": "一室户(总28套),三室户(总28套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 94,
+          "maxRent": 2126,
+          "minRent": 1985,
+          "houseTypeList": [
+            {
+              "area": "49",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/44/5/1671885894681.jpg,/group1/publicHouse/20221224/20/45/5/1671885956738.jpg,/group1/publicHouse/20221224/20/45/5/1671885957002.jpg,/group1/publicHouse/20221224/20/45/5/1671885957268.jpg,/group1/publicHouse/20221224/20/45/5/1671885957666.jpg,/group1/publicHouse/20221224/20/45/5/1671885957971.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一室户",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,脱排油烟机,热水器,空调,电磁炉,宽带,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 28.0,
+          "kezuCount": 2
+        },
+        {
+          "queueCount": 55,
+          "maxRent": 3344,
+          "minRent": 3064,
+          "houseTypeList": [
+            {
+              "area": "83",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/45/5/1671885958275.jpg,/group1/publicHouse/20221224/20/45/5/1671885958536.jpg,/group1/publicHouse/20221224/20/45/5/1671885959289.jpg,/group1/publicHouse/20221224/20/46/5/1671885959647.jpg,/group1/publicHouse/20221224/20/46/5/1671885960146.jpg,/group1/publicHouse/20221224/20/46/5/1671885960601.jpg,/group1/publicHouse/20221224/20/46/5/1671885961021.jpg,/group1/publicHouse/20221224/20/46/5/1671885961450.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三室户",
+              "roomEquipment": "床,衣柜,床头柜,餐椅,餐桌,脱排油烟机,电磁炉,空调,热水器,宽带,电子门锁,安防设施",
+              "towards": "朝南",
+              "roomType": "311"
+            }
+          ],
+          "totalCount": 28.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -251,7 +556,27 @@
       "fileProjectName": "中铁建青秀苑（东区）",
       "visiblity": "1",
       "totalArea": "6022.56",
-      "roomTypeCount": "二室户(总84套)"
+      "roomTypeCount": "二室户(总84套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 42,
+          "maxRent": 2445,
+          "minRent": 2319,
+          "houseTypeList": [
+            {
+              "area": "71",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885968264.jpg,/group1/publicHouse/20221224/20/46/5/1671885968485.jpg,/group1/publicHouse/20221224/20/46/5/1671885968849.jpg,/group1/publicHouse/20221224/20/46/5/1671885969304.jpg,/group1/publicHouse/20221224/20/46/5/1671885969814.jpg,/group1/publicHouse/20221224/20/46/5/1671885970152.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电磁炉,脱排油烟机,热水器,宽带,空调,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 84.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -279,7 +604,45 @@
       "fileProjectName": "中铁建青秀苑（西区）",
       "visiblity": "1",
       "totalArea": "6088.32",
-      "roomTypeCount": "一室户(总64套),三室户(总32套)"
+      "roomTypeCount": "一室户(总64套),三室户(总32套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 37,
+          "maxRent": 2167,
+          "minRent": 1969,
+          "houseTypeList": [
+            {
+              "area": "56",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885970494.jpg,/group1/publicHouse/20221224/20/46/5/1671885970701.jpg,/group1/publicHouse/20221224/20/46/5/1671885970923.jpg,/group1/publicHouse/20221224/20/46/5/1671885971143.jpg,/group1/publicHouse/20221224/20/46/5/1671885971349.jpg,/group1/publicHouse/20221224/20/46/5/1671885971612.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一室户",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 64.0,
+          "kezuCount": 1
+        },
+        {
+          "queueCount": 29,
+          "maxRent": 2838,
+          "minRent": 2740,
+          "houseTypeList": [
+            {
+              "area": "81",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885971882.jpg,/group1/publicHouse/20221224/20/46/5/1671885972081.jpg,/group1/publicHouse/20221224/20/46/5/1671885972442.jpg,/group1/publicHouse/20221224/20/46/5/1671885972818.jpg,/group1/publicHouse/20221224/20/46/5/1671885973150.jpg,/group1/publicHouse/20221224/20/46/5/1671885973480.jpg,/group1/publicHouse/20221224/20/46/5/1671885973822.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三室户",
+              "roomEquipment": "衣柜,床,床头柜,餐桌,餐椅,空调,脱排油烟机,电磁炉,热水器,电子门锁",
+              "towards": "朝南",
+              "roomType": "311"
+            }
+          ],
+          "totalCount": 32.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -307,7 +670,63 @@
       "fileProjectName": "信达北苑",
       "visiblity": "1",
       "totalArea": "5369.4",
-      "roomTypeCount": "一室户(总27套),二室户(总29套),三室户(总30套)"
+      "roomTypeCount": "一室户(总27套),二室户(总29套),三室户(总30套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 29,
+          "maxRent": 902,
+          "minRent": 862,
+          "houseTypeList": [
+            {
+              "area": "46",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885974254.jpg,/group1/publicHouse/20221224/20/46/5/1671885974496.jpg,/group1/publicHouse/20221224/20/46/5/1671885974729.jpg,/group1/publicHouse/20221224/20/46/5/1671885974996.jpg,/group1/publicHouse/20221224/20/46/5/1671885975396.jpg,/group1/publicHouse/20221224/20/46/5/1671885975700.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一室户",
+              "roomEquipment": "空调,热水器,脱排油烟机,电磁炉,宽带,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 27.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 13,
+          "maxRent": 1122,
+          "minRent": 1054,
+          "houseTypeList": [
+            {
+              "area": "60",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885976005.jpg,/group1/publicHouse/20221224/20/46/5/1671885976393.jpg,/group1/publicHouse/20221224/20/46/5/1671885976640.jpg,/group1/publicHouse/20221224/20/46/5/1671885976999.jpg,/group1/publicHouse/20221224/20/46/5/1671885977489.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二室户",
+              "roomEquipment": "空调,热水器,脱排油烟机,电磁炉,宽带,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 29.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 2,
+          "maxRent": 1406,
+          "minRent": 1338,
+          "houseTypeList": [
+            {
+              "area": "80",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885977796.jpg,/group1/publicHouse/20221224/20/46/5/1671885978158.jpg,/group1/publicHouse/20221224/20/46/5/1671885978480.jpg,/group1/publicHouse/20221224/20/46/5/1671885978864.jpg,/group1/publicHouse/20221224/20/46/5/1671885979250.jpg,/group1/publicHouse/20221224/20/46/5/1671885979564.jpg,/group1/publicHouse/20221224/20/46/5/1671885979948.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三室户",
+              "roomEquipment": "脱排油烟机,电磁炉,热水器,空调,电子门锁,宽带",
+              "towards": "朝南",
+              "roomType": "311"
+            }
+          ],
+          "totalCount": 30.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -335,7 +754,27 @@
       "fileProjectName": "华灵路小区",
       "visiblity": "1",
       "totalArea": "802.89",
-      "roomTypeCount": "一室户(总18套)"
+      "roomTypeCount": "一室户(总18套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 57,
+          "maxRent": 3277,
+          "minRent": 2875,
+          "houseTypeList": [
+            {
+              "area": "43",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885984339.jpg,/group1/publicHouse/20221224/20/46/5/1671885984570.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "户型一",
+              "roomEquipment": "床,衣柜,床头柜,电磁炉,脱排油烟机,热水器,电子门锁,空调",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 18.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -363,7 +802,27 @@
       "fileProjectName": "七牧小区",
       "visiblity": "1",
       "totalArea": "1213.05",
-      "roomTypeCount": "一室户(总21套)"
+      "roomTypeCount": "一室户(总21套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 5,
+          "maxRent": 2480,
+          "minRent": 2382,
+          "houseTypeList": [
+            {
+              "area": "61",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885985042.jpg,/group1/publicHouse/20221224/20/46/5/1671885985241.jpg",
+              "roomLabel": "独立阳台,独立卫生间",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,床头柜,衣柜,电磁炉,脱排油烟机,热水器,电子门锁,空调",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 21.0,
+          "kezuCount": 2
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -391,7 +850,45 @@
       "fileProjectName": "马泾桥小区",
       "visiblity": "1",
       "totalArea": "464.84",
-      "roomTypeCount": "一室户(总6套),二室户(总3套)"
+      "roomTypeCount": "一室户(总6套),二室户(总3套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 2,
+          "maxRent": 1728,
+          "minRent": 1655,
+          "houseTypeList": [
+            {
+              "area": "51",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885985645.jpg,/group1/publicHouse/20221224/20/46/5/1671885985913.jpg,/group1/publicHouse/20221224/20/46/5/1671885986372.jpg,/group1/publicHouse/20221224/20/46/5/1671885986819.jpg,/group1/publicHouse/20221224/20/46/5/1671885987475.jpg,/group1/publicHouse/20221224/20/46/5/1671885988071.jpg",
+              "roomLabel": "独立阳台,独立厨房,独立卫生间",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,电磁炉,脱排油烟机,热水器,电子门锁,空调",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 6.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 4,
+          "maxRent": 1994,
+          "minRent": 1994,
+          "houseTypeList": [
+            {
+              "area": "54",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885988738.jpg",
+              "roomLabel": "独立阳台,独立厨房,独立卫生间",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,电磁炉,脱排油烟机,热水器,电子门锁,空调",
+              "towards": "朝南",
+              "roomType": "201"
+            }
+          ],
+          "totalCount": 3.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -419,7 +916,27 @@
       "fileProjectName": "盛桥小区",
       "visiblity": "1",
       "totalArea": "1279.1",
-      "roomTypeCount": "一室户(总22套)"
+      "roomTypeCount": "一室户(总22套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 1,
+          "maxRent": 1662,
+          "minRent": 1162,
+          "houseTypeList": [
+            {
+              "area": "64",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885989466.jpg,/group1/publicHouse/20221224/20/46/5/1671885990024.jpg,/group1/publicHouse/20221224/20/46/5/1671885990597.jpg,/group1/publicHouse/20221224/20/46/5/1671885991313.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,电磁炉,脱排油烟机,热水器,电子门锁,空调",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 22.0,
+          "kezuCount": 6
+        }
+      ]
     },
     {
       "openQueue": "0",
@@ -447,7 +964,60 @@
       "fileProjectName": "霄云湾公寓",
       "visiblity": "1",
       "totalArea": "72957.73",
-      "roomTypeCount": "一室户(总1487套),二室户(总155套)"
+      "roomTypeCount": "一室户(总1487套),二室户(总155套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 0,
+          "maxRent": 1140,
+          "minRent": 708,
+          "houseTypeList": [
+            {
+              "area": "45",
+              "vrUrl": "https://beyond.3dnest.cn/newhouse/?m=3be07f5a_NqcI_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885991958.jpg,/group1/publicHouse/20221224/20/46/5/1671885992357.jpg",
+              "roomDescription": "一居室",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电子门锁,电磁炉,脱排油烟机,热水器,浴霸",
+              "towards": "朝南,朝东,朝西",
+              "roomType": "111"
+            },
+            {
+              "area": "40",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=cc3d42be_qMcZ_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885993292.jpg",
+              "roomDescription": "一居室（单身公寓）",
+              "roomLabel": "独立阳台,独立卫生间",
+              "houseTypeName": "一居室（单身公寓）",
+              "roomEquipment": "床,衣柜,床头柜,空调,电子门锁,电磁炉,热水器,浴霸",
+              "towards": "朝南,朝北,朝东,朝西",
+              "roomType": "101"
+            }
+          ],
+          "totalCount": 1487.0,
+          "kezuCount": 3
+        },
+        {
+          "queueCount": 0,
+          "maxRent": 1299,
+          "minRent": 1147,
+          "houseTypeList": [
+            {
+              "area": "65",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=67ae2aa6_7jYq_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885993971.jpg,/group1/publicHouse/20221224/20/46/5/1671885994387.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,电子门锁,电磁炉,脱排油烟机,热水器,浴霸,空调,餐桌,餐椅",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 155.0,
+          "kezuCount": 2
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -475,7 +1045,47 @@
       "fileProjectName": "同瓴佳苑",
       "visiblity": "1",
       "totalArea": "3090.9",
-      "roomTypeCount": "二室户(总20套),三室户(总17套)"
+      "roomTypeCount": "二室户(总20套),三室户(总17套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 61,
+          "maxRent": 4018,
+          "minRent": 3453,
+          "houseTypeList": [
+            {
+              "area": "84.79",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885995288.jpg,/group1/publicHouse/20221224/20/46/5/1671885995914.jpg",
+              "roomDescription": "建筑面积约为80平方米，总计20套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 20.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 16,
+          "maxRent": 3782,
+          "minRent": 3670,
+          "houseTypeList": [
+            {
+              "area": "82.72",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885996611.jpg",
+              "roomDescription": "建筑面积约为82平方米，总计17套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三居室",
+              "roomEquipment": "床,衣柜,床头柜,装饰柜,电磁炉,脱排油烟机,安防设施,热水器,电子门锁",
+              "towards": "朝南",
+              "roomType": "311"
+            }
+          ],
+          "totalCount": 17.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -503,7 +1113,28 @@
       "fileProjectName": "上坤公园华庭",
       "visiblity": "1",
       "totalArea": "1233.76",
-      "roomTypeCount": "三室户(总16套)"
+      "roomTypeCount": "三室户(总16套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 5,
+          "maxRent": 3012,
+          "minRent": 2938,
+          "houseTypeList": [
+            {
+              "area": "77.11",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885999616.jpg",
+              "roomDescription": "建筑面积约为77平方米，共计16套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三居室",
+              "roomEquipment": "床,床头柜,衣柜,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "311"
+            }
+          ],
+          "totalCount": 16.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -531,7 +1162,47 @@
       "fileProjectName": "昱翠家苑",
       "visiblity": "1",
       "totalArea": "4389.08",
-      "roomTypeCount": "二室户(总6套),三室户(总44套)"
+      "roomTypeCount": "二室户(总6套),三室户(总44套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 15,
+          "maxRent": 2151,
+          "minRent": 2129,
+          "houseTypeList": [
+            {
+              "area": "68",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671886000397.jpg",
+              "roomDescription": "建筑面积约为67平方米，共计6套",
+              "roomLabel": "独立卫生间,独立阳台,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 6.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 3,
+          "maxRent": 2599,
+          "minRent": 2489,
+          "houseTypeList": [
+            {
+              "area": "90",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671886001069.jpg",
+              "roomDescription": "建筑面积约为90平方米，共计44套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三居室",
+              "roomEquipment": "床,衣柜,床头柜,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "311"
+            }
+          ],
+          "totalCount": 44.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -559,7 +1230,66 @@
       "fileProjectName": "旭辉澜悦苑",
       "visiblity": "1",
       "totalArea": "9075.12",
-      "roomTypeCount": "一室户(总44套),二室户(总44套),三室户(总43套)"
+      "roomTypeCount": "一室户(总44套),二室户(总44套),三室户(总43套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 6,
+          "maxRent": 1430,
+          "minRent": 1282,
+          "houseTypeList": [
+            {
+              "area": "54.07",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885997315.jpg",
+              "roomDescription": "建筑面积约54平方米，共计44套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,床头柜,衣柜,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 44.0,
+          "kezuCount": 1
+        },
+        {
+          "queueCount": 0,
+          "maxRent": 1713,
+          "minRent": 1568,
+          "houseTypeList": [
+            {
+              "area": "66.77",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885998130.jpg",
+              "roomDescription": "建筑面积约为70平方米，共计44套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 44.0,
+          "kezuCount": 6
+        },
+        {
+          "queueCount": 0,
+          "maxRent": 2149,
+          "minRent": 1977,
+          "houseTypeList": [
+            {
+              "area": "87.26",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671885998808.jpg",
+              "roomDescription": "建筑面积约为87平方米，共计43套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三居室",
+              "roomEquipment": "床,衣柜,床头柜,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "311"
+            }
+          ],
+          "totalCount": 43.0,
+          "kezuCount": 12
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -587,7 +1317,88 @@
       "fileProjectName": "中怡雅苑",
       "visiblity": "1",
       "totalArea": "45530.44",
-      "roomTypeCount": "一室户(总148套),二室户(总160套),三室户(总48套),四室户(总96套)"
+      "roomTypeCount": "一室户(总148套),二室户(总160套),三室户(总48套),四室户(总96套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 17,
+          "maxRent": 2621,
+          "minRent": 2319,
+          "houseTypeList": [
+            {
+              "area": "61",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886383903.jpg,/group1/publicHouse/20221224/20/53/5/1671886384633.jpg,/group1/publicHouse/20221224/20/53/5/1671886385482.jpg,/group1/publicHouse/20221224/20/53/5/1671886386271.jpg,/group1/publicHouse/20221224/20/53/5/1671886387089.jpg,/group1/publicHouse/20221224/20/53/5/1671886387842.jpg",
+              "roomDescription": "一居室面积约为60平方米，共计148套。",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床头柜,装饰柜,床,衣柜,脱排油烟机,热水器,电磁炉,沙发,茶几,洗衣机,冰箱,安防设施,电子门锁,空调,餐椅,餐桌",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 148.0,
+          "kezuCount": 4
+        },
+        {
+          "queueCount": 16,
+          "maxRent": 3766,
+          "minRent": 3202,
+          "houseTypeList": [
+            {
+              "area": "100",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=fde31202_wxld_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671886002518.jpg,/group1/publicHouse/20221224/20/46/5/1671886003204.jpg,/group1/publicHouse/20221224/20/46/5/1671886003822.jpg,/group1/publicHouse/20221224/20/46/5/1671886004393.jpg,/group1/publicHouse/20221224/20/46/5/1671886004952.jpg,/group1/publicHouse/20221224/20/46/5/1671886005616.jpg,/group1/publicHouse/20221224/20/46/5/1671886006299.jpg",
+              "roomDescription": "二居室面积约为100平方米，共计160套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "衣柜,床头柜,床,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 160.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 23,
+          "maxRent": 4185,
+          "minRent": 3760,
+          "houseTypeList": [
+            {
+              "area": "141.93",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=d39fc8d2_HwTb_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671886001800.jpg",
+              "roomDescription": "建筑面积约为141平方米，共计48套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三居室",
+              "roomEquipment": "床,衣柜,床头柜,电磁炉,脱排油烟机,热水器,安防设施,电子门锁,空调,餐椅,餐桌",
+              "towards": "朝南",
+              "roomType": "322"
+            }
+          ],
+          "totalCount": 48.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 2,
+          "maxRent": 4604,
+          "minRent": 4104,
+          "houseTypeList": [
+            {
+              "area": "142.5",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=441e31ac_PaT3_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/46/5/1671886007190.jpg,/group1/publicHouse/20221224/20/46/5/1671886007722.jpg,/group1/publicHouse/20221224/20/46/5/1671886008317.jpg,/group1/publicHouse/20221224/20/46/5/1671886008870.jpg,/group1/publicHouse/20221224/20/53/5/1671886382983.jpg",
+              "roomDescription": "四居室面积约为140平方米，共计96套",
+              "roomLabel": "独立阳台,独立厨房,独立卫生间",
+              "houseTypeName": "四居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电磁炉,脱排油烟机,热水器,安防设施,电子门锁,空调",
+              "towards": "朝南",
+              "roomType": "412"
+            }
+          ],
+          "totalCount": 96.0,
+          "kezuCount": 2
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -615,7 +1426,40 @@
       "fileProjectName": "招商主城",
       "visiblity": "1",
       "totalArea": "7872.34",
-      "roomTypeCount": "二室户(总100套)"
+      "roomTypeCount": "二室户(总100套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 17,
+          "maxRent": 2051,
+          "minRent": 1586,
+          "houseTypeList": [
+            {
+              "area": "72",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=ced86262_rlAm_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886388562.jpg",
+              "roomDescription": "二居室A户型（68套），平均面积：72㎡/套，租金区间：1513元~1673元/月",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,电子门锁,热水器,浴霸,安防设施",
+              "towards": "朝南",
+              "roomType": "221"
+            },
+            {
+              "area": "92",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=05166504_KrQV_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886389273.jpg",
+              "roomDescription": "二居室B户型（32套），平均面积：92㎡/套，租金区间：1992元~2154元/月",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,装饰柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,热水器,浴霸,电子门锁,安防设施",
+              "towards": "朝南",
+              "roomType": "221"
+            }
+          ],
+          "totalCount": 100.0,
+          "kezuCount": 2
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -643,7 +1487,51 @@
       "fileProjectName": "雍景丽庭（雍和府）",
       "visiblity": "1",
       "totalArea": "5370.9",
-      "roomTypeCount": "二室户(总60套)"
+      "roomTypeCount": "二室户(总60套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 0,
+          "maxRent": 2077,
+          "minRent": 1782,
+          "houseTypeList": [
+            {
+              "area": "87.33",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=3e1dd902_3tP5_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886389914.jpg",
+              "roomDescription": "二居室A户型（87.33m2/套）共30套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,电子门锁,安防设施",
+              "towards": "朝南",
+              "roomType": "221"
+            },
+            {
+              "area": "89.41",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=d6dc52b4_eoZq_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886390669.jpg",
+              "roomDescription": "二居室B户型（89.41m2/套）共15套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "221"
+            },
+            {
+              "area": "93.99",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=09a0f736_dGBX_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886391230.jpg",
+              "roomDescription": "二居室C户型（93.99m2/套）共15套",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室C户型",
+              "roomEquipment": "床,衣柜,床头柜,空调,电磁炉,脱排油烟机,电子门锁,安防设施,热水器,浴霸",
+              "towards": "朝南",
+              "roomType": "221"
+            }
+          ],
+          "totalCount": 60.0,
+          "kezuCount": 14
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -671,7 +1559,80 @@
       "fileProjectName": "金地云锦苑（金地天地云墅）",
       "visiblity": "1",
       "totalArea": "10253.2",
-      "roomTypeCount": "一室户(总124套),二室户(总2套)"
+      "roomTypeCount": "一室户(总124套),二室户(总2套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 1,
+          "maxRent": 3516,
+          "minRent": 2796,
+          "houseTypeList": [
+            {
+              "area": "64.47",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=ed480c9e_f4R8_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886391758.jpg",
+              "roomLabel": "独立阳台,近地铁,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,电子门锁,安防设施",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "70.26",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=2d9fd988_cRwa_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886392530.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,安防设施,电子门锁,热水器",
+              "towards": "朝南",
+              "roomType": "121"
+            },
+            {
+              "area": "79.13",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=a835b020_5VQY_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886393081.jpg",
+              "roomDescription": "带书房",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室C户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "82.66",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=5fea79ac_8zYO_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886393804.jpg",
+              "roomDescription": "带书房",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室D户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "121"
+            }
+          ],
+          "totalCount": 124.0,
+          "kezuCount": 25
+        },
+        {
+          "queueCount": 4,
+          "maxRent": 4129,
+          "minRent": 4129,
+          "houseTypeList": [
+            {
+              "area": "110.02",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=7d02ba42_Qugy_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886394509.jpg",
+              "roomDescription": "带书房",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "221"
+            }
+          ],
+          "totalCount": 2.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -699,7 +1660,40 @@
       "fileProjectName": "云雅新苑（云麓之城）",
       "visiblity": "1",
       "totalArea": "4479.2",
-      "roomTypeCount": "一室户(总60套)"
+      "roomTypeCount": "一室户(总60套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 0,
+          "maxRent": 2428,
+          "minRent": 2269,
+          "houseTypeList": [
+            {
+              "area": "74.26",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=6f8c9e40_gw0l_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886395271.jpg",
+              "roomDescription": "带书房",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "121"
+            },
+            {
+              "area": "75",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=a21bb242_IGU8_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886395932.jpg",
+              "roomDescription": "带书房",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "121"
+            }
+          ],
+          "totalCount": 60.0,
+          "kezuCount": 18
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -727,7 +1721,72 @@
       "fileProjectName": "同济路60弄公租房",
       "visiblity": "1",
       "totalArea": "2066.85",
-      "roomTypeCount": "一室户(总34套),二室户(总5套),三室户(总1套),四室户(总1套)"
+      "roomTypeCount": "一室户(总34套),二室户(总5套),三室户(总1套),四室户(总1套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 21,
+          "maxRent": 3130,
+          "minRent": 1488,
+          "houseTypeList": [
+            {
+              "area": "40",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886396542.jpg",
+              "roomLabel": "近地铁,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "衣柜,空调,电磁炉,脱排油烟机,热水器,浴霸,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 34.0,
+          "kezuCount": 2
+        },
+        {
+          "queueCount": 22,
+          "houseTypeList": [
+            {
+              "area": "66.36",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886396542.jpg",
+              "roomLabel": "近地铁,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "衣柜,空调,电磁炉,脱排油烟机,热水器,浴霸,电子门锁",
+              "towards": "朝南",
+              "roomType": "201"
+            }
+          ],
+          "totalCount": 5.0
+        },
+        {
+          "queueCount": 5,
+          "houseTypeList": [
+            {
+              "area": "76.51",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886396542.jpg",
+              "roomLabel": "近地铁,独立厨房,独立卫生间",
+              "houseTypeName": "三居室",
+              "roomEquipment": "衣柜,空调,电磁炉,脱排油烟机,热水器,浴霸,电子门锁",
+              "towards": "朝南",
+              "roomType": "301"
+            }
+          ],
+          "totalCount": 1.0
+        },
+        {
+          "queueCount": 4,
+          "houseTypeList": [
+            {
+              "area": "105.29",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886396542.jpg",
+              "roomLabel": "近地铁,独立卫生间,独立厨房",
+              "houseTypeName": "四居室",
+              "roomEquipment": "衣柜,空调,电磁炉,脱排油烟机,热水器,浴霸,电子门锁",
+              "towards": "朝南",
+              "roomType": "401"
+            }
+          ],
+          "totalCount": 1.0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -755,7 +1814,49 @@
       "fileProjectName": "凯旋佳苑（滨江公园壹号）",
       "visiblity": "1",
       "totalArea": "6159.44",
-      "roomTypeCount": "一室户(总112套)"
+      "roomTypeCount": "一室户(总112套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 29,
+          "maxRent": 3969,
+          "minRent": 2928,
+          "houseTypeList": [
+            {
+              "area": "53.37",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=3aed0374_iJe6_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886408835.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "121"
+            },
+            {
+              "area": "52",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=99e7bb68_0Enw_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886409960.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,餐桌,餐椅,床头柜,电子门锁,电磁炉,脱排油烟机,热水器,浴霸,安防设施,空调",
+              "towards": "朝南",
+              "roomType": "121"
+            },
+            {
+              "area": "61.47",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=e163f970_sOId_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886410917.jpg",
+              "roomDescription": "一居室C户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室C户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "121"
+            }
+          ],
+          "totalCount": 112.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -783,7 +1884,40 @@
       "fileProjectName": "保利熙悦名邸（保利熙悦）",
       "visiblity": "1",
       "totalArea": "8082.31",
-      "roomTypeCount": "二室户(总90套)"
+      "roomTypeCount": "二室户(总90套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 0,
+          "maxRent": 5134,
+          "minRent": 4057,
+          "houseTypeList": [
+            {
+              "area": "88",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=baf5d2fa_Zh9H_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886400614.jpg",
+              "roomDescription": "二居室A户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "91.59",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=7528f824_0wFU_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886401503.jpg",
+              "roomDescription": "二居室B户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 90.0,
+          "kezuCount": 7
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -811,7 +1945,100 @@
       "fileProjectName": "文景华庭（招商中环华府）",
       "visiblity": "1",
       "totalArea": "7060.26",
-      "roomTypeCount": "一室户(总69套),二室户(总41套)"
+      "roomTypeCount": "一室户(总69套),二室户(总41套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 104,
+          "maxRent": 3725,
+          "minRent": 2417,
+          "houseTypeList": [
+            {
+              "area": "49.42",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=0c428a28_qzVL_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886402463.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "121"
+            },
+            {
+              "area": "66.56",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=bb605bb8_ZqdN_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886403401.jpg",
+              "roomDescription": "一居室B户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "121"
+            },
+            {
+              "area": "47.39",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=82e990e8_hlHS_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886404272.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室C户型",
+              "roomEquipment": "床,衣柜,床头柜,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "101"
+            },
+            {
+              "area": "49.03",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=33e80be0_JymG_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886405212.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室D户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "64.4",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886405988.jpg",
+              "roomDescription": "一居室E户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室E户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "121"
+            }
+          ],
+          "totalCount": 69.0,
+          "kezuCount": 1
+        },
+        {
+          "queueCount": 52,
+          "maxRent": 4271,
+          "minRent": 3790,
+          "houseTypeList": [
+            {
+              "area": "78.31",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=9de199ac_svJR_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886406993.jpg",
+              "roomDescription": "二居室A户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,床头柜,衣柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "77.53",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=f8455d86_bZAa_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886407815.jpg",
+              "roomDescription": "二居室B户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐椅,餐桌,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 41.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -839,9 +2066,41 @@
       "fileProjectName": "万科智云新苑（万科启宸）",
       "visiblity": "1",
       "totalArea": "7419.26",
-      "roomTypeCount": "二室户(总98套)"
-    },
-    {
+      "roomTypeCount": "二室户(总98套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 12,
+          "maxRent": 2094,
+          "minRent": 1911,
+          "houseTypeList": [
+            {
+              "area": "80.2",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=367c21ba_q96a_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886413637.jpg",
+              "roomDescription": "二居室A户型",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "74.83",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=20384816_O4es_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886414618.jpg",
+              "roomDescription": "二居室B户型",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 98.0,
+          "kezuCount": 0
+        }
+      ]
+    },{
       "openQueue": "1",
       "thumbnail": "/group1/publicHouse/20240527/21/03/2/1671886570457.jpg,/group1/publicHouse/20240527/21/03/2/1671886571242.jpg,/group1/publicHouse/20240527/21/03/2/1671886572038.jpg,/group1/publicHouse/20240527/21/03/2/1671886572951.jpg,/group1/publicHouse/20240527/21/03/2/1671886573902.jpg,/group1/publicHouse/20240527/21/03/2/1671886574975.jpg",
       "minRent": 2943,
@@ -867,7 +2126,40 @@
       "fileProjectName": "荣万宝邸（四季都会）",
       "visiblity": "1",
       "totalArea": "6436.06",
-      "roomTypeCount": "二室户(总89套)"
+      "roomTypeCount": "二室户(总89套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 112,
+          "maxRent": 3342,
+          "minRent": 2943,
+          "houseTypeList": [
+            {
+              "area": "74",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=7c45030a_YqmH_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886411910.jpg",
+              "roomDescription": "二居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "71",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=6199921e_Ckge_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886412723.jpg",
+              "roomDescription": "二居室B户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 89.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -895,7 +2187,48 @@
       "fileProjectName": "润园（央玺）",
       "visiblity": "1",
       "totalArea": "6610.76",
-      "roomTypeCount": "一室户(总102套)"
+      "roomTypeCount": "一室户(总102套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 25,
+          "maxRent": 3131,
+          "minRent": 2474,
+          "houseTypeList": [
+            {
+              "area": "63",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=18bb565c_nOao_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886415490.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "62.64",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=472b6892_CrJO_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886416353.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "69.46",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=6ab28b6a_o78c_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886417222.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室C户型",
+              "roomEquipment": "床,衣柜,床头柜,餐椅,书桌,餐桌,书桌椅,燃气,空调,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 102.0,
+          "kezuCount": 11
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -923,7 +2256,55 @@
       "fileProjectName": "华景新苑（大华朗香臻园）",
       "visiblity": "1",
       "totalArea": "1338.59",
-      "roomTypeCount": "一室户(总18套),二室户(总5套)"
+      "roomTypeCount": "一室户(总18套),二室户(总5套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 22,
+          "maxRent": 3792,
+          "minRent": 3507,
+          "houseTypeList": [
+            {
+              "area": "56",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=80dfaa46_wXBS_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886418166.jpg,/group1/publicHouse/20221224/20/53/5/1671886419123.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "59",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=9558677e_oVza_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886419694.jpg,/group1/publicHouse/20221224/20/53/5/1671886420382.jpg",
+              "roomDescription": "带书房",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 18.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 15,
+          "houseTypeList": [
+            {
+              "area": "64",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=7033bc32_Ja9q_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886420969.jpg,/group1/publicHouse/20221224/20/53/5/1671886421761.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "201"
+            }
+          ],
+          "totalCount": 5.0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -951,7 +2332,57 @@
       "fileProjectName": "逸翠华庭（大华公园城市）",
       "visiblity": "1",
       "totalArea": "5062.8",
-      "roomTypeCount": "一室户(总30套),二室户(总45套)"
+      "roomTypeCount": "一室户(总30套),二室户(总45套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 0,
+          "maxRent": 3414,
+          "minRent": 3219,
+          "houseTypeList": [
+            {
+              "area": "53.34",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=5a9e83a0_MGmL_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886422330.jpg,/group1/publicHouse/20221224/20/53/5/1671886423100.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 30.0,
+          "kezuCount": 2
+        },
+        {
+          "queueCount": 1,
+          "maxRent": 4397,
+          "minRent": 4109,
+          "houseTypeList": [
+            {
+              "area": "75",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=ac2b3f24_uqIh_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886423692.jpg,/group1/publicHouse/20221224/20/53/5/1671886424444.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "80.52",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=87aef55a_7VTI_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886424965.jpg,/group1/publicHouse/20221224/20/53/5/1671886425839.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 45.0,
+          "kezuCount": 4
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -979,7 +2410,77 @@
       "fileProjectName": "卓置名邸（玲珑悦府）",
       "visiblity": "1",
       "totalArea": "4498.97",
-      "roomTypeCount": "一室户(总19套),二室户(总53套)"
+      "roomTypeCount": "一室户(总19套),二室户(总53套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 13,
+          "maxRent": 1752,
+          "minRent": 1712,
+          "houseTypeList": [
+            {
+              "area": "46",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=33e524e8_KMoN_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886426363.jpg,/group1/publicHouse/20221224/20/53/5/1671886427243.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 19.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 3,
+          "maxRent": 2430,
+          "minRent": 2165,
+          "houseTypeList": [
+            {
+              "area": "67",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=4872b88a_7Pm1_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886427774.jpg,/group1/publicHouse/20221224/20/53/5/1671886428577.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "64",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=230c2cf2_ZOXP_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886429108.jpg,/group1/publicHouse/20221224/20/53/5/1671886429893.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "76.28",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=103beab8_jDNE_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886430494.jpg,/group1/publicHouse/20221224/20/53/5/1671886431384.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室C户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "64.48",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=f8d80cb2_p4Pc_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886431861.jpg,/group1/publicHouse/20221224/20/53/5/1671886432829.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室D户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 53.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1007,7 +2508,38 @@
       "fileProjectName": "荣万河畔景园（四季都会晓风来）",
       "visiblity": "1",
       "totalArea": "5108.8",
-      "roomTypeCount": "二室户(总64套)"
+      "roomTypeCount": "二室户(总64套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 104,
+          "maxRent": 3353,
+          "minRent": 3174,
+          "houseTypeList": [
+            {
+              "area": "79.54",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=7294eeee_cPju_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886433360.jpg,/group1/publicHouse/20221224/20/53/5/1671886434265.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,电视柜,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "80.11",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=5eb694ea_FzeJ_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886434810.jpg,/group1/publicHouse/20221224/20/53/5/1671886436021.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电视柜,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 64.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1035,7 +2567,47 @@
       "fileProjectName": "大华四季园（锦绣四季）",
       "visiblity": "1",
       "totalArea": "11037.7",
-      "roomTypeCount": "一室户(总90套),二室户(总89套)"
+      "roomTypeCount": "一室户(总90套),二室户(总89套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 2,
+          "maxRent": 2250,
+          "minRent": 2172,
+          "houseTypeList": [
+            {
+              "area": "48.51",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=71af33d6_48yX_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886436496.jpg,/group1/publicHouse/20221224/20/53/5/1671886437430.jpg",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房,近地铁",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝西",
+              "roomType": "101"
+            }
+          ],
+          "totalCount": 90.0,
+          "kezuCount": 8
+        },
+        {
+          "queueCount": 1,
+          "maxRent": 3212,
+          "minRent": 3111,
+          "houseTypeList": [
+            {
+              "area": "74.77",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=62486c8c_bswu_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20221224/20/53/5/1671886437984.jpg,/group1/publicHouse/20221224/20/53/5/1671886438898.jpg",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝西",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 89.0,
+          "kezuCount": 12
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1063,7 +2635,44 @@
       "fileProjectName": "荣万满芳庭（四季都会繁星启）",
       "visiblity": "1",
       "totalArea": "1719.54",
-      "roomTypeCount": "一室户(总18套),二室户(总12套)"
+      "roomTypeCount": "一室户(总18套),二室户(总12套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 55,
+          "maxRent": 2598,
+          "minRent": 2449,
+          "houseTypeList": [
+            {
+              "area": "51",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=4d74c5ca_UB84_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230112/16/48/5/iICf7dlZsEm-iimQY0_yj3sL.png,/group1/publicHouse/20230112/16/48/5/QwHao9HKIY5punyKdtY-QAVQ.png",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电视柜,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 18.0,
+          "kezuCount": 2
+        },
+        {
+          "queueCount": 76,
+          "houseTypeList": [
+            {
+              "area": "66.46",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=9166e010_58jN_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230112/16/50/5/KDshGXgAYc-3lbMyTWrr7EsI.png,/group1/publicHouse/20230112/16/51/5/FIPkmswD7fqh0FfwFLglg0MJ.png",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电视柜,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 12.0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1091,7 +2700,76 @@
       "fileProjectName": "信达泰禾雅苑（上城院子）",
       "visiblity": "1",
       "totalArea": "7724.88",
-      "roomTypeCount": "一室户(总28套),二室户(总56套),三室户(总28套)"
+      "roomTypeCount": "一室户(总28套),二室户(总56套),三室户(总28套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 13,
+          "maxRent": 2738,
+          "minRent": 2602,
+          "houseTypeList": [
+            {
+              "area": "55",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=78ef990e_HTlO_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230112/17/05/5/GKNIQqzwAY68QGObQ06pJxg4.png,/group1/publicHouse/20230112/17/05/5/Qz1RUyBebkkUS69d-76UGpfP.png",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,鞋柜,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 28.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 29,
+          "maxRent": 3046,
+          "minRent": 2875,
+          "houseTypeList": [
+            {
+              "area": "68",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=d391da52_TUrN_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230112/17/07/5/_lRr7AMg23YJrCJ8NSJ7s0Mk.png,/group1/publicHouse/20230112/17/07/5/B1dhGqkdF8DofWepx4Ye9H1S.png",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,鞋柜,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "68",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=9f8fd948_9z5f_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230112/17/09/5/346ORzjQmccrmcT2uZL1yZJ2.png,/group1/publicHouse/20230112/17/09/5/akkkqagZNOI1WkaO2FnxFlU1.png",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,鞋柜,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 56.0,
+          "kezuCount": 2
+        },
+        {
+          "queueCount": 16,
+          "maxRent": 3463,
+          "minRent": 3295,
+          "houseTypeList": [
+            {
+              "area": "85",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=24ed664c_YNkc_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230112/17/11/5/GQB8qJ_ejdBDj_R75rVGLCfq.png,/group1/publicHouse/20230112/17/11/5/R__Ljt2TQBrH8bygApWs5VDw.png",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,鞋柜,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "311"
+            }
+          ],
+          "totalCount": 28.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1119,7 +2797,44 @@
       "fileProjectName": "荣万悦宁苑",
       "visiblity": "1",
       "totalArea": "2198.3",
-      "roomTypeCount": "一室户(总30套),二室户(总10套)"
+      "roomTypeCount": "一室户(总30套),二室户(总10套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 43,
+          "maxRent": 2674,
+          "minRent": 2537,
+          "houseTypeList": [
+            {
+              "area": "51",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=4d74c5ca_UB84_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230323/09/22/5/4vKWQXN1V4Du1nEXS7To4VlP.png,/group1/publicHouse/20230323/09/22/5/V2T1YNkzDrUWvfMMxL7jw8SW.png",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电视柜,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 30.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 52,
+          "houseTypeList": [
+            {
+              "area": "66.82",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=9166e010_58jN_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230323/09/23/5/T0_xIJsoZPfwX68ER1kooRAB.png,/group1/publicHouse/20230323/09/24/5/izA66JVbQDGcw1kPC7PqGdZd.png",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电视柜,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 10.0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1147,7 +2862,39 @@
       "fileProjectName": "中集金地美兰城",
       "visiblity": "1",
       "totalArea": "7377.28",
-      "roomTypeCount": "二室户(总96套)"
+      "roomTypeCount": "二室户(总96套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 35,
+          "maxRent": 3293,
+          "minRent": 3154,
+          "houseTypeList": [
+            {
+              "area": "76",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=9fd86c46_CNB4_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230410/14/44/5/eoscrr610VeqVhafVIkzisL5.png,/group1/publicHouse/20230410/14/48/5/kQUIyiPQskZF1FMUQUzMBpkU.png",
+              "roomDescription": "二居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "77",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=8b5c016a_2pk4_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230410/15/14/5/OTLFZU71ODFOtn7C2Vy12Jpm.png,/group1/publicHouse/20230410/15/15/5/BwUBnVeKAFUh7jB331saiPE_.png",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 96.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1175,7 +2922,49 @@
       "fileProjectName": "华泰新苑（大华朗香公园里）",
       "visiblity": "1",
       "totalArea": "9540.48",
-      "roomTypeCount": "一室户(总144套),二室户(总24套)"
+      "roomTypeCount": "一室户(总144套),二室户(总24套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 27,
+          "maxRent": 3134,
+          "minRent": 2994,
+          "houseTypeList": [
+            {
+              "area": "56",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=4a12b1f4_2b35_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230719/11/32/5/lQwDx5RpBDEoM2BcmhCcBrBq.jpg,/group1/publicHouse/20230719/11/33/5/UiBlYzBTqANNd9wEo7j9A9pN.jpg,/group1/publicHouse/20230719/11/19/5/DCk0m45Z2bEVfKEp0S0InS2Z.png",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 144.0,
+          "kezuCount": 6
+        },
+        {
+          "queueCount": 28,
+          "maxRent": 3723,
+          "minRent": 3560,
+          "houseTypeList": [
+            {
+              "area": "62.72",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=357e67e2_iBzm_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230719/15/39/5/U53Uz_2juHLu9Fy__Gf4K0h6.jpg,/group1/publicHouse/20230719/15/39/5/MkU2biSdEo3wmCY4ahP40sGr.jpg,/group1/publicHouse/20230719/11/19/5/DCk0m45Z2bEVfKEp0S0InS2Z.png",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "201"
+            }
+          ],
+          "totalCount": 24.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1203,7 +2992,49 @@
       "fileProjectName": "巧悦轩（大华锦绣悦府）",
       "visiblity": "1",
       "totalArea": "771.55",
-      "roomTypeCount": "一室户(总12套),二室户(总1套)"
+      "roomTypeCount": "一室户(总12套),二室户(总1套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 0,
+          "maxRent": 2616,
+          "minRent": 2503,
+          "houseTypeList": [
+            {
+              "area": "58",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=59c1b5f0_mbS4_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230720/11/21/5/c14iDTmvaEZ7Le-bEXxsMYJk.jpg,/group1/publicHouse/20230720/11/21/5/m3EuzEhQ6f2qwHsocJpntpak.jpg,/group1/publicHouse/20230719/16/57/5/oeDlHPgBnEbcm46QBLt7PsaX.png,/group1/publicHouse/20230719/16/57/5/TzAT6d27IRhzPcPTCA6Cy1Rt.png",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南,朝西",
+              "roomType": "101"
+            }
+          ],
+          "totalCount": 12.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 13,
+          "maxRent": 3358,
+          "minRent": 3358,
+          "houseTypeList": [
+            {
+              "area": "74.99",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=2ba7a7ee_SKcX_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230720/11/32/5/5C-j0EnwhvQT3Pb5GCrfppMo.jpg,/group1/publicHouse/20230720/11/32/5/qvYq5RdFF36mgJLJUk5dhkZi.jpg,/group1/publicHouse/20230719/16/57/5/oeDlHPgBnEbcm46QBLt7PsaX.png",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝西",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 1.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1231,7 +3062,29 @@
       "fileProjectName": "宝润雅苑（建发云锦湾）",
       "visiblity": "1",
       "totalArea": "6230.52",
-      "roomTypeCount": "一室户(总108套)"
+      "roomTypeCount": "一室户(总108套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 17,
+          "maxRent": 1928,
+          "minRent": 1711,
+          "houseTypeList": [
+            {
+              "area": "58",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=aeaa5298_h3vB_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240312/13/52/2/3137e2e9905215.jpg,/group1/bsgzf/20240312/13/52/2/3137f23b898500.jpg,/group1/bsgzf/20240312/13/52/2/31381ab1294425.png",
+              "roomDescription": "一居室",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房,近地铁",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "101"
+            }
+          ],
+          "totalCount": 108.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1259,7 +3112,51 @@
       "fileProjectName": "海上馨苑（上实海上菁英二期）",
       "visiblity": "1",
       "totalArea": "3237.94",
-      "roomTypeCount": "一室户(总46套)"
+      "roomTypeCount": "一室户(总46套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 1,
+          "maxRent": 3224,
+          "minRent": 2573,
+          "houseTypeList": [
+            {
+              "area": "60.12",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=0d8b74d4_sHLa_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230720/12/33/5/48UV_QSaGEFC6Lq4EgvFRMG3.png,/group1/publicHouse/20230720/12/33/5/H6JE_91bGKDCTK0WvgJFSwFx.png,/group1/publicHouse/20230720/10/51/5/GU9wAkVuyXYessRD-0Calmyn.jpg",
+              "roomDescription": "一居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "79.97",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=c9c4810a_re6l_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230720/12/35/5/oNZCSU_LP1bUyZGMXs6azMU-.jpg,/group1/publicHouse/20230720/12/35/5/p1j8a9HS4dT7zIgWsZV2jaGI.png,/group1/publicHouse/20230720/10/51/5/GU9wAkVuyXYessRD-0Calmyn.jpg",
+              "roomDescription": "一居室B户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "121"
+            },
+            {
+              "area": "77.98",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=8638c50e_6E0I_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230720/12/37/5/aETYBQPzQv_Uu4iZhJtDRpXO.jpg,/group1/publicHouse/20230720/12/37/5/VZFi4PrJbaGj8nF2xuV7aqtC.jpg,/group1/publicHouse/20230720/10/50/5/GbXUaH5hyVYNBMtRq4LIeSAQ.jpg",
+              "roomDescription": "一居室C户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室C户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 46.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1287,7 +3184,51 @@
       "fileProjectName": "海上祯苑（上实海上菁英）",
       "visiblity": "1",
       "totalArea": "2672.58",
-      "roomTypeCount": "一室户(总38套)"
+      "roomTypeCount": "一室户(总38套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 2,
+          "maxRent": 3188,
+          "minRent": 2567,
+          "houseTypeList": [
+            {
+              "area": "60",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=0d8b74d4_sHLa_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230720/12/33/5/48UV_QSaGEFC6Lq4EgvFRMG3.png,/group1/publicHouse/20230720/12/33/5/H6JE_91bGKDCTK0WvgJFSwFx.png,/group1/publicHouse/20230720/10/51/5/GU9wAkVuyXYessRD-0Calmyn.jpg",
+              "roomDescription": "一居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "79.83",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=c9c4810a_re6l_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230720/12/35/5/oNZCSU_LP1bUyZGMXs6azMU-.jpg,/group1/publicHouse/20230720/12/35/5/p1j8a9HS4dT7zIgWsZV2jaGI.png,/group1/publicHouse/20230720/10/51/5/GU9wAkVuyXYessRD-0Calmyn.jpg",
+              "roomDescription": "一居室B户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "121"
+            },
+            {
+              "area": "77.82",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=8638c50e_6E0I_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20230720/12/37/5/aETYBQPzQv_Uu4iZhJtDRpXO.jpg,/group1/publicHouse/20230720/12/37/5/VZFi4PrJbaGj8nF2xuV7aqtC.jpg,/group1/publicHouse/20230720/10/50/5/GbXUaH5hyVYNBMtRq4LIeSAQ.jpg",
+              "roomDescription": "一居室C户型（带书房）",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室C户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 38.0,
+          "kezuCount": 2
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1315,7 +3256,40 @@
       "fileProjectName": "祁真华苑（大华朗香花园）",
       "visiblity": "1",
       "totalArea": "786.33",
-      "roomTypeCount": "二室户(总11套)"
+      "roomTypeCount": "二室户(总11套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 60,
+          "maxRent": 4291,
+          "minRent": 3462,
+          "houseTypeList": [
+            {
+              "area": "65",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=bb9f28a4_ZqJ9_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20231019/16/10/5/WHH96Sv4yTChrVDXDIq8HCG6.png,/group1/publicHouse/20231019/16/10/5/WLVy43iEZhofssg-fk7885ZI.png,/group1/publicHouse/20231019/14/41/5/8m6jLCrbUsYla9GPBcHcMUwP.png",
+              "roomDescription": "二居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝东,朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "75",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=d0a7df5c_r5xg_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20231019/16/14/5/odUYqlMC5Hf891gL822BgepO.png,/group1/publicHouse/20231019/16/14/5/eldv6wRmhjBLW2ZapUuerPh4.png",
+              "roomDescription": "二居室B户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 11.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1343,7 +3317,40 @@
       "fileProjectName": "澜翠华庭（大华公园城市三期）",
       "visiblity": "1",
       "totalArea": "4215.12",
-      "roomTypeCount": "二室户(总56套)"
+      "roomTypeCount": "二室户(总56套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 4,
+          "maxRent": 4379,
+          "minRent": 3926,
+          "houseTypeList": [
+            {
+              "area": "72.89",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=fb1958ae_sU8I_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20231019/16/23/5/L1lh3lL2wT1loSbvXh_E2MFU.png,/group1/publicHouse/20231019/16/24/5/rWpkO6lRzoHGMsCQLyl3VV_K.png,/group1/publicHouse/20231019/15/22/5/sPxrC7YyeBIFSb1iv1XIRLFA.png",
+              "roomDescription": "二居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "77.65",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=21c4aa3a_gk3X_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20231019/16/25/5/6vjZusd16HJcTwSmNyf1fJxc.png,/group1/publicHouse/20231019/16/26/5/plbswHfPwp-JfNal8vH1JMBQ.png,/group1/publicHouse/20231019/15/22/5/sPxrC7YyeBIFSb1iv1XIRLFA.png",
+              "roomDescription": "二居室B户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 56.0,
+          "kezuCount": 7
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1371,7 +3378,57 @@
       "fileProjectName": "春樾湾华庭(大华公园荟)",
       "visiblity": "1",
       "totalArea": "4992.83",
-      "roomTypeCount": "一室户(总66套),二室户(总13套)"
+      "roomTypeCount": "一室户(总66套),二室户(总13套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 56,
+          "maxRent": 3098,
+          "minRent": 2306,
+          "houseTypeList": [
+            {
+              "area": "62",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=cebda82c_dW2o_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20231030/15/41/5/pLYrrj-U_o7XUJPtQUE1itJU.png,/group1/publicHouse/20231030/15/41/5/_hLOnDaTNw0ksTdwtEkhkFWh.png,/group1/publicHouse/20231103/15/10/5/kt4dSnzDhYanU2cm49xfFWHM.png,/group1/publicHouse/20231103/15/10/5/eiNHBgdMrgl7f54ZR2z1FCLV.png,/group1/publicHouse/20231103/15/10/5/ZBcoKuRYASOjM4MKkDp0fvUr.png",
+              "roomDescription": "一居室A户型",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房,近地铁",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "48.17",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=c1818232_jJPv_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20231030/15/48/5/A9XsMFbOiKjvve_38E-o7y_F.png,/group1/publicHouse/20231030/15/48/5/CwS5Kzqvr6uHamn_SJdFQY7N.png,/group1/publicHouse/20231103/15/10/5/kt4dSnzDhYanU2cm49xfFWHM.png,/group1/publicHouse/20231103/15/10/5/eiNHBgdMrgl7f54ZR2z1FCLV.png,/group1/publicHouse/20231103/15/10/5/ZBcoKuRYASOjM4MKkDp0fvUr.png",
+              "roomDescription": "一居室B户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝西",
+              "roomType": "101"
+            }
+          ],
+          "totalCount": 66.0,
+          "kezuCount": 1
+        },
+        {
+          "queueCount": 67,
+          "houseTypeList": [
+            {
+              "area": "77.95",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=dd5d95a4_G8LP_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20231030/15/54/5/XL8RqZAr8ijHHBXS8xagKncL.png,/group1/publicHouse/20231030/15/54/5/aaRHSC1SoLorTiP5iqbv_UnK.png,/group1/publicHouse/20231103/15/10/5/kt4dSnzDhYanU2cm49xfFWHM.png,/group1/publicHouse/20231103/15/10/5/eiNHBgdMrgl7f54ZR2z1FCLV.png,/group1/publicHouse/20231103/15/10/5/ZBcoKuRYASOjM4MKkDp0fvUr.png",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 13.0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1399,7 +3456,26 @@
       "fileProjectName": "荣万月城名邸",
       "visiblity": "1",
       "totalArea": "11884.4",
-      "roomTypeCount": "一室户(总220套)"
+      "roomTypeCount": "一室户(总220套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 66,
+          "houseTypeList": [
+            {
+              "area": "54.02",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=3fe81f90_fNrK_b6f9",
+              "roomPicUrl": "/group1/publicHouse/20231030/16/07/5/6dMTIw3YHYXoP_QGphkm81mX.png,/group1/publicHouse/20231030/16/07/5/GKK85djQ1ZaydiykgrGPIFE4.png,/group1/publicHouse/20231103/15/12/5/LpdY6gyQDC1x2VK8XvfeD1Ox.png",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电视柜,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 220.0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1427,7 +3503,40 @@
       "fileProjectName": "新顾城中企珺庭（中企光华雅境）",
       "visiblity": "1",
       "totalArea": "3112.72",
-      "roomTypeCount": "一室户(总52套)"
+      "roomTypeCount": "一室户(总52套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 37,
+          "maxRent": 2601,
+          "minRent": 2227,
+          "houseTypeList": [
+            {
+              "area": "56.84",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=c2bfc108_hN2l_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240129/09/20/2/52cd431c129099.jpg,/group1/bsgzf/20240129/09/20/2/52cd53ad930112.jpg,/group1/bsgzf/20240129/08/58/2/52b9f9c9205391.jpg",
+              "roomDescription": "一居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,沙发,空调,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱,燃气",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "62.88",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=fd0f71bc_8jHi_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240129/09/23/2/52d02cea142246.jpg,/group1/bsgzf/20240129/09/23/2/52d034fc799028.jpg,/group1/bsgzf/20240129/08/58/2/52b9f9c9205391.jpg",
+              "roomDescription": "一居室B户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,沙发,空调,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱,燃气",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 52.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1455,7 +3564,49 @@
       "fileProjectName": "玖盛湾名邸(玖盛湾名邸C区）",
       "visiblity": "1",
       "totalArea": "7781.4",
-      "roomTypeCount": "一室户(总90套),二室户(总30套)"
+      "roomTypeCount": "一室户(总90套),二室户(总30套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 2,
+          "maxRent": 2644,
+          "minRent": 2486,
+          "houseTypeList": [
+            {
+              "area": "59.06",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=5c01c854_eyza_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240418/10/35/2/ef0f2d57862835.jpg,/group1/bsgzf/20240418/10/35/2/ef0f37de363618.jpg,/group1/bsgzf/20240418/10/09/2/eef7aa3f264659.png",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 90.0,
+          "kezuCount": 7
+        },
+        {
+          "queueCount": 17,
+          "maxRent": 3420,
+          "minRent": 3220,
+          "houseTypeList": [
+            {
+              "area": "82.2",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=4bc662ce_r7st_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240418/10/38/2/ef11b4d2507722.jpg,/group1/bsgzf/20240418/10/38/2/ef11c21f671927.jpg,/group1/bsgzf/20240418/10/09/2/eef7aa3f264659.png",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 30.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1483,7 +3634,69 @@
       "fileProjectName": "悦水雅庭（大华悦庭）",
       "visiblity": "1",
       "totalArea": "3995.48",
-      "roomTypeCount": "一室户(总24套),二室户(总24套),三室户(总8套)"
+      "roomTypeCount": "一室户(总24套),二室户(总24套),三室户(总8套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 62,
+          "maxRent": 3302,
+          "minRent": 2906,
+          "houseTypeList": [
+            {
+              "area": "54.27",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=194b4198_Mojf_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240516/10/34/2/7f4022de165370.jpg,/group1/bsgzf/20240516/10/34/2/7f403dd8533428.jpg,/group1/bsgzf/20240516/10/00/2/7f2159a2308499.jpg",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "101"
+            }
+          ],
+          "totalCount": 24.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 31,
+          "maxRent": 4501,
+          "minRent": 3960,
+          "houseTypeList": [
+            {
+              "area": "79.39",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=2f2251d2_Jduo_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240516/10/36/2/7f421714937923.jpg,/group1/bsgzf/20240516/10/36/2/7f422a1b235304.jpg,/group1/bsgzf/20240516/10/00/2/7f2159a2308499.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 24.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 52,
+          "maxRent": 4942,
+          "minRent": 4928,
+          "houseTypeList": [
+            {
+              "area": "98.45",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=09e5e6ae_sCit_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240516/10/40/2/7f45f637631697.jpg,/group1/bsgzf/20240516/10/40/2/7f46013f459479.jpg,/group1/bsgzf/20240516/11/36/2/7f78bc61681273.jpg",
+              "roomDescription": "三居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "312"
+            }
+          ],
+          "totalCount": 8.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1511,7 +3724,60 @@
       "fileProjectName": "金悦美兰铂庭（金融街美兰金悦府）",
       "visiblity": "1",
       "totalArea": "3706.11",
-      "roomTypeCount": "一室户(总68套),三室户(总1套)"
+      "roomTypeCount": "一室户(总68套),三室户(总1套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 2,
+          "maxRent": 1997,
+          "minRent": 1726,
+          "houseTypeList": [
+            {
+              "area": "57.39",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=a61bc520_xcAd_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240627/10/13/2/5777ef4b951143.jpg,/group1/bsgzf/20240627/10/13/2/57780285579855.jpg,/group1/bsgzf/20240627/09/59/2/576b9f1d992642.jpg",
+              "roomDescription": "一居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "51.76",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=988daaf4_rOif_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240627/10/25/2/578342bf379198.jpg,/group1/bsgzf/20240627/10/25/2/5783584c773533.jpg,/group1/bsgzf/20240627/09/59/2/576b9f1d992642.jpg",
+              "roomDescription": "一居室B户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 68.0,
+          "kezuCount": 1
+        },
+        {
+          "queueCount": 25,
+          "maxRent": 2800,
+          "minRent": 2800,
+          "houseTypeList": [
+            {
+              "area": "88.51",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=b7ab1c3c_A31M_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240627/10/29/2/5786f3e4745670.jpg,/group1/bsgzf/20240627/10/29/2/578707f7191279.jpg,/group1/bsgzf/20240627/09/59/2/576b9f1d992642.jpg",
+              "roomDescription": "三居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "321"
+            }
+          ],
+          "totalCount": 1.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1539,7 +3805,40 @@
       "fileProjectName": "璟翠华庭（大华公园城市二期）",
       "visiblity": "1",
       "totalArea": "4705.7",
-      "roomTypeCount": "二室户(总62套)"
+      "roomTypeCount": "二室户(总62套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 3,
+          "maxRent": 4306,
+          "minRent": 4018,
+          "houseTypeList": [
+            {
+              "area": "73",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=fb1958ae_sU8I_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240823/08/54/2/7cba6ba2402632.jpg,/group1/bsgzf/20240823/08/54/2/7cba74aa755153.jpg,/group1/bsgzf/20240822/16/43/2/79417555690628.jpg,/group1/bsgzf/20240822/16/43/2/7941a7f9174732.jpg",
+              "roomDescription": "二居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电视柜,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "78.99",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=21c4aa3a_gk3X_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20240823/08/58/2/7cbd83c4330170.jpg,/group1/bsgzf/20240823/08/58/2/7cbd8c9c545369.jpg,/group1/bsgzf/20240822/16/43/2/79417555690628.jpg,/group1/bsgzf/20240822/16/43/2/7941a7f9174732.jpg",
+              "roomDescription": "二居室B户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,电视柜,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 62.0,
+          "kezuCount": 8
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1567,7 +3866,40 @@
       "fileProjectName": "西江悦庭（天安象屿西江悦）",
       "visiblity": "1",
       "totalArea": "3992.17",
-      "roomTypeCount": "一室户(总70套)"
+      "roomTypeCount": "一室户(总70套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 11,
+          "maxRent": 1938,
+          "minRent": 1683,
+          "houseTypeList": [
+            {
+              "area": "58.5",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=384ee366_eC87_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20241025/09/52/2/c15fbfe2990567.jpg,/group1/bsgzf/20241025/09/52/2/c15fc8c9937915.jpg,/group1/bsgzf/20241025/09/29/2/c14ae4a8719765.png",
+              "roomDescription": "一居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,电视柜,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝东,朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "56",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=fad316d8_u8Zm_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20241025/10/00/2/c1676175847412.jpg,/group1/bsgzf/20241025/10/00/2/c16776ad482257.jpg,/group1/bsgzf/20241025/09/29/2/c14ae4a8719765.png",
+              "roomDescription": "一居室B户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,电视柜,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,安防设施,电子门锁,洗衣机,冰箱,浴霸",
+              "towards": "朝东,朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 70.0,
+          "kezuCount": 1
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1595,7 +3927,49 @@
       "fileProjectName": "湾桂馨苑（柏悦江湾）",
       "visiblity": "1",
       "totalArea": "3406.99",
-      "roomTypeCount": "一室户(总41套),二室户(总13套)"
+      "roomTypeCount": "一室户(总41套),二室户(总13套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 65,
+          "maxRent": 3569,
+          "minRent": 3351,
+          "houseTypeList": [
+            {
+              "area": "58",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=4792ce30_ku6l_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20241119/09/49/2/421c51dd498083.jpg,/group1/bsgzf/20241119/09/49/2/421c620a322015.jpg,/group1/bsgzf/20241119/09/37/2/42119b6c338761.jpg,/group1/bsgzf/20241119/09/38/2/42125b14279829.jpg",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 41.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 58,
+          "maxRent": 4669,
+          "minRent": 4458,
+          "houseTypeList": [
+            {
+              "area": "78.96",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=395a77fa_DEx3_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20241119/09/52/2/421f3101545250.jpg,/group1/bsgzf/20241119/09/52/2/421f3e55678796.jpg,/group1/bsgzf/20241119/09/37/2/42119b6c338761.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 13.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1623,7 +3997,49 @@
       "fileProjectName": "云澜名邸（保利云上浔光）",
       "visiblity": "1",
       "totalArea": "4155.82",
-      "roomTypeCount": "一室户(总51套),二室户(总17套)"
+      "roomTypeCount": "一室户(总51套),二室户(总17套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 59,
+          "maxRent": 1918,
+          "minRent": 1844,
+          "houseTypeList": [
+            {
+              "area": "56.79",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=44ba07c8_EuFP_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250122/16/44/2/8d2f1de9566339.jpg,/group1/bsgzf/20250122/16/44/2/8d2f2d06686735.jpg,/group1/bsgzf/20250122/16/32/2/8d24541a172484.jpg",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 51.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 82,
+          "maxRent": 2403,
+          "minRent": 2310,
+          "houseTypeList": [
+            {
+              "area": "74.09",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=30f9539c_Sk92_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250122/16/50/2/8d34695e136180.jpg,/group1/bsgzf/20250122/16/50/2/8d347a5e664659.jpg,/group1/bsgzf/20250122/16/32/2/8d24541a172484.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 17.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1651,7 +4067,29 @@
       "fileProjectName": "熙和雅苑（建发熙和府）",
       "visiblity": "1",
       "totalArea": "4343.04",
-      "roomTypeCount": "一室户(总80套)"
+      "roomTypeCount": "一室户(总80套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 43,
+          "maxRent": 1944,
+          "minRent": 1824,
+          "houseTypeList": [
+            {
+              "area": "54.09",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=b0009932_r14h_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250123/15/16/2/9204b029798814.jpg,/group1/bsgzf/20250123/15/16/2/9204b7c2519396.jpg,/group1/bsgzf/20250123/15/08/2/91fda420589166.png",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,燃气,脱排油烟机,热水器,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "101"
+            }
+          ],
+          "totalCount": 80.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1679,7 +4117,60 @@
       "fileProjectName": "祁映华庭（大华朗香公园映）",
       "visiblity": "1",
       "totalArea": "2895.06",
-      "roomTypeCount": "一室户(总34套),二室户(总12套)"
+      "roomTypeCount": "一室户(总34套),二室户(总12套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 44,
+          "maxRent": 3402,
+          "minRent": 3299,
+          "houseTypeList": [
+            {
+              "area": "58.56",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=d2229574_35b1_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250221/13/46/2/270b2177904746.jpg,/group1/bsgzf/20250221/13/46/2/270b2d94741376.jpg,/group1/bsgzf/20250221/13/31/2/26fcf38c360248.png,/group1/bsgzf/20250221/13/31/2/26fcfed2909469.png",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 34.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 51,
+          "maxRent": 4373,
+          "minRent": 4034,
+          "houseTypeList": [
+            {
+              "area": "76.42",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=0b030504_JixQ_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250221/14/10/2/2720a1d8467068.jpg,/group1/bsgzf/20250221/14/10/2/2720a9c0849511.jpg,/group1/bsgzf/20250221/13/31/2/26fcf38c360248.png,/group1/bsgzf/20250221/13/31/2/26fcfed2909469.png",
+              "roomDescription": "二居室A户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            },
+            {
+              "area": "70.49",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=e89072d6_Gyxs_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250221/14/12/2/2722e5dd174221.jpg,/group1/bsgzf/20250221/14/12/2/2722f097602416.jpg,/group1/bsgzf/20250221/13/31/2/26fcf38c360248.png,/group1/bsgzf/20250221/13/31/2/26fcfed2909469.png",
+              "roomDescription": "二居室B户型",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 12.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "0",
@@ -1707,7 +4198,81 @@
       "fileProjectName": "红星铂雅名都",
       "visiblity": "1",
       "totalArea": "6912.36",
-      "roomTypeCount": "一室户(总65套),二室户(总39套),三室户(总1套)"
+      "roomTypeCount": "一室户(总65套),二室户(总39套),三室户(总1套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 0,
+          "houseTypeList": [
+            {
+              "area": "58.27",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=e60b3f44_b2Ss_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250429/11/15/2/7f8a85d6309271.jpg,/group1/bsgzf/20250429/11/08/2/7f847bb5223881.jpg,/group1/bsgzf/20250429/11/00/2/7f7d5f2f153921.jpg",
+              "roomDescription": "一居室A户型",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,餐桌,餐椅,书桌,书桌椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝西",
+              "roomType": "111"
+            },
+            {
+              "area": "58.13",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=dce83a48_J2P8_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250429/11/17/2/7f8ca0f4993291.jpg,/group1/bsgzf/20250429/11/17/2/7f8cacef794498.jpg,/group1/bsgzf/20250429/11/00/2/7f7d5f2f153921.jpg",
+              "roomDescription": "一居室B户型",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,餐桌,餐椅,书桌,书桌椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            },
+            {
+              "area": "58",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=f04c757c_HQFf_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250429/11/20/2/7f8f6ebc815377.jpg,/group1/bsgzf/20250429/11/20/2/7f8f777f468628.jpg,/group1/bsgzf/20250429/11/00/2/7f7d5f2f153921.jpg",
+              "roomDescription": "一居室C户型",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室C户型",
+              "roomEquipment": "床,衣柜,餐桌,餐椅,书桌,书桌椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 65.0
+        },
+        {
+          "queueCount": 0,
+          "houseTypeList": [
+            {
+              "area": "78",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=fdad0c7c_81EV_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250429/11/25/2/7f93b500265181.jpg,/group1/bsgzf/20250429/11/25/2/7f93bbf1616981.jpg,/group1/bsgzf/20250429/11/00/2/7f7d5f2f153921.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 39.0
+        },
+        {
+          "queueCount": 0,
+          "houseTypeList": [
+            {
+              "area": "88.92",
+              "roomPicUrl": "/group1/bsgzf/20250430/09/47/2/8460874d235576.jpg",
+              "roomDescription": "三居室",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "三居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "322"
+            }
+          ],
+          "totalCount": 1.0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1735,7 +4300,49 @@
       "fileProjectName": "和颂名邸（保利和颂)",
       "visiblity": "1",
       "totalArea": "4261.83",
-      "roomTypeCount": "一室户(总34套),二室户(总31套)"
+      "roomTypeCount": "一室户(总34套),二室户(总31套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 48,
+          "maxRent": 2344,
+          "minRent": 2152,
+          "houseTypeList": [
+            {
+              "area": "54",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=9c85885c_ydXJ_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250526/14/48/2/b597ba7210503.jpg,/group1/bsgzf/20250526/14/48/2/b598a26156301.jpg,/group1/bsgzf/20250526/14/39/2/b5141f2677167.jpg,/group1/bsgzf/20250526/14/39/2/b514d7f858486.jpg,/group1/bsgzf/20250526/14/39/2/b5158db197986.jpg",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,安防设施,电子门锁,洗衣机,冰箱,浴霸",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 34.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 58,
+          "maxRent": 3008,
+          "minRent": 2784,
+          "houseTypeList": [
+            {
+              "area": "78",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=40a9cbc4_BHd3_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250526/14/52/2/b5d1f39635235.jpg,/group1/bsgzf/20250526/14/52/2/b5d2581966110.jpg,/group1/bsgzf/20250526/14/39/2/b5141f2677167.jpg,/group1/bsgzf/20250526/14/39/2/b514d7f858486.jpg,/group1/bsgzf/20250526/14/39/2/b5158db197986.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 31.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1763,7 +4370,60 @@
       "fileProjectName": "佳运宝悦名邸（佳运名邸）",
       "visiblity": "1",
       "totalArea": "3937.12",
-      "roomTypeCount": "一室户(总56套),二室户(总8套)"
+      "roomTypeCount": "一室户(总56套),二室户(总8套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 24,
+          "maxRent": 1952,
+          "minRent": 1688,
+          "houseTypeList": [
+            {
+              "area": "56.78",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=814efaca_U0Ln_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250605/16/02/2/3f1cbab0196249.jpg,/group1/bsgzf/20250605/16/02/2/3f1cc82a980100.jpg,/group1/bsgzf/20250605/15/45/2/3f0d5f24123699.jpg",
+              "roomDescription": "一居室A户型",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室A户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,安防设施,电子门锁,洗衣机,冰箱,浴霸",
+              "towards": "朝南",
+              "roomType": "101"
+            },
+            {
+              "area": "60",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=6ad8325c_CykH_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250605/16/09/2/3f2312c9792716.jpg,/group1/bsgzf/20250605/16/09/2/3f231f00573297.jpg,/group1/bsgzf/20250605/15/45/2/3f0d5f24123699.jpg",
+              "roomDescription": "一居室B户型",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室B户型",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 56.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 27,
+          "maxRent": 2544,
+          "minRent": 2376,
+          "houseTypeList": [
+            {
+              "area": "73.23",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=56fa6b56_oSc7_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250605/16/12/2/3f26561c212561.jpg,/group1/bsgzf/20250605/16/12/2/3f266b3d842576.jpg,/group1/bsgzf/20250605/15/45/2/3f0d5f24123699.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 8.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1791,7 +4451,49 @@
       "fileProjectName": "宝钰澜庭",
       "visiblity": "1",
       "totalArea": "1826.5",
-      "roomTypeCount": "一室户(总20套),二室户(总10套)"
+      "roomTypeCount": "一室户(总20套),二室户(总10套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 34,
+          "maxRent": 2496,
+          "minRent": 2400,
+          "houseTypeList": [
+            {
+              "area": "54",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=0a4be9d8_1NDs_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250815/11/16/2/abba7d94202119.jpg,/group1/bsgzf/20250815/11/16/2/abba9239830223.jpg,/group1/bsgzf/20250815/10/54/2/aba615a9110166.jpg",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 20.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 25,
+          "maxRent": 3144,
+          "minRent": 3024,
+          "houseTypeList": [
+            {
+              "area": "74.56",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=28f603aa_kZdX_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250815/11/19/2/abbd8ad0751321.jpg,/group1/bsgzf/20250815/11/19/2/abbd9e77758181.jpg,/group1/bsgzf/20250815/11/19/2/abbdc47c915193.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 10.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1819,7 +4521,29 @@
       "fileProjectName": "华涵佳苑",
       "visiblity": "1",
       "totalArea": "9955.44",
-      "roomTypeCount": "一室户(总162套)"
+      "roomTypeCount": "一室户(总162套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 6,
+          "maxRent": 2714,
+          "minRent": 2542,
+          "houseTypeList": [
+            {
+              "area": "61.45",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=6f07b37e_tpqD_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250815/17/08/2/acfd1bd8863979.jpg,/group1/bsgzf/20250815/17/08/2/acfd2f1e170437.jpg,/group1/bsgzf/20250815/16/44/2/ace6dce3985247.jpg",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,书桌,书桌椅,沙发,茶几,空调,电磁炉,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 162.0,
+          "kezuCount": 26
+        }
+      ]
     },
     {
       "openQueue": "1",
@@ -1847,7 +4571,49 @@
       "fileProjectName": "悦逸雅苑（天安象屿萃湖臻境）",
       "visiblity": "1",
       "totalArea": "2947.2",
-      "roomTypeCount": "一室户(总32套),二室户(总16套)"
+      "roomTypeCount": "一室户(总32套),二室户(总16套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 41,
+          "maxRent": 2080,
+          "minRent": 1944,
+          "houseTypeList": [
+            {
+              "area": "55.29",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=298e5f40_NsKJ_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250822/09/11/2/cf54f64c363287.jpg,/group1/bsgzf/20250822/09/11/2/cf5506d4761185.jpg,/group1/bsgzf/20250822/09/03/2/cf4d85de119303.jpg",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 32.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 59,
+          "maxRent": 2568,
+          "minRent": 2400,
+          "houseTypeList": [
+            {
+              "area": "73.62",
+              "vrUrl": "https://cloud5.3dnest.cn/newhouse/?m=37965804_aKVx_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20250822/09/14/2/cf571d00243610.jpg,/group1/bsgzf/20250822/09/14/2/cf5744a6535432.jpg,/group1/bsgzf/20250822/09/03/2/cf4d85de119303.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 16.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "0",
@@ -1875,7 +4641,49 @@
       "fileProjectName": "中建宝熙观邸（中建熙江岳）",
       "visiblity": "1",
       "totalArea": "5038.88",
-      "roomTypeCount": "一室户(总56套),二室户(总28套)"
+      "roomTypeCount": "一室户(总56套),二室户(总28套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 5,
+          "maxRent": 2376,
+          "minRent": 2184,
+          "houseTypeList": [
+            {
+              "area": "55.85",
+              "vrUrl": "https://beyond.3dnest.cn/newhouse/?m=6992486e_2RAg_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20251112/15/57/2/77117bdd267952.jpg,/group1/bsgzf/20251112/15/57/2/77118d22901884.jpg,/group1/bsgzf/20251112/15/52/2/770d0c76978338.jpg",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 56.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 4,
+          "maxRent": 2840,
+          "minRent": 2680,
+          "houseTypeList": [
+            {
+              "area": "68.26",
+              "vrUrl": "https://beyond.3dnest.cn/newhouse/?m=436050e6_IcHn_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20251112/15/59/2/7713559b437760.jpg,/group1/bsgzf/20251112/15/59/2/77136160741846.jpg,/group1/bsgzf/20251112/15/52/2/770d0c76978338.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 28.0,
+          "kezuCount": 0
+        }
+      ]
     },
     {
       "openQueue": "0",
@@ -1903,7 +4711,49 @@
       "fileProjectName": "荣万和璟名邸 （四季都会青藤里）",
       "visiblity": "1",
       "totalArea": "5012.02",
-      "roomTypeCount": "一室户(总52套),二室户(总26套)"
+      "roomTypeCount": "一室户(总52套),二室户(总26套)",
+      "roomTypeDetails": [
+        {
+          "queueCount": 16,
+          "maxRent": 2640,
+          "minRent": 2480,
+          "houseTypeList": [
+            {
+              "area": "57",
+              "vrUrl": "https://beyond.3dnest.cn/newhouse/?m=83bfa970_ObTV_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20251112/16/47/2/773fdc4a234774.jpg,/group1/bsgzf/20251112/16/47/2/773fe521692561.jpg,/group1/bsgzf/20251112/16/42/2/773b4f27257365.jpg",
+              "roomDescription": "一居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "一居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "111"
+            }
+          ],
+          "totalCount": 52.0,
+          "kezuCount": 0
+        },
+        {
+          "queueCount": 31,
+          "maxRent": 3168,
+          "minRent": 3040,
+          "houseTypeList": [
+            {
+              "area": "78.77",
+              "vrUrl": "https://beyond.3dnest.cn/newhouse/?m=c9f3621c_2kEx_b6f9",
+              "roomPicUrl": "/group1/bsgzf/20251112/16/51/2/77434930768450.jpg,/group1/bsgzf/20251112/16/51/2/7743561a122145.jpg,/group1/bsgzf/20251112/16/42/2/773b4f27257365.jpg",
+              "roomDescription": "二居室",
+              "roomLabel": "近地铁,独立阳台,独立卫生间,独立厨房",
+              "houseTypeName": "二居室",
+              "roomEquipment": "床,衣柜,床头柜,餐桌,餐椅,沙发,茶几,空调,燃气,脱排油烟机,热水器,浴霸,安防设施,电子门锁,洗衣机,冰箱",
+              "towards": "朝南",
+              "roomType": "211"
+            }
+          ],
+          "totalCount": 26.0,
+          "kezuCount": 0
+        }
+      ]
     }
   ],
   "pageNo": 0,
