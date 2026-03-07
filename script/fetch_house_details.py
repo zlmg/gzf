@@ -108,7 +108,7 @@ def generate_headers():
         "Z-nonce": nonce_data,
         "Z-signature": signature,
         "Authorization": "1",
-        "ip": "180.164.108.153",
+        "ip": "180.164.108.83",
         "userId": "MDAwMDAwMDA=",
         "type": "4"
     }
@@ -153,6 +153,37 @@ def fetch_house_detail(project_no):
     except Exception as e:
         logging.error(f"处理API响应失败 (projectNo: {project_no}): {str(e)}")
         return None
+
+def save_json_file_atomic(data, project_no):
+    """原子方式保存JSON文件"""
+    import os
+    import tempfile
+    
+    temp_file = None
+    try:
+        # 创建临时文件
+        temp_fd, temp_file = tempfile.mkstemp(dir=os.path.dirname(JSON_FILE_PATH), suffix='.tmp')
+        
+        # 写入临时文件
+        with os.fdopen(temp_fd, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        
+        # 原子方式替换文件
+        os.replace(temp_file, JSON_FILE_PATH)
+        
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        logging.info(f"[{timestamp}] 成功保存房源 {project_no} 的数据到JSON文件")
+        return True
+    except Exception as e:
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        logging.error(f"[{timestamp}] 保存房源 {project_no} 的数据失败: {str(e)}")
+        # 清理临时文件
+        if temp_file and os.path.exists(temp_file):
+            try:
+                os.unlink(temp_file)
+            except:
+                pass
+        return False
 
 def update_house_details():
     """更新所有房源的详细数据"""
@@ -211,6 +242,9 @@ def update_house_details():
                 
                 logging.info(f"成功更新房源 {project_no} 的 {updated_fields} 个字段")
                 success_count += 1
+                
+                # 立即保存更新后的数据（原子写入）
+                save_json_file_atomic(data, project_no)
             except Exception as e:
                 logging.error(f"更新房源数据失败 (projectNo: {project_no}): {str(e)}")
                 failure_count += 1
@@ -229,9 +263,6 @@ def update_house_details():
         
         logging.info(f"等待{total_interval}秒后处理下一个房源... (固定20秒 + 随机{random_interval}秒)")
         time.sleep(total_interval)
-    
-    # 保存更新后的数据
-    save_json_file(data)
     
     # 输出统计信息
     logging.info(f"更新完成: 成功 {success_count} 个, 失败 {failure_count} 个")
