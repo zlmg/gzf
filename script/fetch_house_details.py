@@ -25,6 +25,8 @@ import os
 # 使用相对路径，基于脚本文件所在目录
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 JSON_FILE_PATH = os.path.join(SCRIPT_DIR, 'bsgz.json')
+# 目标文件路径（public/data/bsgz.json）
+PUBLIC_JSON_PATH = os.path.join(os.path.dirname(SCRIPT_DIR), 'public', 'data', 'bsgz.json')
 
 # API返回数据结构说明
 """
@@ -103,6 +105,63 @@ def save_json_file(data):
     except Exception as e:
         logging.error(f"保存JSON文件失败: {str(e)}")
         raise
+
+def validate_json_file(file_path):
+    """验证JSON文件的完整性和有效性"""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        logging.info(f"JSON文件验证成功: {file_path}")
+        return True, data
+    except json.JSONDecodeError as e:
+        logging.error(f"JSON文件格式错误: {str(e)}")
+        return False, None
+    except Exception as e:
+        logging.error(f"验证JSON文件失败: {str(e)}")
+        return False, None
+
+def copy_json_to_public():
+    """将script/bsgz.json覆盖到public/data/bsgz.json"""
+    try:
+        # 验证源文件的完整性
+        is_valid, data = validate_json_file(JSON_FILE_PATH)
+        if not is_valid:
+            logging.error("源JSON文件无效，无法覆盖到public目录")
+            return False
+        
+        # 确保目标目录存在
+        os.makedirs(os.path.dirname(PUBLIC_JSON_PATH), exist_ok=True)
+        
+        # 原子方式写入目标文件
+        import tempfile
+        temp_file = None
+        try:
+            # 创建临时文件
+            temp_fd, temp_file = tempfile.mkstemp(dir=os.path.dirname(PUBLIC_JSON_PATH), suffix='.tmp')
+            
+            # 写入临时文件
+            with os.fdopen(temp_fd, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            
+            # 原子方式替换文件
+            os.replace(temp_file, PUBLIC_JSON_PATH)
+            
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            logging.info(f"---------- [{timestamp}] 成功将JSON文件覆盖到public/data/bsgz.json ----------")
+            return True
+        except Exception as e:
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            logging.error(f"[{timestamp}] 覆盖JSON文件到public目录失败: {str(e)}")
+            # 清理临时文件
+            if temp_file and os.path.exists(temp_file):
+                try:
+                    os.unlink(temp_file)
+                except:
+                    pass
+            return False
+    except Exception as e:
+        logging.error(f"复制JSON文件到public目录失败: {str(e)}")
+        return False
 
 def generate_headers():
     """生成符合规范的请求头"""
@@ -371,6 +430,13 @@ def update_house_details():
     logging.info(f"更新完成: 成功 {success_count} 个, 失败 {failure_count} 个")
     if failed_projects:
         logging.warning(f"失败的房源: {failed_projects}")
+    
+    # 仅在数据抓取完全成功且无错误的情况下执行文件覆盖
+    if failure_count == 0 and success_count > 0:
+        logging.info("数据抓取完全成功，开始将JSON文件覆盖到public目录...")
+        copy_json_to_public()
+    else:
+        logging.info("数据抓取存在失败项，跳过文件覆盖操作")
     
     return {
         'total': total_houses,
