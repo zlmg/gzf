@@ -1,0 +1,28 @@
+{
+    "code": 0,
+    "data": {
+        "projectShortName": "华涵佳苑",
+        "openQueue": "1",
+        "houseSource": "配建房",
+        "mediaUrl": "/group1/bsgzf/20250815/16/34/2/acdda05e860751.jpg,/group1/bsgzf/20250815/16/34/2/acddbd56333392.jpg,/group1/bsgzf/20250815/16/41/2/ace43744126634.jpg,/group1/bsgzf/20250815/16/34/2/acddf3d5298561.jpg,/group1/bsgzf/20250815/16/34/2/acde0abc868931.jpg,/group1/bsgzf/20250815/16/42/2/ace53044919874.jpg,/group1/bsgzf/20250815/16/35/2/acde6c52912229.jpg,/group1/bsgzf/20250815/16/44/2/ace6dce3985247.jpg,/group1/bsgzf/20250815/17/10/2/acfeb4ab638633.jpg",
+        "houseType": "公租房",
+        "latitude": "31.352723",
+        "textContent": "华涵佳苑公租房项目位于宝山区顾北路358弄1号、2号，总建筑面积9955.44平方米,房源共计162套，均为一居室户型，配套车位65个。",
+        "fileProjectName": "华涵佳苑",
+        "roomTypeInfos": "一",
+        "visiblity": "1",
+        "totalCount": "162",
+        "supply": "社会面（个人、单位）",
+        "kezuCount": 26,
+        "layout": "顾村镇",
+        "roomTypeCount": "一室户(总162套)",
+        "projectNo": "0952",
+        "district": "宝山区",
+        "location": "上海市宝山区顾北路358弄",
+        "projectName": "华涵佳苑",
+        "openingDate": "2025-08-18",
+        "totalArea": "9955.44",
+        "longitude": "121.393645"
+    },
+    "message": "Operation successfully."
+}
