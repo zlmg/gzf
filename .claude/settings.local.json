@@ -5,7 +5,10 @@
       "Bash(npx tailwindcss init:*)",
       "Bash(pnpm exec tailwindcss init:*)",
       "Bash(pnpm run build)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(curl:*)",
+      "Bash(pnpm vue-tsc:*)",
+      "Bash(pnpm build:*)"
     ]
   }
 }
