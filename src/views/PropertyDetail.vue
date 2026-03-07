@@ -72,12 +72,12 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="container-app py-6">
+    <div class="container-app py-4 md:py-6">
       <!-- Back button -->
-      <div class="mb-6">
+      <div class="mb-4 md:mb-6">
         <button
           @click="goBack"
-          class="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+          class="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors text-sm md:text-base"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -87,24 +87,24 @@ onMounted(async () => {
       </div>
 
       <!-- Loading state -->
-      <div v-if="loading" class="bg-white rounded-xl shadow-md p-6">
+      <div v-if="loading" class="bg-white rounded-xl shadow-md p-4 md:p-6">
         <ElSkeleton :rows="10" animated />
       </div>
 
       <!-- Error state -->
-      <div v-else-if="error" class="bg-white rounded-xl shadow-md p-12 text-center">
-        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div v-else-if="error" class="bg-white rounded-xl shadow-md p-8 md:p-12 text-center">
+        <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
             d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <p class="text-gray-600 mb-4">{{ error }}</p>
+        <p class="text-gray-600 mb-4 text-sm md:text-base">{{ error }}</p>
         <ElButton type="primary" @click="goBack">返回首页</ElButton>
       </div>
 
       <!-- Property detail -->
-      <div v-else-if="property" class="space-y-6">
+      <div v-else-if="property" class="space-y-4 md:space-y-6">
         <!-- Image gallery -->
-        <div class="bg-white rounded-xl shadow-md p-4">
+        <div class="bg-white rounded-xl shadow-md p-3 md:p-4">
           <ImageGallery
             :images="images"
             :title="property.projectName"
@@ -112,21 +112,62 @@ onMounted(async () => {
         </div>
 
         <!-- Basic info -->
-        <div class="bg-white rounded-xl shadow-md p-6">
-          <div class="flex items-start justify-between mb-6">
-            <div>
-              <h1 class="text-2xl font-bold text-gray-800 mb-2">
+        <div class="bg-white rounded-xl shadow-md p-4 md:p-6">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-4 mb-4 md:mb-6">
+            <div class="flex-1 min-w-0">
+              <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-1 md:mb-2 break-words">
                 {{ property.projectName }}
               </h1>
-              <p class="text-gray-600">{{ property.location }}</p>
+              <p class="text-gray-600 text-sm md:text-base break-words">{{ property.location }}</p>
             </div>
-            <div class="flex items-center gap-3">
-              <ElTag v-if="isAvailable" type="success" size="large">可租</ElTag>
-              <ElTag v-else type="info" size="large">已满</ElTag>
+            <div class="flex items-center gap-2 md:gap-3 shrink-0">
+              <ElTag v-if="isAvailable" type="success" size="default">可租</ElTag>
+              <ElTag v-else type="info" size="default">已满</ElTag>
             </div>
           </div>
 
-          <ElDescriptions :column="2" border class="mb-6">
+          <!-- 移动端: 卡片式信息展示 -->
+          <div class="md:hidden space-y-3 mb-4">
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">项目编号</p>
+                <p class="text-sm font-medium text-gray-800 break-all">{{ property.projectNo }}</p>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">所属区域</p>
+                <p class="text-sm font-medium text-gray-800">{{ property.layout || '-' }}</p>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">户型</p>
+                <p class="text-sm font-medium text-gray-800">{{ formatRoomType(property.roomType) }}</p>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">租金</p>
+                <p class="text-sm font-semibold text-red-600">{{ formatPriceRange(property.minRent, property.maxRent) }}/月</p>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">可租数量</p>
+                <p class="text-sm font-medium" :class="property.kezuCount > 0 ? 'text-green-600' : 'text-gray-500'">
+                  {{ property.kezuCount }} 套
+                </p>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">开放状态</p>
+                <p class="text-sm font-medium text-gray-800">{{ formatOpenQueue(property.openQueue) }}</p>
+              </div>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-500 mb-1">地址</p>
+              <p class="text-sm font-medium text-gray-800 break-words">{{ property.location || '-' }}</p>
+            </div>
+            <div v-if="property.latitude && property.longitude" class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-500 mb-1">坐标</p>
+              <p class="text-sm font-medium text-gray-800 font-mono">{{ property.latitude }}, {{ property.longitude }}</p>
+            </div>
+          </div>
+
+          <!-- 桌面端: Descriptions 组件 -->
+          <ElDescriptions :column="2" border class="mb-6 hidden md:block">
             <ElDescriptionsItem label="项目编号">
               {{ property.projectNo }}
             </ElDescriptionsItem>
@@ -158,52 +199,56 @@ onMounted(async () => {
           </ElDescriptions>
 
           <!-- Action buttons -->
-          <div class="flex flex-wrap items-center gap-4">
-            <FavoriteButton
-              v-if="property"
-              :property="property"
-              size="large"
-              :show-text="true"
-            />
-            <ElButton
-              :type="isInCompare ? 'primary' : 'default'"
-              size="large"
-              @click="handleToggleCompare"
-            >
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-              {{ isInCompare ? '已添加对比' : '加入对比' }}
-            </ElButton>
-            <RouterLink to="/compare">
-              <ElButton v-if="compareStore.compareList.length > 0" type="primary" size="large">
-                查看对比 ({{ compareStore.compareList.length }})
+          <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex flex-wrap gap-3">
+              <FavoriteButton
+                v-if="property"
+                :property="property"
+                size="default"
+                :show-text="true"
+              />
+              <ElButton
+                :type="isInCompare ? 'primary' : 'default'"
+                size="default"
+                @click="handleToggleCompare"
+              >
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                {{ isInCompare ? '已添加对比' : '加入对比' }}
               </ElButton>
-            </RouterLink>
-            <RouterLink to="/favorites">
-              <ElButton v-if="favoriteStore.count > 0" type="danger" plain size="large">
-                查看收藏 ({{ favoriteStore.count }})
-              </ElButton>
-            </RouterLink>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <RouterLink to="/compare">
+                <ElButton v-if="compareStore.compareList.length > 0" type="primary" size="default">
+                  查看对比 ({{ compareStore.compareList.length }})
+                </ElButton>
+              </RouterLink>
+              <RouterLink to="/favorites">
+                <ElButton v-if="favoriteStore.count > 0" type="danger" plain size="default">
+                  查看收藏 ({{ favoriteStore.count }})
+                </ElButton>
+              </RouterLink>
+            </div>
           </div>
         </div>
 
         <!-- Map placeholder (shows coordinates if available) -->
-        <div v-if="property.latitude && property.longitude" class="bg-white rounded-xl shadow-md p-6">
-          <h2 class="text-lg font-semibold text-gray-800 mb-4">位置信息</h2>
+        <div v-if="property.latitude && property.longitude" class="bg-white rounded-xl shadow-md p-4 md:p-6">
+          <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">位置信息</h2>
           <div class="bg-gray-100 rounded-lg p-4 text-center">
-            <p class="text-gray-600 mb-2">经纬度坐标</p>
-            <p class="font-mono text-gray-800">
+            <p class="text-gray-600 text-sm mb-2">经纬度坐标</p>
+            <p class="font-mono text-gray-800 text-sm md:text-base">
               {{ property.latitude }}, {{ property.longitude }}
             </p>
             <a
               :href="`https://www.google.com/maps?q=${property.latitude},${property.longitude}`"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 mt-4 text-blue-600 hover:text-blue-800"
+              class="inline-flex items-center gap-2 mt-3 md:mt-4 text-blue-600 hover:text-blue-800 text-sm md:text-base"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
