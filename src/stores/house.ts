@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import houseData from '../../bsgz.json'
+import houseData from '../../script/bsgz.json'
 
 export interface House {
   openQueue: string
