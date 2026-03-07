@@ -21,7 +21,8 @@ const defaultFilters: FilterState = {
   roomType: [],
   priceRange: [0, 10000],
   keyword: '',
-  onlyAvailable: false
+  availableStatus: '',
+  openStatus: ''
 }
 
 export const useFilterStore = defineStore('filter', () => {
@@ -87,8 +88,17 @@ export const useFilterStore = defineStore('filter', () => {
     }
 
     // Filter by availability
-    if (filters.value.onlyAvailable) {
+    if (filters.value.availableStatus === 'available') {
       result = result.filter(p => p.kezuCount > 0)
+    } else if (filters.value.availableStatus === 'unavailable') {
+      result = result.filter(p => p.kezuCount === 0)
+    }
+
+    // Filter by open status
+    if (filters.value.openStatus === 'open') {
+      result = result.filter(p => p.openQueue === '1')
+    } else if (filters.value.openStatus === 'closed') {
+      result = result.filter(p => p.openQueue === '0')
     }
 
     // Sort

@@ -14,12 +14,16 @@ export interface Property {
   openQueue: string        // 是否开放
 }
 
+export type OpenStatus = '' | 'open' | 'closed'
+export type AvailableStatus = '' | 'available' | 'unavailable'
+
 export interface FilterState {
   layout: string[]         // 区域筛选
   roomType: string[]       // 户型筛选
   priceRange: [number, number]  // 价格区间
   keyword: string          // 关键词搜索
-  onlyAvailable: boolean   // 仅显示可租
+  availableStatus: AvailableStatus   // 可租状态筛选
+  openStatus: OpenStatus   // 开放状态筛选
 }
 
 export interface CompareItem extends Property {

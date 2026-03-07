@@ -2,7 +2,20 @@
 import { ref, computed, watch } from 'vue'
 import { usePropertyStore } from '@/stores/property'
 import { useFilterStore } from '@/stores/filter'
-import { ElSlider, ElInput, ElCheckbox, ElButton, ElSelect, ElOption } from 'element-plus'
+import { ElSlider, ElInput, ElButton, ElSelect, ElOption } from 'element-plus'
+import type { OpenStatus, AvailableStatus } from '@/types/property'
+
+const openStatusOptions: { label: string; value: OpenStatus }[] = [
+  { label: '全部', value: '' },
+  { label: '开放', value: 'open' },
+  { label: '未开放', value: 'closed' }
+]
+
+const availableStatusOptions: { label: string; value: AvailableStatus }[] = [
+  { label: '全部', value: '' },
+  { label: '有房', value: 'available' },
+  { label: '无房', value: 'unavailable' }
+]
 
 const propertyStore = usePropertyStore()
 const filterStore = useFilterStore()
@@ -12,7 +25,8 @@ const localFilters = ref({
   roomType: [...filterStore.filters.roomType],
   priceRange: [...filterStore.filters.priceRange] as [number, number],
   keyword: filterStore.filters.keyword,
-  onlyAvailable: filterStore.filters.onlyAvailable
+  availableStatus: filterStore.filters.availableStatus,
+  openStatus: filterStore.filters.openStatus
 })
 
 const isExpanded = ref(false)
@@ -31,7 +45,8 @@ const applyFilters = () => {
     roomType: localFilters.value.roomType,
     priceRange: localFilters.value.priceRange,
     keyword: localFilters.value.keyword,
-    onlyAvailable: localFilters.value.onlyAvailable
+    availableStatus: localFilters.value.availableStatus,
+    openStatus: localFilters.value.openStatus
   })
 }
 
@@ -41,7 +56,8 @@ const resetFilters = () => {
     roomType: [],
     priceRange: [0, maxPrice.value],
     keyword: '',
-    onlyAvailable: false
+    availableStatus: '',
+    openStatus: ''
   }
   filterStore.resetFilters()
 }
@@ -81,7 +97,7 @@ watch(() => localFilters.value.keyword, (newVal) => {
     </div>
 
     <!-- Always visible filters -->
-    <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-4">
+    <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-10">
       <!-- Keyword search -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">关键词</label>
@@ -98,6 +114,7 @@ watch(() => localFilters.value.keyword, (newVal) => {
           价格: ¥{{ localFilters.priceRange[0] }} - ¥{{ localFilters.priceRange[1] }}
         </label>
         <ElSlider
+          class="px-2"
           v-model="localFilters.priceRange"
           range
           :max="maxPrice"
@@ -106,27 +123,48 @@ watch(() => localFilters.value.keyword, (newVal) => {
         />
       </div>
 
-      <!-- Available only -->
-      <div class="flex items-center pt-1">
-        <ElCheckbox
-          v-model="localFilters.onlyAvailable"
-          @change="() => filterStore.updateFilters({ onlyAvailable: localFilters.onlyAvailable })"
-        >
-          仅显示可租
-        </ElCheckbox>
+      <!-- Available status filter -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">可租状态</label>
+        <div class="flex items-center gap-1">
+          <span
+            v-for="option in availableStatusOptions"
+            :key="option.value"
+            class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
+            :class="localFilters.availableStatus === option.value ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
+            @click="() => { localFilters.availableStatus = option.value; filterStore.updateFilters({ availableStatus: option.value }) }"
+          >
+            {{ option.label }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Open status filter -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">开放状态</label>
+        <div class="flex items-center gap-1">
+          <span
+            v-for="option in openStatusOptions"
+            :key="option.value"
+            class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
+            :class="localFilters.openStatus === option.value ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
+            @click="() => { localFilters.openStatus = option.value; filterStore.updateFilters({ openStatus: option.value }) }"
+          >
+            {{ option.label }}
+          </span>
+        </div>
       </div>
     </div>
 
     <!-- Expandable filters -->
     <div v-show="isExpanded" class="mt-4 pt-4 border-t border-gray-200">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
         <!-- Layout filter -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">区域</label>
           <ElSelect
             v-model="localFilters.layout"
             multiple
-            collapse-tags
             collapse-tags-tooltip
             placeholder="选择区域"
             class="w-full"
@@ -147,7 +185,6 @@ watch(() => localFilters.value.keyword, (newVal) => {
           <ElSelect
             v-model="localFilters.roomType"
             multiple
-            collapse-tags
             collapse-tags-tooltip
             placeholder="选择户型"
             class="w-full"
