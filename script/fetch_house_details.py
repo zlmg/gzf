@@ -3,6 +3,8 @@ import logging
 import requests
 import hashlib
 import uuid
+import random
+import time
 from datetime import datetime
 
 # 配置日志
@@ -216,6 +218,17 @@ def update_house_details():
         else:
             failure_count += 1
             failed_projects.append({'projectNo': project_no, 'reason': 'API请求失败'})
+        
+        # 添加20秒固定间隔 + 0-10秒随机间隔
+        fixed_interval = 20
+        # 使用当前时间作为随机种子
+        random.seed(datetime.now().timestamp())
+        # 生成0-10秒的随机时间（包含0和10）
+        random_interval = random.randint(0, 10)
+        total_interval = fixed_interval + random_interval
+        
+        logging.info(f"等待{total_interval}秒后处理下一个房源... (固定20秒 + 随机{random_interval}秒)")
+        time.sleep(total_interval)
     
     # 保存更新后的数据
     save_json_file(data)
