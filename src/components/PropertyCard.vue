@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 import type { Property } from '@/types/property'
 import { formatPriceRange, formatRoomType, formatOpenQueue, truncateText } from '@/utils/format'
 import { useCompareStore } from '@/stores/compare'
+import { useFilterStore } from '@/stores/filter'
 import FavoriteButton from './FavoriteButton.vue'
 
 const props = defineProps<{
@@ -11,6 +12,7 @@ const props = defineProps<{
 }>()
 
 const compareStore = useCompareStore()
+const filterStore = useFilterStore()
 
 const IMAGE_BASE_URL = 'https://www.bsgzf.com.cn'
 
@@ -36,6 +38,54 @@ const handleToggleCompare = (e: Event) => {
   e.stopPropagation()
   compareStore.toggleCompare(props.property)
 }
+
+// 提取房源的所有设备
+const propertyEquipments = computed(() => {
+  const equipments = new Set<string>()
+  if (props.property.roomTypeDetails) {
+    props.property.roomTypeDetails.forEach(detail => {
+      if (detail.houseTypeList) {
+        detail.houseTypeList.forEach(house => {
+          if (house.roomEquipment) {
+            house.roomEquipment.split(',').forEach(e => equipments.add(e.trim()))
+          }
+        })
+      }
+    })
+  }
+  return Array.from(equipments).filter(Boolean)
+})
+
+// 提取房源的所有标签
+const propertyLabels = computed(() => {
+  const labels = new Set<string>()
+  if (props.property.roomTypeDetails) {
+    props.property.roomTypeDetails.forEach(detail => {
+      if (detail.houseTypeList) {
+        detail.houseTypeList.forEach(house => {
+          if (house.roomLabel) {
+            house.roomLabel.split(',').forEach(l => labels.add(l.trim()))
+          }
+        })
+      }
+    })
+  }
+  return Array.from(labels).filter(Boolean)
+})
+
+// 显示在卡片上的设备：用户筛选了的 AND 房源有的
+const displayEquipments = computed(() => {
+  const selected = filterStore.filters.equipment
+  if (!selected || selected.length === 0) return []
+  return propertyEquipments.value.filter(eq => selected.includes(eq))
+})
+
+// 显示在卡片上的标签：用户筛选了的 AND 房源有的
+const displayLabels = computed(() => {
+  const selected = filterStore.filters.label
+  if (!selected || selected.length === 0) return []
+  return propertyLabels.value.filter(label => selected.includes(label))
+})
 </script>
 
 <template>
@@ -101,6 +151,23 @@ const handleToggleCompare = (e: Event) => {
         </span>
         <span class="px-2 py-1 bg-orange-50 text-orange-700 rounded">
           可租: {{ property.kezuCount }}
+        </span>
+      </div>
+      <!-- 显示筛选条件中已选择的设备和标签 -->
+      <div v-if="displayEquipments.length > 0 || displayLabels.length > 0" class="flex flex-wrap items-center gap-1.5 mb-3">
+        <span
+          v-for="eq in displayEquipments"
+          :key="eq"
+          class="px-2 py-0.5 text-xs bg-teal-50 text-teal-700 rounded"
+        >
+          {{ eq }}
+        </span>
+        <span
+          v-for="label in displayLabels"
+          :key="label"
+          class="px-2 py-0.5 text-xs bg-pink-50 text-pink-700 rounded"
+        >
+          {{ label }}
         </span>
       </div>
       <div class="flex items-center justify-between">
