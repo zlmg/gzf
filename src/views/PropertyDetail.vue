@@ -68,7 +68,7 @@ const getHouseTypeImage = (house: HouseType): string | undefined => {
 // 打开VR链接
 const openVrUrl = (vrUrl: string) => {
   if (vrUrl) {
-    window.open(vrUrl, '_blank')
+    (window as any).open(vrUrl, '_blank')
   }
 }
 
@@ -82,6 +82,17 @@ const openImageViewer = (imageUrl: string, title: string) => {
 // 关闭图片查看器
 const closeImageViewer = () => {
   showImageViewer.value = false
+}
+
+// 打开地图
+const openMap = () => {
+  if (property.value) {
+    const longitude = property.value.longitude || ''
+    const latitude = property.value.latitude || ''
+    const projectName = property.value.projectName || '房源位置'
+    const mapUrl = `https://uri.amap.com/marker?position=${longitude},${latitude}&name=${encodeURIComponent(projectName)}&coordinate=gaode`;
+    (window as any).open(mapUrl, '_blank');
+  }
 }
 
 onMounted(async () => {
@@ -111,10 +122,8 @@ onMounted(async () => {
     <div class="container-app py-4 md:py-6">
       <!-- Back button -->
       <div class="mb-4 md:mb-6">
-        <button
-          @click="goBack"
-          class="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors text-sm md:text-base"
-        >
+        <button @click="goBack"
+          class="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors text-sm md:text-base">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
@@ -129,7 +138,8 @@ onMounted(async () => {
 
       <!-- Error state -->
       <div v-else-if="error" class="bg-white rounded-xl shadow-md p-8 md:p-12 text-center">
-        <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor"
+          viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
             d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -141,10 +151,7 @@ onMounted(async () => {
       <div v-else-if="property" class="space-y-4 md:space-y-6">
         <!-- Image gallery -->
         <div class="bg-white rounded-xl shadow-md p-3 md:p-4">
-          <ImageGallery
-            :images="images"
-            :title="property.projectName"
-          />
+          <ImageGallery :images="images" :title="property.projectName" />
         </div>
 
         <!-- Basic info -->
@@ -169,7 +176,8 @@ onMounted(async () => {
             <div class="grid grid-cols-2 gap-3">
               <div class="bg-gray-50 rounded-lg p-3">
                 <p class="text-xs text-gray-500 mb-1">租金</p>
-                <p class="text-sm font-semibold text-red-600">{{ formatPriceRange(property.minRent, property.maxRent) }}/月</p>
+                <p class="text-sm font-semibold text-red-600">{{ formatPriceRange(property.minRent, property.maxRent)
+                  }}/月</p>
               </div>
               <div class="bg-gray-50 rounded-lg p-3">
                 <p class="text-xs text-gray-500 mb-1">户型</p>
@@ -203,7 +211,8 @@ onMounted(async () => {
             </div>
             <div v-if="property.latitude && property.longitude" class="bg-gray-50 rounded-lg p-3">
               <p class="text-xs text-gray-500 mb-1">坐标</p>
-              <p class="text-sm font-medium text-gray-800 font-mono">{{ property.latitude }}, {{ property.longitude }}</p>
+              <p class="text-sm font-medium text-gray-800 font-mono">{{ property.latitude }}, {{ property.longitude }}
+              </p>
             </div>
             <div class="bg-gray-50 rounded-lg p-3">
               <p class="text-xs text-gray-500 mb-1">地址</p>
@@ -309,20 +318,13 @@ onMounted(async () => {
           <!-- Action buttons -->
           <div class="flex flex-col sm:flex-row gap-3">
             <div class="flex flex-wrap gap-3">
-              <FavoriteButton
-                v-if="property"
-                :property="property"
-              />
+              <FavoriteButton v-if="property" :property="property" />
               <RouterLink to="/favorites">
                 <ElButton v-if="favoriteStore.count > 0" type="danger" plain size="default">
                   查看收藏 ({{ favoriteStore.count }})
                 </ElButton>
               </RouterLink>
-              <ElButton
-                :type="isInCompare ? 'primary' : 'default'"
-                size="default"
-                @click="handleToggleCompare"
-              >
+              <ElButton :type="isInCompare ? 'primary' : 'default'" size="default" @click="handleToggleCompare">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -344,14 +346,12 @@ onMounted(async () => {
         <div v-if="property.roomTypeDetails && property.roomTypeDetails.length > 0" class="space-y-4">
           <h2 class="text-lg md:text-xl font-bold text-gray-800">房型详情</h2>
 
-          <div
-            v-for="(detail, index) in property.roomTypeDetails"
-            :key="index"
-            class="bg-white rounded-xl shadow-md p-4 md:p-6"
-          >
+          <div v-for="(detail, index) in property.roomTypeDetails" :key="index"
+            class="bg-white rounded-xl shadow-md p-4 md:p-6">
             <!-- 房型分组信息 -->
             <div class="flex flex-wrap items-center gap-2 mb-4 pb-4 border-b border-gray-200">
-              <ElTag type="primary" size="large">{{ formatHouseTypeName(detail.houseTypeList?.[0]?.houseTypeName || '') || `房型 ${index + 1}` }}</ElTag>
+              <ElTag type="primary" size="large">{{ formatHouseTypeName(detail.houseTypeList?.[0]?.houseTypeName || '')
+                || `房型 ${index + 1}` }}</ElTag>
               <span class="text-red-600 font-semibold">{{ formatPriceRange(detail.minRent, detail.maxRent) }}/月</span>
               <span class="text-gray-500 text-sm">总套数: {{ detail.totalCount }} 套</span>
               <span class="text-green-600 text-sm">可租: {{ detail.kezuCount }} 套</span>
@@ -360,21 +360,13 @@ onMounted(async () => {
 
             <!-- 房型卡片列表 -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div
-                v-for="(house, hIndex) in detail.houseTypeList"
-                :key="hIndex"
-                class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
-              >
+              <div v-for="(house, hIndex) in detail.houseTypeList" :key="hIndex"
+                class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
                 <!-- 房型图片 -->
                 <div class="bg-gray-100 relative">
-                  <img
-                    v-if="getHouseTypeImage(house)"
-                    :src="getHouseTypeImage(house)"
-                    :alt="house.houseTypeName"
+                  <img v-if="getHouseTypeImage(house)" :src="getHouseTypeImage(house)" :alt="house.houseTypeName"
                     class="w-full h-auto max-h-64 object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                    loading="lazy"
-                    @click="openImageViewer(getHouseTypeImage(house)!, house.houseTypeName)"
-                  />
+                    loading="lazy" @click="openImageViewer(getHouseTypeImage(house)!, house.houseTypeName)" />
                   <div v-else class="w-full h-40 flex items-center justify-center text-gray-400">
                     <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
@@ -382,14 +374,13 @@ onMounted(async () => {
                     </svg>
                   </div>
                   <!-- VR 按钮 -->
-                  <button
-                    v-if="house.vrUrl"
-                    @click.stop="openVrUrl(house.vrUrl)"
-                    class="absolute bottom-3 right-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
-                  >
+                  <button v-if="house.vrUrl" @click.stop="openVrUrl(house.vrUrl)"
+                    class="absolute bottom-3 right-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                     VR看房
                   </button>
@@ -399,7 +390,8 @@ onMounted(async () => {
                 <div class="p-3">
                   <div class="flex items-center justify-between mb-2">
                     <h4 class="font-semibold text-gray-800">{{ house.houseTypeName }}</h4>
-                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">{{ formatRoomTypeCode(house.roomType) }}</span>
+                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">{{
+                      formatRoomTypeCode(house.roomType) }}</span>
                   </div>
 
                   <div class="flex items-center gap-3 text-sm text-gray-600 mb-2">
@@ -408,23 +400,19 @@ onMounted(async () => {
                   </div>
 
                   <!-- 标签 -->
-                  <div v-if="house.roomLabel && formatLabelList(house.roomLabel).length > 0" class="flex flex-wrap gap-1 mb-2">
-                    <span
-                      v-for="(label, lIndex) in formatLabelList(house.roomLabel)"
-                      :key="lIndex"
-                      class="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded"
-                    >
+                  <div v-if="house.roomLabel && formatLabelList(house.roomLabel).length > 0"
+                    class="flex flex-wrap gap-1 mb-2">
+                    <span v-for="(label, lIndex) in formatLabelList(house.roomLabel)" :key="lIndex"
+                      class="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded">
                       {{ label }}
                     </span>
                   </div>
 
                   <!-- 设备 (全部显示) -->
-                  <div v-if="house.roomEquipment && formatEquipmentList(house.roomEquipment).length > 0" class="flex flex-wrap gap-1">
-                    <span
-                      v-for="(eq, eIndex) in formatEquipmentList(house.roomEquipment)"
-                      :key="eIndex"
-                      class="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded"
-                    >
+                  <div v-if="house.roomEquipment && formatEquipmentList(house.roomEquipment).length > 0"
+                    class="flex flex-wrap gap-1">
+                    <span v-for="(eq, eIndex) in formatEquipmentList(house.roomEquipment)" :key="eIndex"
+                      class="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">
                       {{ eq }}
                     </span>
                   </div>
@@ -436,11 +424,19 @@ onMounted(async () => {
 
         <!-- 周边配套 (高德地图) -->
         <div v-if="property.latitude && property.longitude" class="bg-white rounded-xl shadow-md p-4 md:p-6">
-          <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">周边配套</h2>
-          <AmapNearby
-            :latitude="property.latitude"
-            :longitude="property.longitude"
-          />
+          <div class="flex items-center justify-between mb-3 md:mb-4">
+            <h2 class="text-base md:text-lg font-semibold text-gray-800">周边配套</h2>
+            <button @click="openMap"
+              class="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              打开地图
+            </button>
+          </div>
+          <AmapNearby :latitude="property.latitude" :longitude="property.longitude"
+            :property-name="property.projectName" />
         </div>
       </div>
     </div>
@@ -448,17 +444,12 @@ onMounted(async () => {
     <!-- 图片查看器 -->
     <Teleport to="body">
       <Transition name="viewer-fade">
-        <div
-          v-if="showImageViewer"
-          class="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center"
-          @click="closeImageViewer"
-        >
+        <div v-if="showImageViewer" class="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center"
+          @click="closeImageViewer">
           <!-- 关闭按钮 -->
-          <button
-            @click="closeImageViewer"
+          <button @click="closeImageViewer"
             class="absolute top-4 right-4 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors z-10"
-            aria-label="关闭"
-          >
+            aria-label="关闭">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -470,12 +461,7 @@ onMounted(async () => {
           </div>
 
           <!-- 图片 -->
-          <img
-            :src="viewerImage"
-            :alt="viewerTitle"
-            class="max-h-[90vh] max-w-[95vw] object-contain"
-            @click.stop
-          />
+          <img :src="viewerImage" :alt="viewerTitle" class="max-h-[90vh] max-w-[95vw] object-contain" @click.stop />
 
           <!-- 提示 -->
           <p class="absolute bottom-4 text-white/60 text-sm">点击空白处关闭</p>
@@ -486,14 +472,15 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-/* 图片查看器过渡动画 */
-.viewer-fade-enter-active,
-.viewer-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
 
-.viewer-fade-enter-from,
-.viewer-fade-leave-to {
-  opacity: 0;
-}
+  /* 图片查看器过渡动画 */
+  .viewer-fade-enter-active,
+  .viewer-fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+
+  .viewer-fade-enter-from,
+  .viewer-fade-leave-to {
+    opacity: 0;
+  }
 </style>
