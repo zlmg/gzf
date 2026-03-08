@@ -164,22 +164,19 @@ onMounted(async () => {
 
           <!-- 移动端: 卡片式信息展示 -->
           <div class="md:hidden space-y-3 mb-4">
+            <!-- 核心信息 -->
             <div class="grid grid-cols-2 gap-3">
               <div class="bg-gray-50 rounded-lg p-3">
-                <p class="text-xs text-gray-500 mb-1">项目编号</p>
-                <p class="text-sm font-medium text-gray-800 break-all">{{ property.projectNo }}</p>
-              </div>
-              <div class="bg-gray-50 rounded-lg p-3">
-                <p class="text-xs text-gray-500 mb-1">所属区域</p>
-                <p class="text-sm font-medium text-gray-800">{{ property.layout || '-' }}</p>
+                <p class="text-xs text-gray-500 mb-1">租金</p>
+                <p class="text-sm font-semibold text-red-600">{{ formatPriceRange(property.minRent, property.maxRent) }}/月</p>
               </div>
               <div class="bg-gray-50 rounded-lg p-3">
                 <p class="text-xs text-gray-500 mb-1">户型</p>
                 <p class="text-sm font-medium text-gray-800">{{ formatRoomType(property.roomType) }}</p>
               </div>
-              <div class="bg-gray-50 rounded-lg p-3">
-                <p class="text-xs text-gray-500 mb-1">租金</p>
-                <p class="text-sm font-semibold text-red-600">{{ formatPriceRange(property.minRent, property.maxRent) }}/月</p>
+              <div v-if="property.totalCount" class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">总套数</p>
+                <p class="text-sm font-medium text-gray-800">{{ property.totalCount }} 套</p>
               </div>
               <div class="bg-gray-50 rounded-lg p-3">
                 <p class="text-xs text-gray-500 mb-1">可租数量</p>
@@ -191,7 +188,28 @@ onMounted(async () => {
                 <p class="text-xs text-gray-500 mb-1">开放状态</p>
                 <p class="text-sm font-medium text-gray-800">{{ formatOpenQueue(property.openQueue) }}</p>
               </div>
-              <!-- 新增字段 -->
+            </div>
+            <!-- 位置信息 -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">所属区域</p>
+                <p class="text-sm font-medium text-gray-800">{{ property.layout || '-' }}</p>
+              </div>
+              <div v-if="property.district" class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">行政区</p>
+                <p class="text-sm font-medium text-gray-800">{{ property.district }}</p>
+              </div>
+            </div>
+            <div v-if="property.latitude && property.longitude" class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-500 mb-1">坐标</p>
+              <p class="text-sm font-medium text-gray-800 font-mono">{{ property.latitude }}, {{ property.longitude }}</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-500 mb-1">地址</p>
+              <p class="text-sm font-medium text-gray-800 break-words">{{ property.location || '-' }}</p>
+            </div>
+            <!-- 房屋属性 -->
+            <div class="grid grid-cols-2 gap-3">
               <div v-if="property.houseType" class="bg-gray-50 rounded-lg p-3">
                 <p class="text-xs text-gray-500 mb-1">房屋类型</p>
                 <p class="text-sm font-medium text-gray-800">{{ property.houseType }}</p>
@@ -200,48 +218,41 @@ onMounted(async () => {
                 <p class="text-xs text-gray-500 mb-1">房屋来源</p>
                 <p class="text-sm font-medium text-gray-800">{{ property.houseSource }}</p>
               </div>
-              <div v-if="property.totalCount" class="bg-gray-50 rounded-lg p-3">
-                <p class="text-xs text-gray-500 mb-1">总套数</p>
-                <p class="text-sm font-medium text-gray-800">{{ property.totalCount }} 套</p>
-              </div>
-              <div v-if="property.totalArea" class="bg-gray-50 rounded-lg p-3">
-                <p class="text-xs text-gray-500 mb-1">总面积</p>
-                <p class="text-sm font-medium text-gray-800">{{ property.totalArea }} m²</p>
-              </div>
-              <div v-if="property.openingDate" class="bg-gray-50 rounded-lg p-3">
-                <p class="text-xs text-gray-500 mb-1">供应日期</p>
-                <p class="text-sm font-medium text-gray-800">{{ property.openingDate }}</p>
-              </div>
               <div v-if="property.supply" class="bg-gray-50 rounded-lg p-3">
                 <p class="text-xs text-gray-500 mb-1">供应对象</p>
                 <p class="text-sm font-medium text-gray-800">{{ property.supply }}</p>
               </div>
             </div>
-            <div class="bg-gray-50 rounded-lg p-3">
-              <p class="text-xs text-gray-500 mb-1">地址</p>
-              <p class="text-sm font-medium text-gray-800 break-words">{{ property.location || '-' }}</p>
+            <!-- 规模信息 -->
+            <div v-if="property.totalArea" class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-500 mb-1">总面积</p>
+              <p class="text-sm font-medium text-gray-800">{{ property.totalArea }} m²</p>
             </div>
-            <div v-if="property.latitude && property.longitude" class="bg-gray-50 rounded-lg p-3">
-              <p class="text-xs text-gray-500 mb-1">坐标</p>
-              <p class="text-sm font-medium text-gray-800 font-mono">{{ property.latitude }}, {{ property.longitude }}</p>
+            <!-- 时间信息 -->
+            <div v-if="property.openingDate" class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-500 mb-1">供应日期</p>
+              <p class="text-sm font-medium text-gray-800">{{ property.openingDate }}</p>
+            </div>
+            <!-- 其他信息 -->
+            <div class="bg-gray-50 rounded-lg p-3">
+              <p class="text-xs text-gray-500 mb-1">项目编号</p>
+              <p class="text-sm font-medium text-gray-800 break-all">{{ property.projectNo }}</p>
             </div>
           </div>
 
           <!-- 桌面端: Descriptions 组件 -->
           <ElDescriptions :column="2" border class="mb-6 hidden md:block">
-            <ElDescriptionsItem label="项目编号">
-              {{ property.projectNo }}
-            </ElDescriptionsItem>
-            <ElDescriptionsItem label="所属区域">
-              {{ property.layout || '-' }}
-            </ElDescriptionsItem>
-            <ElDescriptionsItem label="户型">
-              {{ formatRoomType(property.roomType) }}
-            </ElDescriptionsItem>
+            <!-- 核心信息 -->
             <ElDescriptionsItem label="租金">
               <span class="text-red-600 font-semibold">
                 {{ formatPriceRange(property.minRent, property.maxRent) }}/月
               </span>
+            </ElDescriptionsItem>
+            <ElDescriptionsItem label="户型">
+              {{ formatRoomType(property.roomType) }}
+            </ElDescriptionsItem>
+            <ElDescriptionsItem v-if="property.totalCount" label="总套数">
+              {{ property.totalCount }} 套
             </ElDescriptionsItem>
             <ElDescriptionsItem label="可租数量">
               <span :class="property.kezuCount > 0 ? 'text-green-600' : 'text-gray-500'">
@@ -251,10 +262,20 @@ onMounted(async () => {
             <ElDescriptionsItem label="开放状态">
               {{ formatOpenQueue(property.openQueue) }}
             </ElDescriptionsItem>
-            <!-- 新增字段 -->
+            <!-- 位置信息 -->
+            <ElDescriptionsItem label="所属区域">
+              {{ property.layout || '-' }}
+            </ElDescriptionsItem>
             <ElDescriptionsItem v-if="property.district" label="行政区">
               {{ property.district }}
             </ElDescriptionsItem>
+            <ElDescriptionsItem v-if="property.latitude && property.longitude" label="坐标">
+              {{ property.latitude }}, {{ property.longitude }}
+            </ElDescriptionsItem>
+            <ElDescriptionsItem label="地址">
+              {{ property.location || '-' }}
+            </ElDescriptionsItem>
+            <!-- 房屋属性 -->
             <ElDescriptionsItem v-if="property.houseType" label="房屋类型">
               {{ property.houseType }}
             </ElDescriptionsItem>
@@ -264,20 +285,17 @@ onMounted(async () => {
             <ElDescriptionsItem v-if="property.supply" label="供应对象">
               {{ property.supply }}
             </ElDescriptionsItem>
-            <ElDescriptionsItem v-if="property.totalCount" label="总套数">
-              {{ property.totalCount }} 套
-            </ElDescriptionsItem>
+            <!-- 规模信息 -->
             <ElDescriptionsItem v-if="property.totalArea" label="总面积">
               {{ property.totalArea }} m²
             </ElDescriptionsItem>
+            <!-- 时间信息 -->
             <ElDescriptionsItem v-if="property.openingDate" label="供应日期">
               {{ property.openingDate }}
             </ElDescriptionsItem>
-            <ElDescriptionsItem label="地址" :span="2">
-              {{ property.location || '-' }}
-            </ElDescriptionsItem>
-            <ElDescriptionsItem v-if="property.latitude && property.longitude" label="坐标" :span="2">
-              {{ property.latitude }}, {{ property.longitude }}
+            <!-- 其他信息 -->
+            <ElDescriptionsItem label="项目编号">
+              {{ property.projectNo }}
             </ElDescriptionsItem>
           </ElDescriptions>
 
@@ -293,9 +311,12 @@ onMounted(async () => {
               <FavoriteButton
                 v-if="property"
                 :property="property"
-                size="default"
-                :show-text="true"
               />
+              <RouterLink to="/favorites">
+                <ElButton v-if="favoriteStore.count > 0" type="danger" plain size="default">
+                  查看收藏 ({{ favoriteStore.count }})
+                </ElButton>
+              </RouterLink>
               <ElButton
                 :type="isInCompare ? 'primary' : 'default'"
                 size="default"
@@ -312,11 +333,6 @@ onMounted(async () => {
               <RouterLink to="/compare">
                 <ElButton v-if="compareStore.compareList.length > 0" type="primary" size="default">
                   查看对比 ({{ compareStore.compareList.length }})
-                </ElButton>
-              </RouterLink>
-              <RouterLink to="/favorites">
-                <ElButton v-if="favoriteStore.count > 0" type="danger" plain size="default">
-                  查看收藏 ({{ favoriteStore.count }})
                 </ElButton>
               </RouterLink>
             </div>
