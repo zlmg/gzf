@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElButton, ElEmpty, ElTag } from 'element-plus'
 import { useCompareStore } from '@/stores/compare'
-import { formatPriceRange, formatRoomType, formatOpenQueue } from '@/utils/format'
+import { formatPriceRange, formatRoomType, formatOpenQueue, truncateText } from '@/utils/format'
 
 const router = useRouter()
 const compareStore = useCompareStore()
@@ -102,6 +102,11 @@ const goToDetail = (projectNo: string) => {
               </div>
 
               <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">行政区</span>
+                <ElTag size="small" type="info">{{ item.district || '-' }}</ElTag>
+              </div>
+
+              <div class="flex justify-between items-center">
                 <span class="text-sm text-gray-500">区域</span>
                 <ElTag size="small" type="info">{{ item.layout || '-' }}</ElTag>
               </div>
@@ -109,6 +114,26 @@ const goToDetail = (projectNo: string) => {
               <div class="flex justify-between items-center">
                 <span class="text-sm text-gray-500">户型</span>
                 <ElTag size="small" type="warning">{{ formatRoomType(item.roomType) }}</ElTag>
+              </div>
+
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">房屋类型</span>
+                <span class="text-sm">{{ item.houseType || '-' }}</span>
+              </div>
+
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">房屋来源</span>
+                <span class="text-sm">{{ item.houseSource || '-' }}</span>
+              </div>
+
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">总套数</span>
+                <span class="text-sm">{{ item.totalCount || '-' }} 套</span>
+              </div>
+
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">总面积</span>
+                <span class="text-sm">{{ item.totalArea || '-' }} m²</span>
               </div>
 
               <div class="flex justify-between items-center">
@@ -123,9 +148,19 @@ const goToDetail = (projectNo: string) => {
                 <span class="text-sm">{{ formatOpenQueue(item.openQueue) }}</span>
               </div>
 
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-500">开放日期</span>
+                <span class="text-sm">{{ item.openingDate || '-' }}</span>
+              </div>
+
               <div class="pt-2 border-t border-gray-100">
                 <span class="text-sm text-gray-500">地址</span>
                 <p class="text-sm text-gray-700 mt-1">{{ item.location || '-' }}</p>
+              </div>
+
+              <div v-if="item.textContent" class="pt-2 border-t border-gray-100">
+                <span class="text-sm text-gray-500">项目介绍</span>
+                <p class="text-sm text-gray-700 mt-1">{{ truncateText(item.textContent, 100) }}</p>
               </div>
             </div>
           </div>
@@ -197,6 +232,20 @@ const goToDetail = (projectNo: string) => {
           </div>
         </div>
 
+        <!-- District row -->
+        <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
+          <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
+            行政区
+          </div>
+          <div
+            v-for="item in compareList"
+            :key="item.projectNo"
+            class="p-4 border-r border-gray-200 last:border-r-0"
+          >
+            <ElTag type="info">{{ item.district || '-' }}</ElTag>
+          </div>
+        </div>
+
         <!-- Layout row -->
         <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
           <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
@@ -222,6 +271,62 @@ const goToDetail = (projectNo: string) => {
             class="p-4 border-r border-gray-200 last:border-r-0"
           >
             <ElTag type="warning">{{ formatRoomType(item.roomType) }}</ElTag>
+          </div>
+        </div>
+
+        <!-- House type row -->
+        <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
+          <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
+            房屋类型
+          </div>
+          <div
+            v-for="item in compareList"
+            :key="item.projectNo"
+            class="p-4 border-r border-gray-200 last:border-r-0"
+          >
+            {{ item.houseType || '-' }}
+          </div>
+        </div>
+
+        <!-- House source row -->
+        <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
+          <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
+            房屋来源
+          </div>
+          <div
+            v-for="item in compareList"
+            :key="item.projectNo"
+            class="p-4 border-r border-gray-200 last:border-r-0"
+          >
+            {{ item.houseSource || '-' }}
+          </div>
+        </div>
+
+        <!-- Total count row -->
+        <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
+          <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
+            总套数
+          </div>
+          <div
+            v-for="item in compareList"
+            :key="item.projectNo"
+            class="p-4 border-r border-gray-200 last:border-r-0"
+          >
+            {{ item.totalCount || '-' }} 套
+          </div>
+        </div>
+
+        <!-- Total area row -->
+        <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
+          <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
+            总面积
+          </div>
+          <div
+            v-for="item in compareList"
+            :key="item.projectNo"
+            class="p-4 border-r border-gray-200 last:border-r-0"
+          >
+            {{ item.totalArea || '-' }} m²
           </div>
         </div>
 
@@ -255,8 +360,22 @@ const goToDetail = (projectNo: string) => {
           </div>
         </div>
 
+        <!-- Opening date row -->
+        <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
+          <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
+            开放日期
+          </div>
+          <div
+            v-for="item in compareList"
+            :key="item.projectNo"
+            class="p-4 border-r border-gray-200 last:border-r-0"
+          >
+            {{ item.openingDate || '-' }}
+          </div>
+        </div>
+
         <!-- Location row -->
-        <div class="grid" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
+        <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
           <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
             地址
           </div>
@@ -266,6 +385,20 @@ const goToDetail = (projectNo: string) => {
             class="p-4 border-r border-gray-200 last:border-r-0 text-gray-600"
           >
             {{ item.location || '-' }}
+          </div>
+        </div>
+
+        <!-- Text content row -->
+        <div class="grid" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
+          <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
+            项目介绍
+          </div>
+          <div
+            v-for="item in compareList"
+            :key="item.projectNo"
+            class="p-4 border-r border-gray-200 last:border-r-0 text-gray-600 text-sm"
+          >
+            {{ truncateText(item.textContent || '', 80) }}
           </div>
         </div>
       </div>

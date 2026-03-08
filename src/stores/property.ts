@@ -19,6 +19,8 @@ export const usePropertyStore = defineStore('property', () => {
       // Handle different data structures
       if (Array.isArray(data)) {
         properties.value = data
+      } else if (data.pageContent && Array.isArray(data.pageContent)) {
+        properties.value = data.pageContent
       } else if (data.data && Array.isArray(data.data)) {
         properties.value = data.data
       } else if (data.list && Array.isArray(data.list)) {
@@ -45,9 +47,106 @@ export const usePropertyStore = defineStore('property', () => {
   const getUniqueRoomTypes = computed(() => {
     const types = new Set<string>()
     properties.value.forEach(p => {
-      if (p.roomType) types.add(p.roomType)
+      if (p.roomType) {
+        // 支持逗号分隔的多个户型
+        p.roomType.split(',').forEach(t => types.add(t.trim()))
+      }
     })
     return Array.from(types).sort()
+  })
+
+  // 提取所有设备选项
+  const getUniqueEquipments = computed(() => {
+    const equipments = new Set<string>()
+    properties.value.forEach(p => {
+      if (p.roomTypeDetails) {
+        p.roomTypeDetails.forEach(detail => {
+          if (detail.houseTypeList) {
+            detail.houseTypeList.forEach(house => {
+              if (house.roomEquipment) {
+                house.roomEquipment.split(',').forEach(e => equipments.add(e.trim()))
+              }
+            })
+          }
+        })
+      }
+    })
+    return Array.from(equipments).filter(Boolean).sort()
+  })
+
+  // 提取所有标签选项
+  const getUniqueLabels = computed(() => {
+    const labels = new Set<string>()
+    properties.value.forEach(p => {
+      if (p.roomTypeDetails) {
+        p.roomTypeDetails.forEach(detail => {
+          if (detail.houseTypeList) {
+            detail.houseTypeList.forEach(house => {
+              if (house.roomLabel) {
+                house.roomLabel.split(',').forEach(l => labels.add(l.trim()))
+              }
+            })
+          }
+        })
+      }
+    })
+    return Array.from(labels).filter(Boolean).sort()
+  })
+
+  // 提取面积范围
+  const getAreaRange = computed((): [number, number] => {
+    let minArea = Infinity
+    let maxArea = -Infinity
+    properties.value.forEach(p => {
+      if (p.roomTypeDetails) {
+        p.roomTypeDetails.forEach(detail => {
+          if (detail.houseTypeList) {
+            detail.houseTypeList.forEach(house => {
+              if (house.area) {
+                const area = parseFloat(house.area)
+                if (!isNaN(area)) {
+                  minArea = Math.min(minArea, area)
+                  maxArea = Math.max(maxArea, area)
+                }
+              }
+            })
+          }
+        })
+      }
+    })
+    // 如果没有找到有效面积，返回默认值
+    if (minArea === Infinity || maxArea === -Infinity) {
+      return [0, 200]
+    }
+    return [Math.floor(minArea), Math.ceil(maxArea)]
+  })
+
+  // 提取朝向选项
+  const getUniqueTowards = computed(() => {
+    const towards = new Set<string>()
+    properties.value.forEach(p => {
+      if (p.roomTypeDetails) {
+        p.roomTypeDetails.forEach(detail => {
+          if (detail.houseTypeList) {
+            detail.houseTypeList.forEach(house => {
+              if (house.towards) {
+                towards.add(house.towards)
+              }
+            })
+          }
+        })
+      }
+    })
+    return Array.from(towards).filter(Boolean).sort()
+  })
+
+  // 提取行政区选项
+  const getUniqueDistricts = computed(() => {
+    const districts = new Set<string>()
+    properties.value.forEach(p => {
+      if (p.district) districts.add(p.district)
+    })
+    return Array.from(districts).filter(Boolean).sort()
   })
 
   const getPropertyByNo = (projectNo: string) => {
@@ -61,6 +160,11 @@ export const usePropertyStore = defineStore('property', () => {
     fetchProperties,
     getUniqueLayouts,
     getUniqueRoomTypes,
+    getUniqueEquipments,
+    getUniqueLabels,
+    getAreaRange,
+    getUniqueTowards,
+    getUniqueDistricts,
     getPropertyByNo
   }
 })

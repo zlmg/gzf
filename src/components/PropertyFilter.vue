@@ -24,17 +24,26 @@ const propertyStore = usePropertyStore()
 const filterStore = useFilterStore()
 
 const localFilters = ref({
-  layout: [...filterStore.filters.layout],
-  roomType: [...filterStore.filters.roomType],
-  priceRange: [...filterStore.filters.priceRange] as [number, number],
-  keyword: filterStore.filters.keyword,
-  availableStatus: filterStore.filters.availableStatus,
-  openStatus: filterStore.filters.openStatus
+  layout: [...(filterStore.filters.layout || [])],
+  roomType: [...(filterStore.filters.roomType || [])],
+  priceRange: [...(filterStore.filters.priceRange || [0, 10000])] as [number, number],
+  keyword: filterStore.filters.keyword || '',
+  availableStatus: (filterStore.filters.availableStatus || '') as AvailableStatus,
+  openStatus: (filterStore.filters.openStatus || '') as OpenStatus,
+  // 新增筛选字段
+  equipment: [...(filterStore.filters.equipment || [])],
+  label: [...(filterStore.filters.label || [])],
+  areaRange: [...(filterStore.filters.areaRange || [0, 200])] as [number, number],
+  towards: [...(filterStore.filters.towards || [])]
 })
 
 const isExpanded = ref(false)
 
 const layouts = computed(() => propertyStore.getUniqueLayouts)
+const equipments = computed(() => propertyStore.getUniqueEquipments)
+const labels = computed(() => propertyStore.getUniqueLabels)
+const towards = computed(() => propertyStore.getUniqueTowards)
+const areaRange = computed(() => propertyStore.getAreaRange)
 
 const toggleRoomType = (type: string) => {
   const index = localFilters.value.roomType.indexOf(type)
@@ -44,6 +53,16 @@ const toggleRoomType = (type: string) => {
     localFilters.value.roomType.push(type)
   }
   filterStore.updateFilters({ roomType: [...localFilters.value.roomType] })
+}
+
+const toggleTowards = (t: string) => {
+  const index = localFilters.value.towards.indexOf(t)
+  if (index > -1) {
+    localFilters.value.towards.splice(index, 1)
+  } else {
+    localFilters.value.towards.push(t)
+  }
+  filterStore.updateFilters({ towards: [...localFilters.value.towards] })
 }
 
 const maxPrice = computed(() => {
@@ -58,7 +77,11 @@ const applyFilters = () => {
     priceRange: localFilters.value.priceRange,
     keyword: localFilters.value.keyword,
     availableStatus: localFilters.value.availableStatus,
-    openStatus: localFilters.value.openStatus
+    openStatus: localFilters.value.openStatus,
+    equipment: localFilters.value.equipment,
+    label: localFilters.value.label,
+    areaRange: localFilters.value.areaRange,
+    towards: localFilters.value.towards
   })
 }
 
@@ -69,7 +92,11 @@ const resetFilters = () => {
     priceRange: [0, maxPrice.value],
     keyword: '',
     availableStatus: '',
-    openStatus: ''
+    openStatus: '',
+    equipment: [],
+    label: [],
+    areaRange: [areaRange.value[0], areaRange.value[1]],
+    towards: []
   }
   filterStore.resetFilters()
 }
@@ -164,7 +191,7 @@ watch(() => localFilters.value.keyword, (newVal) => {
       </div>
     </div>
 
-    <!-- Second row: 可租状态、开放状态、价格 -->
+    <!-- Second row: 可租状态、开放状态、朝向 -->
     <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-6 mt-4">
       <!-- Available status filter -->
       <div>
@@ -198,25 +225,104 @@ watch(() => localFilters.value.keyword, (newVal) => {
         </div>
       </div>
 
-      <!-- Price range -->
+      <!-- 朝向筛选 -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          价格: ¥{{ localFilters.priceRange[0] }} - ¥{{ localFilters.priceRange[1] }}
-        </label>
-        <ElSlider
-          class="px-2"
-          v-model="localFilters.priceRange"
-          range
-          :max="maxPrice"
-          :step="100"
-          @change="() => filterStore.updateFilters({ priceRange: localFilters.priceRange })"
-        />
+        <label class="block text-sm font-medium text-gray-700 mb-1">朝向</label>
+        <div class="flex items-center gap-1 flex-wrap">
+          <span
+            class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
+            :class="localFilters.towards.length === 0 ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
+            @click="() => { localFilters.towards = []; filterStore.updateFilters({ towards: [] }) }"
+          >
+            全部
+          </span>
+          <span
+            v-for="t in towards"
+            :key="t"
+            class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
+            :class="localFilters.towards.includes(t) ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
+            @click="toggleTowards(t)"
+          >
+            {{ t }}
+          </span>
+        </div>
       </div>
     </div>
 
-    <!-- Expandable section (reserved for future use) -->
+    <!-- Expandable section: 新增筛选条件 -->
     <div v-show="isExpanded" class="mt-4 pt-4 border-t border-gray-200">
-      <!-- Additional filters can be added here -->
+      <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
+        <!-- 设备筛选 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">设备</label>
+          <ElSelect
+            v-model="localFilters.equipment"
+            multiple
+            collapse-tags-tooltip
+            placeholder="选择设备"
+            class="w-full"
+            @change="() => filterStore.updateFilters({ equipment: localFilters.equipment })"
+          >
+            <ElOption
+              v-for="eq in equipments"
+              :key="eq"
+              :label="eq"
+              :value="eq"
+            />
+          </ElSelect>
+        </div>
+
+        <!-- 标签筛选 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">标签</label>
+          <ElSelect
+            v-model="localFilters.label"
+            multiple
+            collapse-tags-tooltip
+            placeholder="选择标签"
+            class="w-full"
+            @change="() => filterStore.updateFilters({ label: localFilters.label })"
+          >
+            <ElOption
+              v-for="label in labels"
+              :key="label"
+              :label="label"
+              :value="label"
+            />
+          </ElSelect>
+        </div>
+
+        <!-- 面积筛选 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            面积: {{ localFilters.areaRange[0] }}m² - {{ localFilters.areaRange[1] }}m²
+          </label>
+          <ElSlider
+            class="px-2"
+            v-model="localFilters.areaRange"
+            range
+            :min="areaRange[0]"
+            :max="areaRange[1]"
+            :step="5"
+            @change="() => filterStore.updateFilters({ areaRange: localFilters.areaRange })"
+          />
+        </div>
+
+        <!-- 价格范围 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            价格: ¥{{ localFilters.priceRange[0] }} - ¥{{ localFilters.priceRange[1] }}
+          </label>
+          <ElSlider
+            class="px-2"
+            v-model="localFilters.priceRange"
+            range
+            :max="maxPrice"
+            :step="100"
+            @change="() => filterStore.updateFilters({ priceRange: localFilters.priceRange })"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -1,3 +1,26 @@
+// 户型详情（房型列表项）
+export interface HouseType {
+  area: string           // 面积
+  vrUrl: string          // VR链接
+  roomPicUrl: string     // 户型图片
+  roomDescription: string // 描述
+  roomLabel: string      // 标签（独立阳台,独立卫生间...）
+  houseTypeName: string  // 户型名称
+  roomEquipment: string  // 设备（床,衣柜,空调...）
+  towards: string        // 朝向
+  roomType: string       // 户型代码（101, 111, 211）
+}
+
+// 户型详情分组
+export interface RoomTypeDetail {
+  queueCount: number     // 排队人数
+  maxRent: number        // 最高租金
+  minRent: number        // 最低租金
+  totalCount: number     // 总套数
+  kezuCount: number      // 可租套数
+  houseTypeList: HouseType[]
+}
+
 export interface Property {
   projectNo: string
   projectName: string
@@ -12,6 +35,17 @@ export interface Property {
   longitude: string
   kezuCount: number        // 可租数量
   openQueue: string        // 是否开放
+  // 新增字段
+  district: string         // 行政区
+  openingDate: string      // 开放日期
+  houseType: string        // 房屋类型
+  houseSource: string      // 房屋来源
+  supply: string           // 供应对象
+  totalCount: string       // 总套数
+  totalArea: string        // 总面积
+  textContent: string      // 项目介绍
+  roomTypeCount: string    // 户型统计
+  roomTypeDetails: RoomTypeDetail[]  // 户型详情
 }
 
 export type OpenStatus = '' | 'open' | 'closed'
@@ -24,6 +58,11 @@ export interface FilterState {
   keyword: string          // 关键词搜索
   availableStatus: AvailableStatus   // 可租状态筛选
   openStatus: OpenStatus   // 开放状态筛选
+  // 新增筛选字段
+  equipment: string[]      // 设备筛选
+  label: string[]          // 标签筛选
+  areaRange: [number, number]  // 面积区间
+  towards: string[]        // 朝向筛选
 }
 
 export interface CompareItem extends Property {

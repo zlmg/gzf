@@ -25,26 +25,28 @@ const handleClick = (e: Event) => {
   const result = favoriteStore.toggleFavorite(props.property)
   emit('change', result)
 }
+
+const sizeClass = computed(() => {
+  switch (props.size) {
+    case 'small':
+      return 'w-4 h-4'
+    case 'large':
+      return 'w-6 h-6'
+    default:
+      return 'w-5 h-5'
+  }
+})
 </script>
 
 <template>
   <button
+    type="button"
+    class="p-1.5 rounded-full transition-colors hover:bg-gray-100"
+    :class="{ 'bg-red-50 hover:bg-red-100': isFavorite }"
     @click="handleClick"
-    :class="[
-      'favorite-btn inline-flex items-center justify-center rounded-lg transition-all duration-200',
-      {
-        'px-2 py-1 text-sm': size === 'small',
-        'px-3 py-2 text-base': size === 'default' || !size,
-        'px-4 py-3 text-lg': size === 'large',
-        'is-favorite': isFavorite
-      }
-    ]"
-    :title="isFavorite ? '取消收藏' : '添加收藏'"
   >
-    <!-- Heart Icon -->
     <svg
-      class="w-5 h-5 transition-transform duration-200"
-      :class="{ 'scale-110': isFavorite }"
+      :class="[sizeClass, { 'mr-1': showText }, isFavorite ? 'text-red-500' : 'text-gray-400 hover:text-gray-600']"
       :fill="isFavorite ? 'currentColor' : 'none'"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -56,31 +58,8 @@ const handleClick = (e: Event) => {
         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
       />
     </svg>
-    <span v-if="showText" class="ml-2">
+    <span v-if="showText" :class="isFavorite ? 'text-red-500' : 'text-gray-500'">
       {{ isFavorite ? '已收藏' : '收藏' }}
     </span>
   </button>
 </template>
-
-<style scoped>
-.favorite-btn {
-  background-color: #f3f4f6;
-  color: #6b7280;
-  border: 1px solid transparent;
-}
-
-.favorite-btn:hover {
-  background-color: #fee2e2;
-  color: #ef4444;
-}
-
-.favorite-btn.is-favorite {
-  background-color: #fef2f2;
-  color: #ef4444;
-  border-color: #fecaca;
-}
-
-.favorite-btn.is-favorite:hover {
-  background-color: #fee2e2;
-}
-</style>

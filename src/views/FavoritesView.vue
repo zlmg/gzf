@@ -103,12 +103,23 @@ const formatDate = (timestamp: number): string => {
                       <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded text-sm">
                         {{ item.layout || '未知区域' }}
                       </span>
+                      <span v-if="item.district" class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-sm">
+                        {{ item.district }}
+                      </span>
                       <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded text-sm">
                         {{ formatRoomType(item.roomType) }}
+                      </span>
+                      <span v-if="item.houseType" class="px-2 py-1 bg-cyan-50 text-cyan-700 rounded text-sm">
+                        {{ item.houseType }}
                       </span>
                       <span class="px-2 py-1 bg-orange-50 text-orange-700 rounded text-sm">
                         可租: {{ item.kezuCount }}
                       </span>
+                    </div>
+                    <!-- 新增字段 -->
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+                      <span v-if="item.totalCount">总套数: {{ item.totalCount }} 套</span>
+                      <span v-if="item.openingDate">开放日期: {{ item.openingDate }}</span>
                     </div>
                   </div>
                   <div class="ml-4 text-right">

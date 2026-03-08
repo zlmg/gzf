@@ -14,6 +14,11 @@ export interface FavoriteItem {
   kezuCount: number
   openQueue: string
   addedAt: number // timestamp
+  // 新增字段
+  district?: string
+  houseType?: string
+  totalCount?: string
+  openingDate?: string
 }
 
 const STORAGE_KEY = 'gzf-favorites'
@@ -92,7 +97,12 @@ export const useFavoriteStore = defineStore('favorite', () => {
       thumbnail: property.thumbnail,
       kezuCount: property.kezuCount,
       openQueue: property.openQueue,
-      addedAt: Date.now()
+      addedAt: Date.now(),
+      // 新增字段
+      district: property.district,
+      houseType: property.houseType,
+      totalCount: property.totalCount,
+      openingDate: property.openingDate
     }
 
     favorites.value.unshift(item) // Add to beginning

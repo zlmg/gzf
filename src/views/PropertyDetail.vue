@@ -7,8 +7,8 @@ import { useCompareStore } from '@/stores/compare'
 import { useFavoriteStore } from '@/stores/favorite'
 import ImageGallery from '@/components/ImageGallery.vue'
 import FavoriteButton from '@/components/FavoriteButton.vue'
-import { formatPriceRange, formatRoomType, formatOpenQueue } from '@/utils/format'
-import type { Property } from '@/types/property'
+import { formatPriceRange, formatRoomType, formatOpenQueue, formatRoomTypeCode, formatEquipmentList, formatLabelList, formatArea, formatHouseTypeName } from '@/utils/format'
+import type { Property, HouseType } from '@/types/property'
 
 const route = useRoute()
 const router = useRouter()
@@ -19,6 +19,11 @@ const favoriteStore = useFavoriteStore()
 const property = ref<Property | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
+
+// 图片查看器状态
+const showImageViewer = ref(false)
+const viewerImage = ref('')
+const viewerTitle = ref('')
 
 const IMAGE_BASE_URL = 'https://www.bsgzf.com.cn'
 
@@ -46,6 +51,45 @@ const handleToggleCompare = () => {
 
 const goBack = () => {
   router.push('/')
+}
+
+// 获取房型图片
+const getHouseTypeImage = (house: HouseType): string | undefined => {
+  if (!house.roomPicUrl) return undefined
+  const imgs = house.roomPicUrl.split(',')
+  if (imgs.length === 0) return undefined
+  const firstPath = imgs[0]
+  if (!firstPath) return undefined
+  if (firstPath.startsWith('http')) return firstPath
+  return `${IMAGE_BASE_URL}${firstPath}`
+}
+
+// 打开VR链接
+const openVrUrl = (vrUrl: string) => {
+  if (vrUrl) {
+    window.open(vrUrl, '_blank')
+  }
+}
+
+// 获取房型所有图片
+const getHouseTypeImages = (house: HouseType): string[] => {
+  if (!house.roomPicUrl) return []
+  return house.roomPicUrl.split(',').map(path => {
+    if (path.startsWith('http')) return path
+    return `${IMAGE_BASE_URL}${path}`
+  }).filter(Boolean)
+}
+
+// 打开图片查看器
+const openImageViewer = (imageUrl: string, title: string) => {
+  viewerImage.value = imageUrl
+  viewerTitle.value = title
+  showImageViewer.value = true
+}
+
+// 关闭图片查看器
+const closeImageViewer = () => {
+  showImageViewer.value = false
 }
 
 onMounted(async () => {
@@ -123,6 +167,7 @@ onMounted(async () => {
             <div class="flex items-center gap-2 md:gap-3 shrink-0">
               <ElTag v-if="isAvailable" type="success" size="default">可租</ElTag>
               <ElTag v-else type="info" size="default">已满</ElTag>
+              <ElTag v-if="property.district" type="primary" size="default">{{ property.district }}</ElTag>
             </div>
           </div>
 
@@ -154,6 +199,31 @@ onMounted(async () => {
               <div class="bg-gray-50 rounded-lg p-3">
                 <p class="text-xs text-gray-500 mb-1">开放状态</p>
                 <p class="text-sm font-medium text-gray-800">{{ formatOpenQueue(property.openQueue) }}</p>
+              </div>
+              <!-- 新增字段 -->
+              <div v-if="property.houseType" class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">房屋类型</p>
+                <p class="text-sm font-medium text-gray-800">{{ property.houseType }}</p>
+              </div>
+              <div v-if="property.houseSource" class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">房屋来源</p>
+                <p class="text-sm font-medium text-gray-800">{{ property.houseSource }}</p>
+              </div>
+              <div v-if="property.totalCount" class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">总套数</p>
+                <p class="text-sm font-medium text-gray-800">{{ property.totalCount }} 套</p>
+              </div>
+              <div v-if="property.totalArea" class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">总面积</p>
+                <p class="text-sm font-medium text-gray-800">{{ property.totalArea }} m²</p>
+              </div>
+              <div v-if="property.openingDate" class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">开放日期</p>
+                <p class="text-sm font-medium text-gray-800">{{ property.openingDate }}</p>
+              </div>
+              <div v-if="property.supply" class="bg-gray-50 rounded-lg p-3">
+                <p class="text-xs text-gray-500 mb-1">供应对象</p>
+                <p class="text-sm font-medium text-gray-800">{{ property.supply }}</p>
               </div>
             </div>
             <div class="bg-gray-50 rounded-lg p-3">
@@ -190,6 +260,28 @@ onMounted(async () => {
             <ElDescriptionsItem label="开放状态">
               {{ formatOpenQueue(property.openQueue) }}
             </ElDescriptionsItem>
+            <!-- 新增字段 -->
+            <ElDescriptionsItem v-if="property.district" label="行政区">
+              {{ property.district }}
+            </ElDescriptionsItem>
+            <ElDescriptionsItem v-if="property.houseType" label="房屋类型">
+              {{ property.houseType }}
+            </ElDescriptionsItem>
+            <ElDescriptionsItem v-if="property.houseSource" label="房屋来源">
+              {{ property.houseSource }}
+            </ElDescriptionsItem>
+            <ElDescriptionsItem v-if="property.supply" label="供应对象">
+              {{ property.supply }}
+            </ElDescriptionsItem>
+            <ElDescriptionsItem v-if="property.totalCount" label="总套数">
+              {{ property.totalCount }} 套
+            </ElDescriptionsItem>
+            <ElDescriptionsItem v-if="property.totalArea" label="总面积">
+              {{ property.totalArea }} m²
+            </ElDescriptionsItem>
+            <ElDescriptionsItem v-if="property.openingDate" label="开放日期">
+              {{ property.openingDate }}
+            </ElDescriptionsItem>
             <ElDescriptionsItem label="地址" :span="2">
               {{ property.location || '-' }}
             </ElDescriptionsItem>
@@ -197,6 +289,12 @@ onMounted(async () => {
               {{ property.latitude }}, {{ property.longitude }}
             </ElDescriptionsItem>
           </ElDescriptions>
+
+          <!-- 项目介绍 -->
+          <div v-if="property.textContent" class="mb-6 p-4 bg-gray-50 rounded-lg">
+            <h3 class="text-sm font-semibold text-gray-700 mb-2">项目介绍</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">{{ property.textContent }}</p>
+          </div>
 
           <!-- Action buttons -->
           <div class="flex flex-col sm:flex-row gap-3">
@@ -234,6 +332,100 @@ onMounted(async () => {
           </div>
         </div>
 
+        <!-- 房型详情区块 -->
+        <div v-if="property.roomTypeDetails && property.roomTypeDetails.length > 0" class="space-y-4">
+          <h2 class="text-lg md:text-xl font-bold text-gray-800">房型详情</h2>
+
+          <div
+            v-for="(detail, index) in property.roomTypeDetails"
+            :key="index"
+            class="bg-white rounded-xl shadow-md p-4 md:p-6"
+          >
+            <!-- 房型分组信息 -->
+            <div class="flex flex-wrap items-center gap-2 mb-4 pb-4 border-b border-gray-200">
+              <ElTag type="primary" size="large">{{ formatHouseTypeName(detail.houseTypeList?.[0]?.houseTypeName || '') || `房型 ${index + 1}` }}</ElTag>
+              <span class="text-red-600 font-semibold">{{ formatPriceRange(detail.minRent, detail.maxRent) }}/月</span>
+              <span class="text-gray-500 text-sm">总套数: {{ detail.totalCount }} 套</span>
+              <span class="text-green-600 text-sm">可租: {{ detail.kezuCount }} 套</span>
+              <span v-if="detail.queueCount > 0" class="text-orange-600 text-sm">排队人数: {{ detail.queueCount }} 人</span>
+            </div>
+
+            <!-- 房型卡片列表 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div
+                v-for="(house, hIndex) in detail.houseTypeList"
+                :key="hIndex"
+                class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+              >
+                <!-- 房型图片 -->
+                <div class="bg-gray-100 relative">
+                  <img
+                    v-if="getHouseTypeImage(house)"
+                    :src="getHouseTypeImage(house)"
+                    :alt="house.houseTypeName"
+                    class="w-full h-auto max-h-64 object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                    loading="lazy"
+                    @click="openImageViewer(getHouseTypeImage(house)!, house.houseTypeName)"
+                  />
+                  <div v-else class="w-full h-40 flex items-center justify-center text-gray-400">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <!-- VR 按钮 -->
+                  <button
+                    v-if="house.vrUrl"
+                    @click.stop="openVrUrl(house.vrUrl)"
+                    class="absolute bottom-3 right-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    VR看房
+                  </button>
+                </div>
+
+                <!-- 房型信息 -->
+                <div class="p-3">
+                  <div class="flex items-center justify-between mb-2">
+                    <h4 class="font-semibold text-gray-800">{{ house.houseTypeName }}</h4>
+                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">{{ formatRoomTypeCode(house.roomType) }}</span>
+                  </div>
+
+                  <div class="flex items-center gap-3 text-sm text-gray-600 mb-2">
+                    <span v-if="house.area">{{ formatArea(house.area) }}</span>
+                    <span v-if="house.towards">{{ house.towards }}</span>
+                  </div>
+
+                  <!-- 标签 -->
+                  <div v-if="house.roomLabel && formatLabelList(house.roomLabel).length > 0" class="flex flex-wrap gap-1 mb-2">
+                    <span
+                      v-for="(label, lIndex) in formatLabelList(house.roomLabel)"
+                      :key="lIndex"
+                      class="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded"
+                    >
+                      {{ label }}
+                    </span>
+                  </div>
+
+                  <!-- 设备 (全部显示) -->
+                  <div v-if="house.roomEquipment && formatEquipmentList(house.roomEquipment).length > 0" class="flex flex-wrap gap-1">
+                    <span
+                      v-for="(eq, eIndex) in formatEquipmentList(house.roomEquipment)"
+                      :key="eIndex"
+                      class="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded"
+                    >
+                      {{ eq }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Map placeholder (shows coordinates if available) -->
         <div v-if="property.latitude && property.longitude" class="bg-white rounded-xl shadow-md p-4 md:p-6">
           <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">位置信息</h2>
@@ -259,5 +451,56 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <!-- 图片查看器 -->
+    <Teleport to="body">
+      <Transition name="viewer-fade">
+        <div
+          v-if="showImageViewer"
+          class="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center"
+          @click="closeImageViewer"
+        >
+          <!-- 关闭按钮 -->
+          <button
+            @click="closeImageViewer"
+            class="absolute top-4 right-4 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors z-10"
+            aria-label="关闭"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <!-- 标题 -->
+          <div v-if="viewerTitle" class="absolute top-4 left-4 text-white text-sm bg-black/50 px-3 py-1 rounded">
+            {{ viewerTitle }}
+          </div>
+
+          <!-- 图片 -->
+          <img
+            :src="viewerImage"
+            :alt="viewerTitle"
+            class="max-h-[90vh] max-w-[95vw] object-contain"
+            @click.stop
+          />
+
+          <!-- 提示 -->
+          <p class="absolute bottom-4 text-white/60 text-sm">点击空白处关闭</p>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
+
+<style scoped>
+/* 图片查看器过渡动画 */
+.viewer-fade-enter-active,
+.viewer-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.viewer-fade-enter-from,
+.viewer-fade-leave-to {
+  opacity: 0;
+}
+</style>
