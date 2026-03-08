@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Property } from '@/types/property'
+import type { Property, RoomTypeDetail } from '@/types/property'
 
 export interface FavoriteItem {
   projectNo: string
@@ -19,6 +19,9 @@ export interface FavoriteItem {
   houseType?: string
   totalCount?: string
   openingDate?: string
+  totalArea?: string
+  houseSource?: string
+  roomTypeDetails?: RoomTypeDetail[]
 }
 
 const STORAGE_KEY = 'gzf-favorites'
@@ -102,7 +105,10 @@ export const useFavoriteStore = defineStore('favorite', () => {
       district: property.district,
       houseType: property.houseType,
       totalCount: property.totalCount,
-      openingDate: property.openingDate
+      openingDate: property.openingDate,
+      totalArea: property.totalArea,
+      houseSource: property.houseSource,
+      roomTypeDetails: property.roomTypeDetails
     }
 
     favorites.value.unshift(item) // Add to beginning

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElButton, ElEmpty } from 'element-plus'
+import { ElButton, ElEmpty, ElMessage } from 'element-plus'
 import { useFavoriteStore } from '@/stores/favorite'
+import { useCompareStore } from '@/stores/compare'
 import { formatPriceRange, formatRoomType, formatOpenQueue } from '@/utils/format'
 
 const router = useRouter()
 const favoriteStore = useFavoriteStore()
+const compareStore = useCompareStore()
 
 const hasFavorites = computed(() => favoriteStore.favorites.length > 0)
 
@@ -32,6 +34,69 @@ const formatDate = (timestamp: number): string => {
     hour: '2-digit',
     minute: '2-digit'
   })
+}
+
+// 汇总所有房型的设备并去重
+const getEquipmentList = (item: typeof favoriteStore.favorites[0]): string[] => {
+  if (!item.roomTypeDetails) return []
+  const equipmentSet = new Set<string>()
+  item.roomTypeDetails.forEach(detail => {
+    detail.houseTypeList?.forEach(houseType => {
+      if (houseType.roomEquipment) {
+        houseType.roomEquipment.split(',').forEach(eq => {
+          const trimmed = eq.trim()
+          if (trimmed) equipmentSet.add(trimmed)
+        })
+      }
+    })
+  })
+  return Array.from(equipmentSet)
+}
+
+// 检查是否在对比列表中
+const isInCompare = (projectNo: string): boolean => {
+  return compareStore.isInCompare(projectNo)
+}
+
+// 切换对比状态
+const handleToggleCompare = (e: Event, item: typeof favoriteStore.favorites[0]) => {
+  e.stopPropagation()
+  // 需要构建一个简化的 Property 对象传给 compareStore
+  const property = {
+    projectNo: item.projectNo,
+    projectName: item.projectName,
+    location: item.location,
+    layout: item.layout,
+    roomType: item.roomType,
+    minRent: item.minRent,
+    maxRent: item.maxRent,
+    thumbnail: item.thumbnail,
+    mediaUrl: '',
+    latitude: '',
+    longitude: '',
+    kezuCount: item.kezuCount,
+    openQueue: item.openQueue,
+    district: item.district || '',
+    openingDate: item.openingDate || '',
+    houseType: item.houseType || '',
+    houseSource: item.houseSource || '',
+    supply: '',
+    totalCount: item.totalCount || '',
+    totalArea: item.totalArea || '',
+    textContent: '',
+    roomTypeCount: '',
+    roomTypeDetails: item.roomTypeDetails || []
+  }
+
+  if (isInCompare(item.projectNo)) {
+    compareStore.toggleCompare(property)
+  } else {
+    if (compareStore.isFull) {
+      ElMessage.warning('对比列表已满，最多只能添加4个房源')
+      return
+    }
+    compareStore.toggleCompare(property)
+  }
 }
 </script>
 
@@ -116,24 +181,49 @@ const formatDate = (timestamp: number): string => {
                         可租: {{ item.kezuCount }}
                       </span>
                     </div>
-                    <!-- 新增字段 -->
+                    <!-- 总套数、开放日期、总面积、房屋来源 -->
                     <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
                       <span v-if="item.totalCount">总套数: {{ item.totalCount }} 套</span>
                       <span v-if="item.openingDate">开放日期: {{ item.openingDate }}</span>
+                      <span v-if="item.totalArea">总面积: {{ item.totalArea }}</span>
+                      <span v-if="item.houseSource">房屋来源: {{ item.houseSource }}</span>
+                    </div>
+                    <!-- 设备 -->
+                    <div v-if="getEquipmentList(item).length > 0" class="mt-2 flex items-start gap-2 text-xs">
+                      <span class="text-gray-500 flex-shrink-0">设备:</span>
+                      <div class="flex flex-wrap gap-1">
+                        <span
+                          v-for="eq in getEquipmentList(item)"
+                          :key="eq"
+                          class="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded"
+                        >
+                          {{ eq }}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div class="ml-4 text-right">
-                    <div class="text-xl font-bold text-red-600 mb-2">
+                  <div class="ml-4 text-right flex flex-col items-end gap-2">
+                    <div class="text-xl font-bold text-red-600">
                       {{ formatPriceRange(item.minRent, item.maxRent) }}/月
                     </div>
-                    <ElButton
-                      type="danger"
-                      plain
-                      size="small"
-                      @click.stop="handleRemove(item.projectNo)"
-                    >
-                      移除
-                    </ElButton>
+                    <div class="flex gap-2">
+                      <ElButton
+                        :type="isInCompare(item.projectNo) ? 'primary' : 'default'"
+                        plain
+                        size="small"
+                        @click.stop="handleToggleCompare($event, item)"
+                      >
+                        {{ isInCompare(item.projectNo) ? '已加入对比' : '加入对比' }}
+                      </ElButton>
+                      <ElButton
+                        type="danger"
+                        plain
+                        size="small"
+                        @click.stop="handleRemove(item.projectNo)"
+                      >
+                        移除
+                      </ElButton>
+                    </div>
                   </div>
                 </div>
                 <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">

@@ -3,8 +3,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElButton, ElEmpty, ElTag } from 'element-plus'
 import { useCompareStore } from '@/stores/compare'
-import { formatPriceRange, formatRoomType, formatOpenQueue, truncateText, formatArea, formatEquipmentList, formatLabelList, formatRoomTypeCode } from '@/utils/format'
-import type { HouseType } from '@/types/property'
+import { formatPriceRange, formatRoomType, formatOpenQueue, formatArea, formatEquipmentList, formatLabelList, formatRoomTypeCode } from '@/utils/format'
 
 const router = useRouter()
 const compareStore = useCompareStore()
@@ -26,12 +25,6 @@ const goToList = () => {
 
 const goToDetail = (projectNo: string) => {
   router.push(`/property/${projectNo}`)
-}
-
-// 获取房源的所有房型（扁平化）
-const getAllHouseTypes = (item: typeof compareList.value[0]): HouseType[] => {
-  if (!item.roomTypeDetails || item.roomTypeDetails.length === 0) return []
-  return item.roomTypeDetails.flatMap(detail => detail.houseTypeList || [])
 }
 </script>
 
@@ -162,39 +155,74 @@ const getAllHouseTypes = (item: typeof compareList.value[0]): HouseType[] => {
 
               <div v-if="item.textContent" class="pt-2 border-t border-gray-100">
                 <span class="text-sm text-gray-500">项目介绍</span>
-                <p class="text-sm text-gray-700 mt-1">{{ truncateText(item.textContent, 100) }}</p>
+                <p class="text-sm text-gray-700 mt-1">{{ item.textContent }}</p>
               </div>
 
               <!-- 房型详情 -->
-              <div v-if="getAllHouseTypes(item).length > 0" class="pt-2 border-t border-gray-100">
+              <div v-if="item.roomTypeDetails && item.roomTypeDetails.length > 0" class="pt-2 border-t border-gray-100">
                 <span class="text-sm text-gray-500 block mb-2">房型详情</span>
-                <div class="space-y-2">
+                <div class="space-y-3">
                   <div
-                    v-for="(house, hIdx) in getAllHouseTypes(item)"
-                    :key="hIdx"
+                    v-for="(detail, dIdx) in item.roomTypeDetails"
+                    :key="dIdx"
                     class="bg-gray-50 rounded-lg p-2"
                   >
-                    <div class="flex items-center justify-between mb-1">
-                      <span class="text-sm font-medium text-gray-800">{{ house.houseTypeName || '-' }}</span>
-                      <span class="text-xs text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded">{{ formatRoomTypeCode(house.roomType) }}</span>
+                    <!-- 房型分组统计 -->
+                    <div class="mb-2 pb-2 border-b border-gray-200">
+                      <div class="flex items-center gap-2 mb-1">
+                        <span class="text-sm font-medium text-gray-800">{{ detail.houseTypeList?.[0]?.houseTypeName || `房型 ${dIdx + 1}` }}</span>
+                        <span class="text-xs text-red-600 font-semibold">{{ formatPriceRange(detail.minRent, detail.maxRent) }}</span>
+                      </div>
+                      <div class="flex flex-wrap items-center gap-2 text-xs">
+                        <span class="text-gray-500">总套数: {{ detail.totalCount }}</span>
+                        <span class="text-green-600">可租: {{ detail.kezuCount }}</span>
+                        <span v-if="detail.queueCount > 0" class="text-orange-600">排队: {{ detail.queueCount }}人</span>
+                      </div>
                     </div>
-                    <div class="flex items-center gap-2 text-xs text-gray-600 mb-1">
-                      <span v-if="house.area">{{ formatArea(house.area) }}</span>
-                      <span v-if="house.towards">{{ house.towards }}</span>
-                    </div>
-                    <div v-if="house.roomLabel && formatLabelList(house.roomLabel).length > 0" class="flex flex-wrap gap-1 mb-1">
-                      <span
-                        v-for="(label, lIdx) in formatLabelList(house.roomLabel)"
-                        :key="lIdx"
-                        class="text-xs bg-green-50 text-green-700 px-1.5 py-0.5 rounded"
-                      >{{ label }}</span>
-                    </div>
-                    <div v-if="house.roomEquipment && formatEquipmentList(house.roomEquipment).length > 0" class="flex flex-wrap gap-1">
-                      <span
-                        v-for="(eq, eIdx) in formatEquipmentList(house.roomEquipment)"
-                        :key="eIdx"
-                        class="text-xs bg-gray-200 text-gray-600 px-1 py-0.5 rounded"
-                      >{{ eq }}</span>
+                    <!-- 房型列表 -->
+                    <div class="space-y-2">
+                      <div
+                        v-for="(house, hIdx) in detail.houseTypeList"
+                        :key="hIdx"
+                        class="bg-white rounded p-2 relative"
+                      >
+                        <div class="flex items-center justify-between mb-1">
+                          <span class="text-sm font-medium text-gray-800">{{ house.houseTypeName || '-' }}</span>
+                          <span class="text-xs text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded">{{ formatRoomTypeCode(house.roomType) }}</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-600 mb-1">
+                          <span v-if="house.area">{{ formatArea(house.area) }}</span>
+                          <span v-if="house.towards">{{ house.towards }}</span>
+                        </div>
+                        <div v-if="house.roomLabel && formatLabelList(house.roomLabel).length > 0" class="flex flex-wrap gap-1 mb-1">
+                          <span
+                            v-for="(label, lIdx) in formatLabelList(house.roomLabel)"
+                            :key="lIdx"
+                            class="text-xs bg-green-50 text-green-700 px-1.5 py-0.5 rounded"
+                          >{{ label }}</span>
+                        </div>
+                        <div v-if="house.roomEquipment && formatEquipmentList(house.roomEquipment).length > 0" class="flex flex-wrap gap-1 mb-1">
+                          <span
+                            v-for="(eq, eIdx) in formatEquipmentList(house.roomEquipment)"
+                            :key="eIdx"
+                            class="text-xs bg-gray-200 text-gray-600 px-1 py-0.5 rounded"
+                          >{{ eq }}</span>
+                        </div>
+                        <!-- VR看房按钮 -->
+                        <a
+                          v-if="house.vrUrl"
+                          :href="house.vrUrl"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="inline-flex items-center gap-1 text-xs bg-blue-500 text-white px-2 py-1 rounded-full mt-1 hover:bg-blue-600 transition-colors"
+                        >
+                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                          VR看房
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -411,20 +439,6 @@ const getAllHouseTypes = (item: typeof compareList.value[0]): HouseType[] => {
           </div>
         </div>
 
-        <!-- Location row -->
-        <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
-          <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
-            地址
-          </div>
-          <div
-            v-for="item in compareList"
-            :key="item.projectNo"
-            class="p-4 border-r border-gray-200 last:border-r-0 text-gray-600"
-          >
-            {{ item.location || '-' }}
-          </div>
-        </div>
-
         <!-- Text content row -->
         <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
           <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
@@ -435,7 +449,7 @@ const getAllHouseTypes = (item: typeof compareList.value[0]): HouseType[] => {
             :key="item.projectNo"
             class="p-4 border-r border-gray-200 last:border-r-0 text-gray-600 text-sm"
           >
-            {{ truncateText(item.textContent || '', 80) }}
+            {{ item.textContent || '-' }}
           </div>
         </div>
 
@@ -449,33 +463,68 @@ const getAllHouseTypes = (item: typeof compareList.value[0]): HouseType[] => {
             :key="item.projectNo"
             class="p-3 border-r border-gray-200 last:border-r-0"
           >
-            <div v-if="getAllHouseTypes(item).length > 0" class="space-y-2">
+            <div v-if="item.roomTypeDetails && item.roomTypeDetails.length > 0" class="space-y-3">
               <div
-                v-for="(house, hIdx) in getAllHouseTypes(item)"
-                :key="hIdx"
+                v-for="(detail, dIdx) in item.roomTypeDetails"
+                :key="dIdx"
                 class="bg-gray-50 rounded-lg p-2"
               >
-                <div class="flex items-center justify-between mb-1">
-                  <span class="text-sm font-medium text-gray-800">{{ house.houseTypeName || '-' }}</span>
-                  <span class="text-xs text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded">{{ formatRoomTypeCode(house.roomType) }}</span>
+                <!-- 房型分组统计 -->
+                <div class="mb-2 pb-2 border-b border-gray-200">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-sm font-medium text-gray-800">{{ detail.houseTypeList?.[0]?.houseTypeName || `房型 ${dIdx + 1}` }}</span>
+                    <span class="text-xs text-red-600 font-semibold">{{ formatPriceRange(detail.minRent, detail.maxRent) }}</span>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-2 text-xs">
+                    <span class="text-gray-500">总套数: {{ detail.totalCount }}</span>
+                    <span class="text-green-600">可租: {{ detail.kezuCount }}</span>
+                    <span v-if="detail.queueCount > 0" class="text-orange-600">排队: {{ detail.queueCount }}人</span>
+                  </div>
                 </div>
-                <div class="flex items-center gap-2 text-xs text-gray-600 mb-1">
-                  <span v-if="house.area">{{ formatArea(house.area) }}</span>
-                  <span v-if="house.towards">{{ house.towards }}</span>
-                </div>
-                <div v-if="house.roomLabel && formatLabelList(house.roomLabel).length > 0" class="flex flex-wrap gap-1 mb-1">
-                  <span
-                    v-for="(label, lIdx) in formatLabelList(house.roomLabel)"
-                    :key="lIdx"
-                    class="text-xs bg-green-50 text-green-700 px-1.5 py-0.5 rounded"
-                  >{{ label }}</span>
-                </div>
-                <div v-if="house.roomEquipment && formatEquipmentList(house.roomEquipment).length > 0" class="flex flex-wrap gap-1">
-                  <span
-                    v-for="(eq, eIdx) in formatEquipmentList(house.roomEquipment)"
-                    :key="eIdx"
-                    class="text-xs bg-gray-200 text-gray-600 px-1 py-0.5 rounded"
-                  >{{ eq }}</span>
+                <!-- 房型列表 -->
+                <div class="space-y-2">
+                  <div
+                    v-for="(house, hIdx) in detail.houseTypeList"
+                    :key="hIdx"
+                    class="bg-white rounded p-2"
+                  >
+                    <div class="flex items-center justify-between mb-1">
+                      <span class="text-sm font-medium text-gray-800">{{ house.houseTypeName || '-' }}</span>
+                      <span class="text-xs text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded">{{ formatRoomTypeCode(house.roomType) }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-gray-600 mb-1">
+                      <span v-if="house.area">{{ formatArea(house.area) }}</span>
+                      <span v-if="house.towards">{{ house.towards }}</span>
+                    </div>
+                    <div v-if="house.roomLabel && formatLabelList(house.roomLabel).length > 0" class="flex flex-wrap gap-1 mb-1">
+                      <span
+                        v-for="(label, lIdx) in formatLabelList(house.roomLabel)"
+                        :key="lIdx"
+                        class="text-xs bg-green-50 text-green-700 px-1.5 py-0.5 rounded"
+                      >{{ label }}</span>
+                    </div>
+                    <div v-if="house.roomEquipment && formatEquipmentList(house.roomEquipment).length > 0" class="flex flex-wrap gap-1 mb-1">
+                      <span
+                        v-for="(eq, eIdx) in formatEquipmentList(house.roomEquipment)"
+                        :key="eIdx"
+                        class="text-xs bg-gray-200 text-gray-600 px-1 py-0.5 rounded"
+                      >{{ eq }}</span>
+                    </div>
+                    <!-- VR看房按钮 -->
+                    <a
+                      v-if="house.vrUrl"
+                      :href="house.vrUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1 text-xs bg-blue-500 text-white px-2 py-1 rounded-full mt-1 hover:bg-blue-600 transition-colors"
+                    >
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                      VR看房
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
