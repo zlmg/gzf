@@ -71,15 +71,6 @@ const openVrUrl = (vrUrl: string) => {
   }
 }
 
-// 获取房型所有图片
-const getHouseTypeImages = (house: HouseType): string[] => {
-  if (!house.roomPicUrl) return []
-  return house.roomPicUrl.split(',').map(path => {
-    if (path.startsWith('http')) return path
-    return `${IMAGE_BASE_URL}${path}`
-  }).filter(Boolean)
-}
-
 // 打开图片查看器
 const openImageViewer = (imageUrl: string, title: string) => {
   viewerImage.value = imageUrl
