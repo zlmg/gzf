@@ -110,7 +110,9 @@ export const useFilterStore = defineStore('filter', () => {
       if (!detail.houseTypeList) return false
       return detail.houseTypeList.some(house => {
         if (!house.towards) return false
-        return towardsList.includes(house.towards)
+        // 拆分房源朝向为单个方向，如 "朝南" -> "南", "朝南,朝北" -> ["南", "北"]
+        const directions = house.towards.split(',').map(t => t.replace('朝', '').trim())
+        return towardsList.some(t => directions.includes(t))
       })
     })
   }

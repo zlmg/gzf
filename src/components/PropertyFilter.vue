@@ -153,6 +153,7 @@ watch(() => localFilters.value.keyword, (newVal) => {
         <ElSelect
           v-model="localFilters.layout"
           multiple
+          clearable
           collapse-tags-tooltip
           placeholder="选择区域"
           class="w-full"
@@ -258,6 +259,7 @@ watch(() => localFilters.value.keyword, (newVal) => {
           <ElSelect
             v-model="localFilters.equipment"
             multiple
+            clearable
             collapse-tags-tooltip
             placeholder="选择设备"
             class="w-full"
@@ -278,6 +280,7 @@ watch(() => localFilters.value.keyword, (newVal) => {
           <ElSelect
             v-model="localFilters.label"
             multiple
+            clearable
             collapse-tags-tooltip
             placeholder="选择标签"
             class="w-full"

@@ -121,7 +121,7 @@ export const usePropertyStore = defineStore('property', () => {
     return [Math.floor(minArea), Math.ceil(maxArea)]
   })
 
-  // 提取朝向选项
+  // 提取朝向选项 - 拆分为单个方向
   const getUniqueTowards = computed(() => {
     const towards = new Set<string>()
     properties.value.forEach(p => {
@@ -130,7 +130,11 @@ export const usePropertyStore = defineStore('property', () => {
           if (detail.houseTypeList) {
             detail.houseTypeList.forEach(house => {
               if (house.towards) {
-                towards.add(house.towards)
+                // 拆分朝向，如 "朝南" -> "南", "朝南,朝北" -> ["南", "北"]
+                house.towards.split(',').forEach(t => {
+                  const direction = t.replace('朝', '').trim()
+                  if (direction) towards.add(direction)
+                })
               }
             })
           }
