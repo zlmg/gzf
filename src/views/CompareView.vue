@@ -149,7 +149,7 @@ const goToDetail = (projectNo: string) => {
               </div>
 
               <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-500">开放日期</span>
+                <span class="text-sm text-gray-500">供应日期</span>
                 <span class="text-sm">{{ item.openingDate || '-' }}</span>
               </div>
 
@@ -428,7 +428,7 @@ const goToDetail = (projectNo: string) => {
         <!-- Opening date row -->
         <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
           <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">
-            开放日期
+            供应日期
           </div>
           <div
             v-for="item in compareList"

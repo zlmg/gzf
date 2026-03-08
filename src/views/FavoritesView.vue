@@ -181,10 +181,10 @@ const handleToggleCompare = (e: Event, item: typeof favoriteStore.favorites[0]) 
                         可租: {{ item.kezuCount }}
                       </span>
                     </div>
-                    <!-- 总套数、开放日期、总面积、房屋来源 -->
+                    <!-- 总套数、供应日期、总面积、房屋来源 -->
                     <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
                       <span v-if="item.totalCount">总套数: {{ item.totalCount }} 套</span>
-                      <span v-if="item.openingDate">开放日期: {{ item.openingDate }}</span>
+                      <span v-if="item.openingDate">供应日期: {{ item.openingDate }}</span>
                       <span v-if="item.totalArea">总面积: {{ item.totalArea }}</span>
                       <span v-if="item.houseSource">房屋来源: {{ item.houseSource }}</span>
                     </div>

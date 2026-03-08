@@ -209,7 +209,7 @@ onMounted(async () => {
                 <p class="text-sm font-medium text-gray-800">{{ property.totalArea }} m²</p>
               </div>
               <div v-if="property.openingDate" class="bg-gray-50 rounded-lg p-3">
-                <p class="text-xs text-gray-500 mb-1">开放日期</p>
+                <p class="text-xs text-gray-500 mb-1">供应日期</p>
                 <p class="text-sm font-medium text-gray-800">{{ property.openingDate }}</p>
               </div>
               <div v-if="property.supply" class="bg-gray-50 rounded-lg p-3">
@@ -270,7 +270,7 @@ onMounted(async () => {
             <ElDescriptionsItem v-if="property.totalArea" label="总面积">
               {{ property.totalArea }} m²
             </ElDescriptionsItem>
-            <ElDescriptionsItem v-if="property.openingDate" label="开放日期">
+            <ElDescriptionsItem v-if="property.openingDate" label="供应日期">
               {{ property.openingDate }}
             </ElDescriptionsItem>
             <ElDescriptionsItem label="地址" :span="2">

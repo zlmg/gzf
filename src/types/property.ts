@@ -37,7 +37,7 @@ export interface Property {
   openQueue: string        // 是否开放
   // 新增字段
   district: string         // 行政区
-  openingDate: string      // 开放日期
+  openingDate: string      // 供应日期
   houseType: string        // 房屋类型
   houseSource: string      // 房屋来源
   supply: string           // 供应对象

@@ -131,9 +131,14 @@ const displayLabels = computed(() => {
       </div>
     </div>
     <div class="p-4">
-      <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-1">
-        {{ property.projectName }}
-      </h3>
+      <div class="flex items-baseline gap-2 mb-2">
+        <h3 class="text-lg font-semibold text-gray-800 line-clamp-1">
+          {{ property.projectName }}
+        </h3>
+        <span v-if="property.openingDate" class="text-xs text-gray-400 shrink-0">
+          {{ property.openingDate }}
+        </span>
+      </div>
       <p class="text-sm text-gray-500 mb-3 line-clamp-2">
         {{ truncateText(property.location, 50) }}
       </p>
