@@ -190,7 +190,7 @@ watch(activeCategory, (newCategory) => {
 
 
     <!-- POI 列表 -->
-    <div class="bg-gray-50 rounded-lg p-3 min-h-40 max-h-120 overflow-y-auto">
+    <div class="bg-gray-50 rounded-lg p-3 h-120 overflow-y-auto">
       <div v-if="loading" class="flex items-center justify-center h-32">
         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </div>
