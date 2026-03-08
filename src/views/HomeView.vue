@@ -6,7 +6,6 @@ import { ElSelect, ElOption, ElEmpty, ElSkeleton } from 'element-plus'
 import PropertyCard from '@/components/PropertyCard.vue'
 import PropertyFilter from '@/components/PropertyFilter.vue'
 import CompareBar from '@/components/CompareBar.vue'
-import type { SortField, SortOrder } from '@/types/property'
 
 const { filteredProperties, loading, error, fetchProperties } = useProperty()
 const filterStore = useFilterStore()
@@ -17,8 +16,15 @@ const isLoadingMore = ref(false)
 const loadMoreTrigger = ref<HTMLElement | null>(null)
 let observer: IntersectionObserver | null = null
 
-const sortField = ref<SortField>('')
-const sortOrder = ref<SortOrder>('asc')
+// 使用 store 中的排序状态
+const sortField = computed({
+  get: () => filterStore.sortField,
+  set: (value) => filterStore.setSort(value, filterStore.sortOrder)
+})
+const sortOrder = computed({
+  get: () => filterStore.sortOrder,
+  set: (value) => filterStore.setSort(filterStore.sortField, value)
+})
 
 const displayedProperties = computed(() => {
   return filteredProperties.value.slice(0, displayedCount.value)
@@ -55,10 +61,6 @@ const setupObserver = () => {
   if (loadMoreTrigger.value) {
     observer.observe(loadMoreTrigger.value)
   }
-}
-
-const handleSortChange = () => {
-  filterStore.setSort(sortField.value, sortOrder.value)
 }
 
 // Reset when filters change
@@ -111,10 +113,10 @@ watch(loadMoreTrigger, (el) => {
           clearable
           size="small"
           class="flex-1 min-w-0 max-w-[120px]"
-          @change="handleSortChange"
         >
           <ElOption label="价格" value="price" />
           <ElOption label="可租数量" value="kezuCount" />
+          <ElOption label="供应日期" value="openingDate" />
         </ElSelect>
         <ElSelect
           v-model="sortOrder"
@@ -122,7 +124,6 @@ watch(loadMoreTrigger, (el) => {
           :disabled="!sortField"
           size="small"
           class="flex-1 min-w-0 max-w-[120px]"
-          @change="handleSortChange"
         >
           <ElOption label="升序 ↑" value="asc" />
           <ElOption label="降序 ↓" value="desc" />

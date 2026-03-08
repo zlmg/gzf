@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import type { Property, FilterState, SortField, SortOrder } from '@/types/property'
 
 const STORAGE_KEY = 'gzf-filters'
+const SORT_STORAGE_KEY = 'gzf-sort'
 
 const loadFromStorage = (): FilterState | null => {
   try {
@@ -14,6 +15,18 @@ const loadFromStorage = (): FilterState | null => {
     console.error('Failed to load filters from storage:', e)
   }
   return null
+}
+
+const loadSortFromStorage = (): { field: SortField; order: SortOrder } => {
+  try {
+    const stored = localStorage.getItem(SORT_STORAGE_KEY)
+    if (stored) {
+      return JSON.parse(stored)
+    }
+  } catch (e) {
+    console.error('Failed to load sort from storage:', e)
+  }
+  return { field: '', order: 'asc' }
 }
 
 const defaultFilters: FilterState = {
@@ -32,17 +45,29 @@ const defaultFilters: FilterState = {
 
 export const useFilterStore = defineStore('filter', () => {
   const stored = loadFromStorage()
+  const storedSort = loadSortFromStorage()
 
   // 合并存储的筛选条件和默认值，确保新字段有默认值
   const filters = ref<FilterState>({ ...defaultFilters, ...stored })
-  const sortField = ref<SortField>('')
-  const sortOrder = ref<SortOrder>('asc')
+  const sortField = ref<SortField>(storedSort.field)
+  const sortOrder = ref<SortOrder>(storedSort.order)
 
   const saveToStorage = () => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(filters.value))
     } catch (e) {
       console.error('Failed to save filters to storage:', e)
+    }
+  }
+
+  const saveSortToStorage = () => {
+    try {
+      localStorage.setItem(SORT_STORAGE_KEY, JSON.stringify({
+        field: sortField.value,
+        order: sortOrder.value
+      }))
+    } catch (e) {
+      console.error('Failed to save sort to storage:', e)
     }
   }
 
@@ -56,11 +81,13 @@ export const useFilterStore = defineStore('filter', () => {
     sortField.value = ''
     sortOrder.value = 'asc'
     saveToStorage()
+    saveSortToStorage()
   }
 
   const setSort = (field: SortField, order: SortOrder) => {
     sortField.value = field
     sortOrder.value = order
+    saveSortToStorage()
   }
 
   // 辅助函数：检查房源是否包含指定设备
@@ -198,6 +225,17 @@ export const useFilterStore = defineStore('filter', () => {
         } else if (sortField.value === 'kezuCount') {
           valueA = a.kezuCount || 0
           valueB = b.kezuCount || 0
+        } else if (sortField.value === 'openingDate') {
+          // 解析日期字符串为时间戳
+          const parseDate = (dateStr: string): number => {
+            if (!dateStr) return 0
+            // 支持 "2024-01-15" 和 "2024年1月15日" 格式
+            const normalized = dateStr.replace(/[年月]/g, '-').replace(/日/g, '')
+            const date = new Date(normalized)
+            return isNaN(date.getTime()) ? 0 : date.getTime()
+          }
+          valueA = parseDate(a.openingDate || '')
+          valueB = parseDate(b.openingDate || '')
         } else {
           return 0
         }

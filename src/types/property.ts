@@ -69,5 +69,5 @@ export interface CompareItem extends Property {
   images: string[]         // 解析后的图片数组
 }
 
-export type SortField = 'price' | 'kezuCount' | ''
+export type SortField = 'price' | 'kezuCount' | 'openingDate' | ''
 export type SortOrder = 'asc' | 'desc'
