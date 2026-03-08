@@ -7,6 +7,7 @@ import { useCompareStore } from '@/stores/compare'
 import { useFavoriteStore } from '@/stores/favorite'
 import ImageGallery from '@/components/ImageGallery.vue'
 import FavoriteButton from '@/components/FavoriteButton.vue'
+import AmapNearby from '@/components/AmapNearby.vue'
 import { formatPriceRange, formatRoomType, formatOpenQueue, formatRoomTypeCode, formatEquipmentList, formatLabelList, formatArea, formatHouseTypeName } from '@/utils/format'
 import type { Property, HouseType } from '@/types/property'
 
@@ -433,28 +434,13 @@ onMounted(async () => {
           </div>
         </div>
 
-        <!-- Map placeholder (shows coordinates if available) -->
+        <!-- 周边配套 (高德地图) -->
         <div v-if="property.latitude && property.longitude" class="bg-white rounded-xl shadow-md p-4 md:p-6">
-          <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">位置信息</h2>
-          <div class="bg-gray-100 rounded-lg p-4 text-center">
-            <p class="text-gray-600 text-sm mb-2">经纬度坐标</p>
-            <p class="font-mono text-gray-800 text-sm md:text-base">
-              {{ property.latitude }}, {{ property.longitude }}
-            </p>
-            <a
-              :href="`https://www.google.com/maps?q=${property.latitude},${property.longitude}`"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 mt-3 md:mt-4 text-blue-600 hover:text-blue-800 text-sm md:text-base"
-            >
-              <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              在地图中查看
-            </a>
-          </div>
+          <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4">周边配套</h2>
+          <AmapNearby
+            :latitude="property.latitude"
+            :longitude="property.longitude"
+          />
         </div>
       </div>
     </div>

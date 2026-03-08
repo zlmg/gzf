@@ -9,7 +9,9 @@
       "Bash(curl:*)",
       "Bash(pnpm vue-tsc:*)",
       "Bash(pnpm build:*)",
-      "Bash(pnpm dev:*)"
+      "Bash(pnpm dev:*)",
+      "Bash(pnpm exec:*)",
+      "WebFetch(domain:lbs.amap.com)"
     ]
   }
 }
