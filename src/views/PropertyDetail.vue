@@ -21,6 +21,9 @@ const property = ref<Property | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
 
+// 周边配套显示状态
+const showNearby = ref(false)
+
 // 图片查看器状态
 const showImageViewer = ref(false)
 const viewerImage = ref('')
@@ -425,8 +428,17 @@ onMounted(async () => {
         <!-- 周边配套 (高德地图) -->
         <div v-if="property.latitude && property.longitude" class="bg-white rounded-xl shadow-md p-4 md:p-6">
           <div class="flex items-center justify-between mb-3 md:mb-4">
-            <h2 class="text-base md:text-lg font-semibold text-gray-800">周边配套</h2>
-            <button @click="openMap"
+            <div class="flex items-center gap-3">
+              <h2 class="text-base md:text-lg font-semibold text-gray-800">周边配套</h2>
+              <button @click="showNearby = !showNearby"
+                class="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors">
+                <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': showNearby }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+                {{ showNearby ? '收起' : '展开' }}
+              </button>
+            </div>
+            <button v-if="showNearby" @click="openMap"
               class="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -435,7 +447,7 @@ onMounted(async () => {
               打开地图
             </button>
           </div>
-          <AmapNearby :latitude="property.latitude" :longitude="property.longitude"
+          <AmapNearby v-if="showNearby" :latitude="property.latitude" :longitude="property.longitude"
             :property-name="property.projectName" />
         </div>
       </div>
