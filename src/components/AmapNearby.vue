@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from 'vue'
+import { usePoiCache, type PoiItem } from '@/composables/usePoiCache'
 
 interface Props {
   latitude: string | number
@@ -9,8 +10,13 @@ interface Props {
 
 const props = defineProps<Props>()
 
+// 缓存工具
+const { getCached, setCached } = usePoiCache()
+
 // 加载状态
 const loading = ref(true)
+// 刷新状态（用于区分首次加载和刷新）
+const isRefreshing = ref(false)
 
 // 距离筛选选项 (单位: 米)
 const DISTANCE_OPTIONS = [
@@ -21,6 +27,7 @@ const DISTANCE_OPTIONS = [
   { label: '3km', value: 3000 },
   { label: '5km', value: 5000 },
   { label: '10km', value: 10000 },
+  { label: '20km', value: 20000 },
 ]
 
 // 当前选择的距离范围
@@ -82,18 +89,29 @@ const filteredPoiList = computed(() => {
 })
 
 // 搜索周边 POI
-const searchPOI = async (category: string, radius?: number) => {
+const searchPOI = async (category: string, radius?: number, forceRefresh = false) => {
   activeCategory.value = category
   loading.value = true
 
   const poiConfig = POI_TYPES.find(p => p.key === category)
   if (!poiConfig) return
 
+  // 使用传入的半径或当前选择的半径，取最大值5km
+  const searchRadius = radius || selectedRadius.value || 3000
+  const location = `${props.longitude},${props.latitude}`
+
+  // 非强制刷新时，先检查缓存
+  if (!forceRefresh) {
+    const cached = getCached(props.latitude, props.longitude, category, searchRadius)
+    if (cached) {
+      poiData.value[category] = cached.pois
+      loading.value = false
+      return
+    }
+  }
+
   try {
     const key = import.meta.env.VITE_AMAP_KEY
-    const location = `${props.longitude},${props.latitude}`
-    // 使用传入的半径或当前选择的半径，取最大值5km
-    const searchRadius = Math.min(radius || selectedRadius.value, 5000)
 
     const response = await fetch(
       `https://restapi.amap.com/v3/place/around?key=${key}&location=${location}&keywords=${poiConfig.keywords}&types=${poiConfig.types}&radius=${searchRadius}&offset=25&page=1&extensions=all`
@@ -101,9 +119,10 @@ const searchPOI = async (category: string, radius?: number) => {
 
     const result = await response.json()
     loading.value = false
+    isRefreshing.value = false
 
     if (result.status === '1' && result.pois && result.pois.length > 0) {
-      poiData.value[category] = result.pois.map((poi: any) => ({
+      const pois: PoiItem[] = result.pois.map((poi: any) => ({
         id: poi.id,
         name: poi.name,
         address: poi.address,
@@ -112,14 +131,34 @@ const searchPOI = async (category: string, radius?: number) => {
         location: poi.location,
         tel: poi.tel,
       }))
+
+      poiData.value[category] = pois
+
+      // 保存到缓存
+      setCached(
+        props.latitude,
+        props.longitude,
+        category,
+        searchRadius,
+        pois,
+        searchRadius,
+        location
+      )
     } else {
       poiData.value[category] = []
     }
   } catch (e) {
     loading.value = false
+    isRefreshing.value = false
     console.error('POI search error:', e)
     poiData.value[category] = []
   }
+}
+
+// 刷新当前分类数据
+const refreshCurrentCategory = () => {
+  isRefreshing.value = true
+  searchPOI(activeCategory.value, selectedRadius.value, true)
 }
 
 // 切换距离筛选
@@ -185,6 +224,22 @@ watch(activeCategory, (newCategory) => {
           {{ opt.label }}
         </button>
       </div>
+      <!-- 刷新按钮 -->
+      <button
+        @click="refreshCurrentCategory"
+        :disabled="loading"
+        class="ml-auto p-1.5 rounded text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        title="刷新当前分类数据"
+      >
+        <svg
+          :class="['w-4 h-4', isRefreshing && 'animate-spin']"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+      </button>
     </div>
 
 
