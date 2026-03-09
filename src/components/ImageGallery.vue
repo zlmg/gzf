@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { ElCarousel, ElCarouselItem } from 'element-plus'
+import { getImageUrl } from '@/config'
 import ImageViewer from '@/components/ImageViewer.vue'
 
 const props = defineProps<{
@@ -8,13 +9,11 @@ const props = defineProps<{
   title?: string
 }>()
 
-const IMAGE_BASE_URL = 'https://www.bsgzf.com.cn'
-
 const parsedImages = computed(() => {
   if (!props.images || props.images.length === 0) return []
   return props.images.map(img => {
     if (typeof img === 'string' && img.startsWith('http')) return img
-    if (typeof img === 'string') return `${IMAGE_BASE_URL}${img}`
+    if (typeof img === 'string') return getImageUrl(img)
     return img
   })
 })

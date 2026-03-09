@@ -7,6 +7,7 @@ import { useCompareStore } from '@/stores/compare'
 import { useFavoriteStore } from '@/stores/favorite'
 import { useHistoryStore } from '@/stores/history'
 import { useStorage } from '@/composables/useStorage'
+import { getImageUrl } from '@/config'
 import ImageGallery from '@/components/ImageGallery.vue'
 import ImageViewer from '@/components/ImageViewer.vue'
 import FavoriteButton from '@/components/FavoriteButton.vue'
@@ -34,13 +35,11 @@ const houseTypeImages = ref<string[]>([])
 const houseTypeViewerTitle = ref('')
 const houseTypeViewerIndex = ref(0)
 
-const IMAGE_BASE_URL = 'https://www.bsgzf.com.cn'
-
 const images = computed(() => {
   if (!property.value?.thumbnail) return []
   return property.value.thumbnail.split(',').map(path => {
     if (path.startsWith('http')) return path
-    return `${IMAGE_BASE_URL}${path}`
+    return getImageUrl(path)
   })
 })
 
@@ -70,7 +69,7 @@ const getHouseTypeImage = (house: HouseType): string | undefined => {
   const firstPath = imgs[0]
   if (!firstPath) return undefined
   if (firstPath.startsWith('http')) return firstPath
-  return `${IMAGE_BASE_URL}${firstPath}`
+  return getImageUrl(firstPath)
 }
 
 // 获取房型所有图片
@@ -81,7 +80,7 @@ const getHouseTypeImages = (house: HouseType): string[] => {
     .filter(path => path)
     .map(path => {
       if (path.startsWith('http')) return path
-      return `${IMAGE_BASE_URL}${path}`
+      return getImageUrl(path)
     })
 }
 

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Property, RoomTypeDetail } from '@/types/property'
+import { getImageUrl } from '@/config'
 
 export interface FavoriteItem {
   projectNo: string
@@ -52,8 +53,6 @@ const saveToStorage = (list: FavoriteItem[]) => {
     console.error('Failed to save favorites to storage:', e)
   }
 }
-
-const IMAGE_BASE_URL = 'https://www.bsgzf.com.cn'
 
 export const useFavoriteStore = defineStore('favorite', () => {
   const favorites = ref<FavoriteItem[]>(loadFromStorage())
@@ -156,7 +155,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
     const path = images[0]
     if (!path) return ''
     if (path.startsWith('http')) return path
-    return `${IMAGE_BASE_URL}${path}`
+    return getImageUrl(path)
   }
 
   return {

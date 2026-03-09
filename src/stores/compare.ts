@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Property, CompareItem } from '@/types/property'
+import { getImageUrl } from '@/config'
 
 const STORAGE_KEY = 'gzf-compare'
 const MAX_COMPARE = 4
@@ -25,13 +26,11 @@ const saveToStorage = (list: CompareItem[]) => {
   }
 }
 
-const IMAGE_BASE_URL = 'https://www.bsgzf.com.cn'
-
 const parseImages = (thumbnail: string): string[] => {
   if (!thumbnail) return []
   return thumbnail.split(',').map(path => {
     if (path.startsWith('http')) return path
-    return `${IMAGE_BASE_URL}${path}`
+    return getImageUrl(path)
   })
 }
 

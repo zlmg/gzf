@@ -6,6 +6,7 @@ import { formatPriceRange, formatRoomType, formatOpenQueue, truncateText } from 
 import { useCompareStore } from '@/stores/compare'
 import { useFilterStore } from '@/stores/filter'
 import { useHistoryStore } from '@/stores/history'
+import { getImageUrl } from '@/config'
 import FavoriteButton from './FavoriteButton.vue'
 
 const props = defineProps<{
@@ -16,15 +17,13 @@ const compareStore = useCompareStore()
 const filterStore = useFilterStore()
 const historyStore = useHistoryStore()
 
-const IMAGE_BASE_URL = 'https://www.bsgzf.com.cn'
-
 const mainImage = computed(() => {
   if (!props.property.thumbnail) return ''
   const images = props.property.thumbnail.split(',')
   const path = images[0]
   if (!path || !path.trim()) return ''
   if (path.startsWith('http')) return path
-  return `${IMAGE_BASE_URL}${path}`
+  return getImageUrl(path)
 })
 
 const isInCompare = computed(() => {

@@ -5,6 +5,7 @@ import { ElButton, ElEmpty, ElMessage } from 'element-plus'
 import { useHistoryStore } from '@/stores/history'
 import { useCompareStore } from '@/stores/compare'
 import { formatPriceRange, formatRoomType, formatOpenQueue } from '@/utils/format'
+import { getImageUrl } from '@/config'
 
 const router = useRouter()
 const historyStore = useHistoryStore()
@@ -12,15 +13,13 @@ const compareStore = useCompareStore()
 
 const hasHistory = computed(() => historyStore.history.length > 0)
 
-const IMAGE_BASE_URL = 'https://www.bsgzf.com.cn'
-
 const getThumbnailUrl = (thumbnail: string): string => {
   if (!thumbnail) return ''
   const images = thumbnail.split(',')
   const path = images[0]
   if (!path) return ''
   if (path.startsWith('http')) return path
-  return `${IMAGE_BASE_URL}${path}`
+  return getImageUrl(path)
 }
 
 const goToDetail = (projectNo: string) => {
