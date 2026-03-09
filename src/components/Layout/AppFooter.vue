@@ -6,7 +6,7 @@
       <div
         class="flex flex-col md:flex-row items-center justify-between text-gray-600 text-sm"
       >
-        <p>公租房查询demo</p>
+        <p>宝山公租房查询demo</p>
         <p class="mt-2 md:mt-0">
           数据来源：
           <a
