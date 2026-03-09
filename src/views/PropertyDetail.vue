@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref,computed, onMounted } from 'vue'
 import { useRoute, useRouter, RouterLink } from 'vue-router'
 import { ElButton, ElSkeleton, ElTag, ElDescriptions, ElDescriptionsItem } from 'element-plus'
 import { usePropertyStore } from '@/stores/property'
 import { useCompareStore } from '@/stores/compare'
 import { useFavoriteStore } from '@/stores/favorite'
+import { useStorage } from '@/composables/useStorage'
 import ImageGallery from '@/components/ImageGallery.vue'
 import FavoriteButton from '@/components/FavoriteButton.vue'
 import AmapNearby from '@/components/AmapNearby.vue'
@@ -21,8 +22,8 @@ const property = ref<Property | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
 
-// 周边配套显示状态
-const showNearby = ref(false)
+// 周边配套显示状态（持久化到本地）
+const { data: showNearby } = useStorage('nearby-expanded', false)
 
 // 图片查看器状态
 const showImageViewer = ref(false)
@@ -118,6 +119,11 @@ onMounted(async () => {
 
   loading.value = false
 })
+
+// 切换周边配套显示状态
+const toggleNearby = () => {
+  showNearby.value = !showNearby.value
+}
 </script>
 
 <template>
@@ -430,7 +436,7 @@ onMounted(async () => {
           <div class="flex items-center justify-between mb-3 md:mb-4">
             <div class="flex items-center gap-3">
               <h2 class="text-base md:text-lg font-semibold text-gray-800">周边配套</h2>
-              <button @click="showNearby = !showNearby"
+              <button @click="toggleNearby"
                 class="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors">
                 <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': showNearby }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
