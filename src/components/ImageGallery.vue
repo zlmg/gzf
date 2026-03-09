@@ -18,9 +18,18 @@ const parsedImages = computed(() => {
   })
 })
 
-const carouselIndex = ref(0)
+// Carousel 组件引用，用于调用 setActiveItem 方法
+const carouselRef = ref<InstanceType<typeof ElCarousel> | null>(null)
+const activeIndex = ref(0)
+
 const showViewer = ref(false)
 const viewerIndex = ref(0)
+
+// 点击缩略图切换到对应图片
+const handleThumbnailClick = (index: number) => {
+  activeIndex.value = index
+  carouselRef.value?.setActiveItem(index)
+}
 
 const openViewer = (index: number) => {
   viewerIndex.value = index
@@ -36,11 +45,12 @@ const closeViewer = () => {
   <div class="gallery-container">
     <ElCarousel
       v-if="parsedImages.length > 0"
+      ref="carouselRef"
       :autoplay="false"
       indicator-position="outside"
       height="400px"
       class="rounded-lg overflow-hidden"
-      v-model="carouselIndex"
+      @change="(current: number) => activeIndex = current"
     >
       <ElCarouselItem
         v-for="(image, index) in parsedImages"
@@ -79,8 +89,8 @@ const closeViewer = () => {
         v-for="(image, index) in parsedImages"
         :key="index"
         class="flex-shrink-0 w-20 h-14 rounded overflow-hidden cursor-pointer border-2 transition-colors"
-        :class="carouselIndex === index ? 'border-blue-500' : 'border-transparent hover:border-gray-300'"
-        @click="carouselIndex = index"
+        :class="activeIndex === index ? 'border-blue-500' : 'border-transparent hover:border-gray-300'"
+        @click="handleThumbnailClick(index)"
       >
         <img
           :src="image"
