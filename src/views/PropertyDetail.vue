@@ -8,6 +8,7 @@ import { useFavoriteStore } from '@/stores/favorite'
 import { useHistoryStore } from '@/stores/history'
 import { useStorage } from '@/composables/useStorage'
 import ImageGallery from '@/components/ImageGallery.vue'
+import ImageViewer from '@/components/ImageViewer.vue'
 import FavoriteButton from '@/components/FavoriteButton.vue'
 import AmapNearby from '@/components/AmapNearby.vue'
 import { formatPriceRange, formatRoomType, formatOpenQueue, formatRoomTypeCode, formatEquipmentList, formatLabelList, formatArea, formatHouseTypeName } from '@/utils/format'
@@ -27,10 +28,11 @@ const error = ref<string | null>(null)
 // 周边配套显示状态（持久化到本地）
 const { data: showNearby } = useStorage('nearby-expanded', false)
 
-// 图片查看器状态
-const showImageViewer = ref(false)
-const viewerImage = ref('')
-const viewerTitle = ref('')
+// 房型图片查看器状态
+const showHouseTypeViewer = ref(false)
+const houseTypeImages = ref<string[]>([])
+const houseTypeViewerTitle = ref('')
+const houseTypeViewerIndex = ref(0)
 
 const IMAGE_BASE_URL = 'https://www.bsgzf.com.cn'
 
@@ -60,7 +62,7 @@ const goBack = () => {
   router.push('/')
 }
 
-// 获取房型图片
+// 获取房型第一张图片（用于卡片显示）
 const getHouseTypeImage = (house: HouseType): string | undefined => {
   if (!house.roomPicUrl) return undefined
   const imgs = house.roomPicUrl.split(',')
@@ -71,6 +73,18 @@ const getHouseTypeImage = (house: HouseType): string | undefined => {
   return `${IMAGE_BASE_URL}${firstPath}`
 }
 
+// 获取房型所有图片
+const getHouseTypeImages = (house: HouseType): string[] => {
+  if (!house.roomPicUrl) return []
+  return house.roomPicUrl.split(',')
+    .map(path => path.trim())
+    .filter(path => path)
+    .map(path => {
+      if (path.startsWith('http')) return path
+      return `${IMAGE_BASE_URL}${path}`
+    })
+}
+
 // 打开VR链接
 const openVrUrl = (vrUrl: string) => {
   if (vrUrl) {
@@ -78,16 +92,20 @@ const openVrUrl = (vrUrl: string) => {
   }
 }
 
-// 打开图片查看器
-const openImageViewer = (imageUrl: string, title: string) => {
-  viewerImage.value = imageUrl
-  viewerTitle.value = title
-  showImageViewer.value = true
+// 打开房型图片查看器
+const openHouseTypeViewer = (house: HouseType) => {
+  const images = getHouseTypeImages(house)
+  if (images.length === 0) return
+
+  houseTypeImages.value = images
+  houseTypeViewerTitle.value = house.houseTypeName || '房型图片'
+  houseTypeViewerIndex.value = 0
+  showHouseTypeViewer.value = true
 }
 
-// 关闭图片查看器
-const closeImageViewer = () => {
-  showImageViewer.value = false
+// 关闭房型图片查看器
+const closeHouseTypeViewer = () => {
+  showHouseTypeViewer.value = false
 }
 
 // 打开地图
@@ -379,12 +397,20 @@ const toggleNearby = () => {
                 <div class="bg-gray-100 relative">
                   <img v-if="getHouseTypeImage(house)" :src="getHouseTypeImage(house)" :alt="house.houseTypeName"
                     class="w-full h-auto max-h-64 object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                    loading="lazy" @click="openImageViewer(getHouseTypeImage(house)!, house.houseTypeName)" />
+                    loading="lazy" @click="openHouseTypeViewer(house)" />
                   <div v-else class="w-full h-40 flex items-center justify-center text-gray-400">
                     <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
                         d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
+                  </div>
+                  <!-- 多图指示器 -->
+                  <div v-if="getHouseTypeImages(house).length > 1"
+                    class="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {{ getHouseTypeImages(house).length }} 张
                   </div>
                   <!-- VR 按钮 -->
                   <button v-if="house.vrUrl" @click.stop="openVrUrl(house.vrUrl)"
@@ -463,46 +489,16 @@ const toggleNearby = () => {
       </div>
     </div>
 
-    <!-- 图片查看器 -->
-    <Teleport to="body">
-      <Transition name="viewer-fade">
-        <div v-if="showImageViewer" class="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center"
-          @click="closeImageViewer">
-          <!-- 关闭按钮 -->
-          <button @click="closeImageViewer"
-            class="absolute top-4 right-4 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors z-10"
-            aria-label="关闭">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-
-          <!-- 标题 -->
-          <div v-if="viewerTitle" class="absolute top-4 left-4 text-white text-sm bg-black/50 px-3 py-1 rounded">
-            {{ viewerTitle }}
-          </div>
-
-          <!-- 图片 -->
-          <img :src="viewerImage" :alt="viewerTitle" class="max-h-[90vh] max-w-[95vw] object-contain" @click.stop />
-
-          <!-- 提示 -->
-          <p class="absolute bottom-4 text-white/60 text-sm">点击空白处关闭</p>
-        </div>
-      </Transition>
-    </Teleport>
+    <!-- 房型图片查看器 -->
+    <ImageViewer
+      v-if="showHouseTypeViewer"
+      :images="houseTypeImages"
+      :title="houseTypeViewerTitle"
+      :initial-index="houseTypeViewerIndex"
+      @close="closeHouseTypeViewer"
+    />
   </div>
 </template>
 
 <style scoped>
-
-  /* 图片查看器过渡动画 */
-  .viewer-fade-enter-active,
-  .viewer-fade-leave-active {
-    transition: opacity 0.3s ease;
-  }
-
-  .viewer-fade-enter-from,
-  .viewer-fade-leave-to {
-    opacity: 0;
-  }
 </style>
