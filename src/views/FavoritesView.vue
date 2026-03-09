@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElButton, ElEmpty, ElMessage } from 'element-plus'
-import { useFavoriteStore } from '@/stores/favorite'
+import { ElButton, ElEmpty, ElMessage, ElMessageBox } from 'element-plus'
+import { useFavoriteStore, type FavoriteExportData } from '@/stores/favorite'
 import { useCompareStore } from '@/stores/compare'
 import { formatPriceRange, formatRoomType, formatOpenQueue } from '@/utils/format'
 
 const router = useRouter()
 const favoriteStore = useFavoriteStore()
 const compareStore = useCompareStore()
+const fileInput = ref<HTMLInputElement | null>(null)
 
 const hasFavorites = computed(() => favoriteStore.favorites.length > 0)
 
@@ -142,6 +143,94 @@ const handleToggleCompare = (e: Event, item: typeof favoriteStore.favorites[0]) 
     compareStore.toggleCompare(property)
   }
 }
+
+// 导出收藏
+const handleExport = () => {
+  const data = favoriteStore.exportFavorites()
+  if (!data) {
+    ElMessage.warning('暂无收藏数据可导出')
+    return
+  }
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  const now = new Date()
+  const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`
+  link.download = `collections_${timestamp}.json`
+  link.click()
+  URL.revokeObjectURL(url)
+  ElMessage.success(`已导出 ${data.totalCount} 个收藏`)
+}
+
+// 触发文件选择
+const triggerImport = () => {
+  fileInput.value?.click()
+}
+
+// 导入收藏
+const handleImport = async (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file) return
+
+  try {
+    const text = await file.text()
+    const data = JSON.parse(text) as FavoriteExportData
+
+    // 验证格式
+    if (!data.version || !data.entries || !Array.isArray(data.entries)) {
+      ElMessage.error('无效的收藏文件格式')
+      return
+    }
+
+    // 预览导入
+    const preview = favoriteStore.previewImport(data)
+
+    if (preview.newCount === 0) {
+      if (preview.existingCount > 0) {
+        ElMessage.info('所有收藏均已存在，无需导入')
+      } else {
+        ElMessage.warning('文件中没有有效的收藏数据')
+      }
+      return
+    }
+
+    // 确认导入
+    const message = preview.canImport < preview.newCount
+      ? `发现 ${preview.newCount} 个新收藏，但收藏上限为50个，当前只能导入 ${preview.canImport} 个。是否继续？`
+      : `发现 ${preview.newCount} 个新收藏，${preview.existingCount > 0 ? `${preview.existingCount} 个已存在将被跳过。` : ''}是否导入？`
+
+    await ElMessageBox.confirm(message, '导入收藏', {
+      confirmButtonText: '导入',
+      cancelButtonText: '取消',
+      type: 'info'
+    })
+
+    // 执行导入
+    const result = favoriteStore.importFavorites(data)
+
+    if (result.imported > 0) {
+      if (result.skipped > 0) {
+        ElMessage.success(`成功导入 ${result.imported} 个收藏，跳过 ${result.skipped} 个已存在的收藏`)
+      } else {
+        ElMessage.success(`成功导入 ${result.imported} 个收藏`)
+      }
+    } else if (result.skipped > 0) {
+      ElMessage.info(`所有收藏均已存在，无需导入`)
+    }
+  } catch (e) {
+    if (e !== 'cancel') {
+      console.error('Import error:', e)
+      ElMessage.error('导入失败，请检查文件格式')
+    }
+  }
+
+  // 清空文件选择，允许重复导入同一文件
+  if (fileInput.value) {
+    fileInput.value.value = ''
+  }
+}
 </script>
 
 <template>
@@ -156,8 +245,20 @@ const handleToggleCompare = (e: Event, item: typeof favoriteStore.favorites[0]) 
           </p>
         </div>
         <div v-if="hasFavorites" class="flex items-center gap-2 md:gap-3">
+          <ElButton @click="triggerImport" plain size="small" class="!text-xs md:!text-sm">
+            导入
+          </ElButton>
+          <ElButton @click="handleExport" plain size="small" class="!text-xs md:!text-sm">
+            导出
+          </ElButton>
           <ElButton @click="handleClearAll" type="danger" plain size="small" class="!text-xs md:!text-sm">
             清空全部
+          </ElButton>
+        </div>
+        <!-- 无收藏时也显示导入按钮 -->
+        <div v-else class="flex items-center gap-2 md:gap-3">
+          <ElButton @click="triggerImport" plain size="small" class="!text-xs md:!text-sm">
+            导入
           </ElButton>
         </div>
       </div>
@@ -427,10 +528,13 @@ const handleToggleCompare = (e: Event, item: typeof favoriteStore.favorites[0]) 
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>收藏数据保存在浏览器本地，清除浏览器数据后将会丢失</span>
+          <span>收藏数据保存在浏览器本地，清除浏览器数据后将会丢失，建议定期导出备份</span>
         </div>
       </div>
     </div>
+
+    <!-- 隐藏的文件输入 -->
+    <input ref="fileInput" type="file" accept=".json" @change="handleImport" class="hidden" />
   </div>
 </template>
 
