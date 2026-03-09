@@ -166,7 +166,8 @@ export function usePoiCache() {
   }
 
   // 内存中的导入缓存（用于三级缓存 Level 2）
-  let importedCache: Map<string, PoiCacheEntry> | null = null
+  // 存储的是 PoiCacheExportEntry，包含 key 属性
+  let importedCache: Map<string, PoiCacheExportEntry> | null = null
 
   /**
    * 导出所有 POI 缓存
