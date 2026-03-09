@@ -189,20 +189,20 @@ const formattedViewedAt = computed(() => {
       </div>
     </div>
     <div class="p-4">
-      <div class="flex items-baseline gap-2 mb-2">
+      <div class="flex items-baseline justify-between gap-2 mb-2">
         <h3 class="text-lg font-semibold text-gray-800 line-clamp-1">
           {{ property.projectName }}
         </h3>
-        <span v-if="property.openingDate" class="text-xs text-gray-400 shrink-0">
-          {{ property.openingDate }}
+        <span class="text-lg font-bold text-red-600 shrink-0">
+          {{ formatPriceRange(property.minRent, property.maxRent) }}/月
         </span>
       </div>
-      <p class="text-sm text-gray-500 mb-3 line-clamp-2">
-        {{ truncateText(property.location, 50) }}
-      </p>
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-lg font-bold text-red-600">
-          {{ formatPriceRange(property.minRent, property.maxRent) }}/月
+      <div class="flex items-center justify-between gap-2 mb-3">
+        <p class="text-sm text-gray-500 line-clamp-1">
+          {{ truncateText(property.location, 50) }}
+        </p>
+        <span v-if="property.openingDate" class="text-xs text-gray-400 shrink-0">
+          {{ property.openingDate }}
         </span>
       </div>
       <!-- 数量信息行：灰色不加粗 -->
@@ -211,28 +211,25 @@ const formattedViewedAt = computed(() => {
         <span>可租: {{ property.kezuCount }}</span>
         <span>{{ formattedArea || '-' }}</span>
       </div>
-      <!-- 标签行 -->
-      <div class="flex items-center flex-wrap gap-2 text-sm text-gray-600 mb-3">
-        <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded">
+      <!-- 标签行：单行显示，高度一致 -->
+      <div class="flex items-center gap-2 text-sm text-gray-600 mb-3 overflow-x-auto">
+        <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded whitespace-nowrap shrink-0">
           {{ property.layout || '未知区域' }}
         </span>
-        <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded">
+        <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded whitespace-nowrap shrink-0">
           {{ formatRoomType(property.roomType) }}
         </span>
-      </div>
-      <!-- 显示筛选条件中已选择的设备和标签 -->
-      <div v-if="displayEquipments.length > 0 || displayLabels.length > 0" class="flex flex-wrap items-center gap-1.5 mb-3">
         <span
           v-for="eq in displayEquipments"
           :key="eq"
-          class="px-2 py-0.5 text-xs bg-teal-50 text-teal-700 rounded"
+          class="px-2 py-1 bg-teal-50 text-teal-700 rounded whitespace-nowrap shrink-0"
         >
           {{ eq }}
         </span>
         <span
           v-for="label in displayLabels"
           :key="label"
-          class="px-2 py-0.5 text-xs bg-pink-50 text-pink-700 rounded"
+          class="px-2 py-1 bg-pink-50 text-pink-700 rounded whitespace-nowrap shrink-0"
         >
           {{ label }}
         </span>

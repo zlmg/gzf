@@ -65,6 +65,21 @@ const getEquipmentList = (item: typeof historyStore.history[0]): string[] => {
   return Array.from(equipmentSet)
 }
 
+// 检查房源是否有"近地铁"标签
+const hasSubwayLabel = (item: typeof historyStore.history[0]): boolean => {
+  if (!item.roomTypeDetails) return false
+  for (const detail of item.roomTypeDetails) {
+    if (detail.houseTypeList) {
+      for (const houseType of detail.houseTypeList) {
+        if (houseType.roomLabel && houseType.roomLabel.includes('近地铁')) {
+          return true
+        }
+      }
+    }
+  }
+  return false
+}
+
 // 提取房型的面积范围
 const getFormattedArea = (item: typeof historyStore.history[0]): string | null => {
   if (!item.roomTypeDetails) return null
@@ -212,26 +227,26 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
 
               <!-- Content -->
               <div class="p-3">
-                <!-- Title and Price row -->
-                <div class="flex items-start justify-between gap-2 mb-2">
-                  <div class="flex items-baseline gap-2 flex-1 min-w-0">
-                    <h3
-                      class="text-base font-semibold text-gray-800 line-clamp-1 cursor-pointer hover:text-blue-600 transition-colors"
-                      @click="goToDetail(item.projectNo)"
-                    >
-                      {{ item.projectName }}
-                    </h3>
-                    <span v-if="item.openingDate" class="text-xs text-gray-400 shrink-0">
-                      {{ item.openingDate }}
-                    </span>
-                  </div>
+                <!-- Title row -->
+                <div class="flex items-baseline justify-between gap-2 mb-2">
+                  <h3
+                    class="text-base font-semibold text-gray-800 line-clamp-1 cursor-pointer hover:text-blue-600 transition-colors flex-1"
+                    @click="goToDetail(item.projectNo)"
+                  >
+                    {{ item.projectName }}
+                  </h3>
                   <span class="text-lg font-bold text-red-600 whitespace-nowrap shrink-0">
                     {{ formatPriceRange(item.minRent, item.maxRent) }}/月
                   </span>
                 </div>
 
-                <!-- Location -->
-                <p class="text-xs text-gray-500 mb-2 line-clamp-1">{{ item.location }}</p>
+                <!-- Location and Opening Date -->
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <p class="text-xs text-gray-500 line-clamp-1 flex-1">{{ item.location }}</p>
+                  <span v-if="item.openingDate" class="text-xs text-gray-400 shrink-0">
+                    {{ item.openingDate }}
+                  </span>
+                </div>
 
                 <!-- 数量信息行：灰色不加粗 -->
                 <div class="flex items-center gap-3 text-xs text-gray-500 mb-2">
@@ -240,13 +255,16 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
                   <span>{{ getFormattedArea(item) || '-' }}</span>
                 </div>
 
-                <!-- Tags -->
-                <div class="flex flex-wrap items-center gap-1.5 mb-2">
-                  <span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs">
+                <!-- Tags: 单行显示，高度一致 -->
+                <div class="flex items-center gap-1.5 mb-2 overflow-x-auto">
+                  <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs whitespace-nowrap shrink-0">
                     {{ item.layout || '未知区域' }}
                   </span>
-                  <span class="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-xs">
+                  <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs whitespace-nowrap shrink-0">
                     {{ formatRoomType(item.roomType) }}
+                  </span>
+                  <span v-if="hasSubwayLabel(item)" class="px-2 py-1 bg-amber-50 text-amber-700 rounded text-xs whitespace-nowrap shrink-0">
+                    近地铁
                   </span>
                 </div>
 
@@ -320,34 +338,43 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
               <div class="flex-1 p-4">
                 <div class="flex items-start justify-between">
                   <div class="flex-1 cursor-pointer" @click="goToDetail(item.projectNo)">
-                    <div class="flex items-baseline gap-2 mb-2">
-                      <h3 class="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors">
+                    <div class="flex items-baseline justify-between gap-2 mb-2">
+                      <h3 class="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors flex-1">
                         {{ item.projectName }}
                       </h3>
+                      <span class="text-lg font-bold text-red-600 whitespace-nowrap shrink-0">
+                        {{ formatPriceRange(item.minRent, item.maxRent) }}/月
+                      </span>
+                    </div>
+                    <!-- Location and Opening Date -->
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                      <p class="text-sm text-gray-500 line-clamp-1 flex-1">{{ item.location }}</p>
                       <span v-if="item.openingDate" class="text-xs text-gray-400 shrink-0">
                         {{ item.openingDate }}
                       </span>
                     </div>
-                    <p class="text-sm text-gray-500 mb-3">{{ item.location }}</p>
                     <!-- 数量信息行：灰色不加粗 -->
                     <div class="flex items-center gap-4 text-sm text-gray-500 mb-3">
                       <span>总套数: {{ item.totalCount || '-' }}</span>
                       <span>可租: {{ item.kezuCount }}</span>
                       <span>{{ getFormattedArea(item) || '-' }}</span>
                     </div>
-                    <!-- 标签行 -->
-                    <div class="flex flex-wrap items-center gap-2 mb-3">
-                      <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded text-sm">
+                    <!-- 标签行：单行显示，高度一致 -->
+                    <div class="flex items-center gap-2 mb-3 overflow-x-auto">
+                      <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded text-sm whitespace-nowrap shrink-0">
                         {{ item.layout || '未知区域' }}
                       </span>
-                      <span v-if="item.district" class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-sm">
+                      <span v-if="item.district" class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-sm whitespace-nowrap shrink-0">
                         {{ item.district }}
                       </span>
-                      <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded text-sm">
+                      <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded text-sm whitespace-nowrap shrink-0">
                         {{ formatRoomType(item.roomType) }}
                       </span>
-                      <span v-if="item.houseType" class="px-2 py-1 bg-cyan-50 text-cyan-700 rounded text-sm">
+                      <span v-if="item.houseType" class="px-2 py-1 bg-cyan-50 text-cyan-700 rounded text-sm whitespace-nowrap shrink-0">
                         {{ item.houseType }}
+                      </span>
+                      <span v-if="hasSubwayLabel(item)" class="px-2 py-1 bg-amber-50 text-amber-700 rounded text-sm whitespace-nowrap shrink-0">
+                        近地铁
                       </span>
                     </div>
                     <!-- 设备 -->
@@ -365,9 +392,6 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
                     </div>
                   </div>
                   <div class="ml-4 text-right flex flex-col items-end gap-2">
-                    <div class="text-xl font-bold text-red-600">
-                      {{ formatPriceRange(item.minRent, item.maxRent) }}/月
-                    </div>
                     <div class="flex gap-2">
                       <ElButton
                         :type="isInCompare(item.projectNo) ? 'primary' : 'default'"
