@@ -40,7 +40,13 @@ const defaultFilters: FilterState = {
   equipment: [],
   label: [],
   areaRange: [0, 200],
-  towards: []
+  towards: [],
+  // 反向筛选标记
+  excludeLayout: false,
+  excludeRoomType: false,
+  excludeEquipment: false,
+  excludeLabel: false,
+  excludeTowards: false
 }
 
 export const useFilterStore = defineStore('filter', () => {
@@ -149,15 +155,28 @@ export const useFilterStore = defineStore('filter', () => {
 
     // Filter by layout (区域)
     if (filters.value.layout.length > 0) {
-      result = result.filter(p => filters.value.layout.includes(p.layout))
+      if (filters.value.excludeLayout) {
+        // 反向筛选：排除包含该区域的房源
+        result = result.filter(p => !filters.value.layout.includes(p.layout))
+      } else {
+        result = result.filter(p => filters.value.layout.includes(p.layout))
+      }
     }
 
     // Filter by room type (户型) - 支持逗号分隔的多个户型
     if (filters.value.roomType.length > 0) {
-      result = result.filter(p => {
-        const types = p.roomType.split(',')
-        return filters.value.roomType.some(t => types.includes(t))
-      })
+      if (filters.value.excludeRoomType) {
+        // 反向筛选：排除包含该户型的房源
+        result = result.filter(p => {
+          const types = p.roomType.split(',')
+          return !filters.value.roomType.some(t => types.includes(t))
+        })
+      } else {
+        result = result.filter(p => {
+          const types = p.roomType.split(',')
+          return filters.value.roomType.some(t => types.includes(t))
+        })
+      }
     }
 
     // Filter by price range
@@ -194,12 +213,22 @@ export const useFilterStore = defineStore('filter', () => {
 
     // Filter by equipment (设备)
     if (filters.value.equipment?.length > 0) {
-      result = result.filter(p => hasEquipment(p, filters.value.equipment))
+      if (filters.value.excludeEquipment) {
+        // 反向筛选：排除包含该设备的房源
+        result = result.filter(p => !hasEquipment(p, filters.value.equipment))
+      } else {
+        result = result.filter(p => hasEquipment(p, filters.value.equipment))
+      }
     }
 
     // Filter by label (标签)
     if (filters.value.label?.length > 0) {
-      result = result.filter(p => hasLabel(p, filters.value.label))
+      if (filters.value.excludeLabel) {
+        // 反向筛选：排除包含该标签的房源
+        result = result.filter(p => !hasLabel(p, filters.value.label))
+      } else {
+        result = result.filter(p => hasLabel(p, filters.value.label))
+      }
     }
 
     // Filter by area range (面积)
@@ -210,7 +239,12 @@ export const useFilterStore = defineStore('filter', () => {
 
     // Filter by towards (朝向)
     if (filters.value.towards?.length > 0) {
-      result = result.filter(p => hasTowards(p, filters.value.towards))
+      if (filters.value.excludeTowards) {
+        // 反向筛选：排除包含该朝向的房源
+        result = result.filter(p => !hasTowards(p, filters.value.towards))
+      } else {
+        result = result.filter(p => hasTowards(p, filters.value.towards))
+      }
     }
 
     // Sort

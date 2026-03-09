@@ -63,6 +63,12 @@ export interface FilterState {
   label: string[]          // 标签筛选
   areaRange: [number, number]  // 面积区间
   towards: string[]        // 朝向筛选
+  // 反向筛选标记
+  excludeLayout: boolean   // 反向筛选区域
+  excludeRoomType: boolean // 反向筛选户型
+  excludeEquipment: boolean // 反向筛选设备
+  excludeLabel: boolean    // 反向筛选标签
+  excludeTowards: boolean  // 反向筛选朝向
 }
 
 export interface CompareItem extends Property {

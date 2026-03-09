@@ -34,7 +34,13 @@ const localFilters = ref({
   equipment: [...(filterStore.filters.equipment || [])],
   label: [...(filterStore.filters.label || [])],
   areaRange: [...(filterStore.filters.areaRange || [0, 200])] as [number, number],
-  towards: [...(filterStore.filters.towards || [])]
+  towards: [...(filterStore.filters.towards || [])],
+  // 反向筛选标记
+  excludeLayout: filterStore.filters.excludeLayout || false,
+  excludeRoomType: filterStore.filters.excludeRoomType || false,
+  excludeEquipment: filterStore.filters.excludeEquipment || false,
+  excludeLabel: filterStore.filters.excludeLabel || false,
+  excludeTowards: filterStore.filters.excludeTowards || false
 })
 
 const isExpanded = ref(false)
@@ -81,7 +87,13 @@ const applyFilters = () => {
     equipment: localFilters.value.equipment,
     label: localFilters.value.label,
     areaRange: localFilters.value.areaRange,
-    towards: localFilters.value.towards
+    towards: localFilters.value.towards,
+    // 反向筛选标记
+    excludeLayout: localFilters.value.excludeLayout,
+    excludeRoomType: localFilters.value.excludeRoomType,
+    excludeEquipment: localFilters.value.excludeEquipment,
+    excludeLabel: localFilters.value.excludeLabel,
+    excludeTowards: localFilters.value.excludeTowards
   })
 }
 
@@ -96,7 +108,13 @@ const resetFilters = () => {
     equipment: [],
     label: [],
     areaRange: [areaRange.value[0], areaRange.value[1]],
-    towards: []
+    towards: [],
+    // 反向筛选标记
+    excludeLayout: false,
+    excludeRoomType: false,
+    excludeEquipment: false,
+    excludeLabel: false,
+    excludeTowards: false
   }
   filterStore.resetFilters()
 }
@@ -149,7 +167,16 @@ watch(() => localFilters.value.keyword, (newVal) => {
 
       <!-- Area filter -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">区域</label>
+        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+          区域
+          <input
+            type="checkbox"
+            v-model="localFilters.excludeLayout"
+            class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
+            title="勾选表示排除所选区域"
+          />
+          <span v-if="localFilters.excludeLayout" class="text-xs text-red-500">(排除)</span>
+        </label>
         <ElSelect
           v-model="localFilters.layout"
           multiple
@@ -170,7 +197,16 @@ watch(() => localFilters.value.keyword, (newVal) => {
 
       <!-- Room type filter -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">户型</label>
+        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+          户型
+          <input
+            type="checkbox"
+            v-model="localFilters.excludeRoomType"
+            class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
+            title="勾选表示排除所选户型"
+          />
+          <span v-if="localFilters.excludeRoomType" class="text-xs text-red-500">(排除)</span>
+        </label>
         <div class="flex items-center gap-1">
           <span
             class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
@@ -228,7 +264,16 @@ watch(() => localFilters.value.keyword, (newVal) => {
 
       <!-- 朝向筛选 -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">朝向</label>
+        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+          朝向
+          <input
+            type="checkbox"
+            v-model="localFilters.excludeTowards"
+            class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
+            title="勾选表示排除所选朝向"
+          />
+          <span v-if="localFilters.excludeTowards" class="text-xs text-red-500">(排除)</span>
+        </label>
         <div class="flex items-center gap-1 flex-wrap">
           <span
             class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
@@ -255,7 +300,16 @@ watch(() => localFilters.value.keyword, (newVal) => {
       <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
         <!-- 设备筛选 -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">设备</label>
+          <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+            设备
+            <input
+              type="checkbox"
+              v-model="localFilters.excludeEquipment"
+              class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
+              title="勾选表示排除所选设备"
+            />
+            <span v-if="localFilters.excludeEquipment" class="text-xs text-red-500">(排除)</span>
+          </label>
           <ElSelect
             v-model="localFilters.equipment"
             multiple
@@ -276,7 +330,16 @@ watch(() => localFilters.value.keyword, (newVal) => {
 
         <!-- 标签筛选 -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">标签</label>
+          <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+            标签
+            <input
+              type="checkbox"
+              v-model="localFilters.excludeLabel"
+              class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
+              title="勾选表示排除所选标签"
+            />
+            <span v-if="localFilters.excludeLabel" class="text-xs text-red-500">(排除)</span>
+          </label>
           <ElSelect
             v-model="localFilters.label"
             multiple
