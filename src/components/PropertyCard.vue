@@ -5,6 +5,7 @@ import type { Property } from '@/types/property'
 import { formatPriceRange, formatRoomType, formatOpenQueue, truncateText } from '@/utils/format'
 import { useCompareStore } from '@/stores/compare'
 import { useFilterStore } from '@/stores/filter'
+import { useHistoryStore } from '@/stores/history'
 import FavoriteButton from './FavoriteButton.vue'
 
 const props = defineProps<{
@@ -13,6 +14,7 @@ const props = defineProps<{
 
 const compareStore = useCompareStore()
 const filterStore = useFilterStore()
+const historyStore = useHistoryStore()
 
 const IMAGE_BASE_URL = 'https://www.bsgzf.com.cn'
 
@@ -85,6 +87,25 @@ const displayLabels = computed(() => {
   const selected = filterStore.filters.label
   if (!selected || selected.length === 0) return []
   return propertyLabels.value.filter(label => selected.includes(label))
+})
+
+// 获取浏览时间
+const viewedAt = computed(() => {
+  return historyStore.getViewedAt(props.property.projectNo)
+})
+
+// 格式化浏览时间（精确到秒）
+const formattedViewedAt = computed(() => {
+  if (!viewedAt.value) return null
+  const date = new Date(viewedAt.value)
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
 })
 </script>
 
@@ -176,14 +197,19 @@ const displayLabels = computed(() => {
         </span>
       </div>
       <div class="flex items-center justify-between">
-        <span
-          :class="[
-            'text-xs',
-            property.openQueue === '是' ? 'text-green-600' : 'text-gray-500'
-          ]"
-        >
-          {{ formatOpenQueue(property.openQueue) }}
-        </span>
+        <div class="flex items-center gap-2">
+          <span
+            :class="[
+              'text-xs',
+              property.openQueue === '是' ? 'text-green-600' : 'text-gray-500'
+            ]"
+          >
+            {{ formatOpenQueue(property.openQueue) }}
+          </span>
+          <span v-if="formattedViewedAt" class="text-xs text-gray-400">
+            浏览: {{ formattedViewedAt }}
+          </span>
+        </div>
         <button
           @click="handleToggleCompare"
           :class="[

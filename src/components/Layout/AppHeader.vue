@@ -3,9 +3,11 @@ import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useFavoriteStore } from '@/stores/favorite'
+import { useHistoryStore } from '@/stores/history'
 import { usePoiCache, type PoiExportData } from '@/composables/usePoiCache'
 
 const favoriteStore = useFavoriteStore()
+const historyStore = useHistoryStore()
 const { exportCache, importCache } = usePoiCache()
 const isMobileMenuOpen = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -120,6 +122,23 @@ const handleImport = async (event: Event) => {
             </span>
           </RouterLink>
           <RouterLink
+            to="/history"
+            class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+            active-class="bg-white/20"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            浏览记录
+            <span
+              v-if="historyStore.count > 0"
+              class="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center"
+            >
+              {{ historyStore.count > 99 ? '99+' : historyStore.count }}
+            </span>
+          </RouterLink>
+          <RouterLink
             to="/compare"
             class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
             active-class="bg-white/20"
@@ -207,6 +226,24 @@ const handleImport = async (event: Event) => {
                 class="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center"
               >
                 {{ favoriteStore.count > 99 ? '99+' : favoriteStore.count }}
+              </span>
+            </RouterLink>
+            <RouterLink
+              to="/history"
+              class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              active-class="bg-white/20"
+              @click="closeMobileMenu"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              浏览记录
+              <span
+                v-if="historyStore.count > 0"
+                class="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center"
+              >
+                {{ historyStore.count > 99 ? '99+' : historyStore.count }}
               </span>
             </RouterLink>
             <RouterLink

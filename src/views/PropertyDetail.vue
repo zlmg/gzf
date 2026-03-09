@@ -5,6 +5,7 @@ import { ElButton, ElSkeleton, ElTag, ElDescriptions, ElDescriptionsItem } from 
 import { usePropertyStore } from '@/stores/property'
 import { useCompareStore } from '@/stores/compare'
 import { useFavoriteStore } from '@/stores/favorite'
+import { useHistoryStore } from '@/stores/history'
 import { useStorage } from '@/composables/useStorage'
 import ImageGallery from '@/components/ImageGallery.vue'
 import FavoriteButton from '@/components/FavoriteButton.vue'
@@ -17,6 +18,7 @@ const router = useRouter()
 const propertyStore = usePropertyStore()
 const compareStore = useCompareStore()
 const favoriteStore = useFavoriteStore()
+const historyStore = useHistoryStore()
 
 const property = ref<Property | null>(null)
 const loading = ref(true)
@@ -113,6 +115,8 @@ onMounted(async () => {
 
   if (found) {
     property.value = found
+    // 记录浏览历史
+    historyStore.addToHistory(found)
   } else {
     error.value = '未找到该房源信息'
   }
