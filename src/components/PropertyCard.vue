@@ -75,6 +75,43 @@ const propertyLabels = computed(() => {
   return Array.from(labels).filter(Boolean)
 })
 
+// 提取房源的所有面积
+const propertyAreas = computed(() => {
+  const areas = new Set<string>()
+  if (props.property.roomTypeDetails) {
+    props.property.roomTypeDetails.forEach(detail => {
+      if (detail.houseTypeList) {
+        detail.houseTypeList.forEach(house => {
+          if (house.area) {
+            areas.add(house.area.trim())
+          }
+        })
+      }
+    })
+  }
+  return Array.from(areas).filter(Boolean)
+})
+
+// 格式化面积显示（提取数值，显示范围）
+const formattedArea = computed(() => {
+  if (propertyAreas.value.length === 0) return null
+
+  // 提取数值（去掉m²等单位）
+  const numbers = propertyAreas.value
+    .map(area => parseFloat(area.replace(/[^\d.]/g, '')))
+    .filter(n => !isNaN(n))
+
+  if (numbers.length === 0) return null
+
+  const min = Math.min(...numbers)
+  const max = Math.max(...numbers)
+
+  if (min === max) {
+    return `${min}m²`
+  }
+  return `${min}-${max}m²`
+})
+
 // 显示在卡片上的设备：用户筛选了的 AND 房源有的
 const displayEquipments = computed(() => {
   const selected = filterStore.filters.equipment
@@ -168,15 +205,19 @@ const formattedViewedAt = computed(() => {
           {{ formatPriceRange(property.minRent, property.maxRent) }}/月
         </span>
       </div>
-      <div class="flex items-center gap-2 text-sm text-gray-600 mb-3">
+      <!-- 数量信息行：灰色不加粗 -->
+      <div class="flex items-center gap-4 text-sm text-gray-500 mb-3">
+        <span>总套数: {{ property.totalCount || '-' }}</span>
+        <span>可租: {{ property.kezuCount }}</span>
+        <span>{{ formattedArea || '-' }}</span>
+      </div>
+      <!-- 标签行 -->
+      <div class="flex items-center flex-wrap gap-2 text-sm text-gray-600 mb-3">
         <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded">
           {{ property.layout || '未知区域' }}
         </span>
         <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded">
           {{ formatRoomType(property.roomType) }}
-        </span>
-        <span class="px-2 py-1 bg-orange-50 text-orange-700 rounded">
-          可租: {{ property.kezuCount }}
         </span>
       </div>
       <!-- 显示筛选条件中已选择的设备和标签 -->
