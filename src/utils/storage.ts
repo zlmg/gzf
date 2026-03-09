@@ -40,5 +40,38 @@ export const storage = {
     } catch (e) {
       console.error('Failed to clear storage:', e)
     }
+  },
+
+  /**
+   * 获取指定前缀的所有缓存条目
+   * @param prefix 前缀（不含 gzf-）
+   * @returns 匹配的缓存条目数组
+   */
+  getAllWithPrefix<T>(prefix: string): Array<{ key: string; value: T }> {
+    const result: Array<{ key: string; value: T }> = []
+    const fullPrefix = STORAGE_PREFIX + prefix
+
+    try {
+      const keys = Object.keys(localStorage)
+      keys.forEach(key => {
+        if (key.startsWith(fullPrefix)) {
+          const stored = localStorage.getItem(key)
+          if (stored) {
+            try {
+              result.push({
+                key: key.replace(STORAGE_PREFIX, ''),
+                value: JSON.parse(stored)
+              })
+            } catch {
+              // 跳过解析失败的条目
+            }
+          }
+        }
+      })
+    } catch (e) {
+      console.error('Failed to get all with prefix:', e)
+    }
+
+    return result
   }
 }

@@ -19,6 +19,26 @@ export interface PoiCacheEntry {
   location: string       // 原始搜索位置 "lng,lat"
 }
 
+// 导出数据结构
+export interface PoiExportData {
+  version: string        // 版本号 "1.0"
+  exportTime: number     // 导出时间戳
+  totalCount: number     // 条目总数
+  entries: PoiCacheExportEntry[]
+}
+
+// 导出条目（包含key）
+export interface PoiCacheExportEntry extends PoiCacheEntry {
+  key: string            // 缓存key（不含gzf-前缀）
+}
+
+// 导入结果
+export interface ImportResult {
+  imported: number       // 成功导入数量
+  skipped: number        // 跳过数量（已有更新的数据）
+  errors: number         // 错误数量
+}
+
 // 缓存过期时间：90天
 const CACHE_TTL = 90 * 24 * 60 * 60 * 1000
 
@@ -145,10 +165,119 @@ export function usePoiCache() {
     }
   }
 
+  // 内存中的导入缓存（用于三级缓存 Level 2）
+  let importedCache: Map<string, PoiCacheEntry> | null = null
+
+  /**
+   * 导出所有 POI 缓存
+   */
+  const exportCache = (): PoiExportData | null => {
+    try {
+      const entries = storage.getAllWithPrefix<PoiCacheEntry>(CACHE_PREFIX)
+      return {
+        version: '1.0',
+        exportTime: Date.now(),
+        totalCount: entries.length,
+        entries: entries.map(e => ({ ...e.value, key: e.key }))
+      }
+    } catch (e) {
+      console.error('Failed to export POI cache:', e)
+      return null
+    }
+  }
+
+  /**
+   * 导入 POI 缓存数据
+   */
+  const importCache = (data: PoiExportData): ImportResult => {
+    const result: ImportResult = { imported: 0, skipped: 0, errors: 0 }
+
+    // 验证版本
+    if (data.version !== '1.0') {
+      console.error('Unsupported cache version:', data.version)
+      result.errors = data.entries?.length || 0
+      return result
+    }
+
+    // 初始化导入缓存
+    if (!importedCache) {
+      importedCache = new Map()
+    }
+
+    for (const entry of data.entries) {
+      try {
+        // 检查是否已过期
+        if (isExpired(entry.timestamp)) {
+          result.skipped++
+          continue
+        }
+
+        // 检查 localStorage 是否已有更新的数据
+        const existing = storage.get<PoiCacheEntry>(entry.key)
+        if (existing && existing.timestamp >= entry.timestamp) {
+          // 本地数据更新，跳过
+          result.skipped++
+          // 但仍加入内存缓存作为备份
+          importedCache.set(entry.key, entry)
+          continue
+        }
+
+        // 保存到 localStorage
+        const { key, ...cacheEntry } = entry
+        storage.set(key, cacheEntry)
+
+        // 同时保存到内存缓存
+        importedCache.set(key, entry)
+
+        result.imported++
+      } catch (e) {
+        console.error('Failed to import cache entry:', e)
+        result.errors++
+      }
+    }
+
+    return result
+  }
+
+  /**
+   * 获取缓存（支持三级缓存：localStorage -> importedCache -> null）
+   */
+  const getCachedWithImport = (
+    latitude: number | string,
+    longitude: number | string,
+    category: string,
+    radius: number
+  ): PoiCacheEntry | null => {
+    const key = generateKey(latitude, longitude, category, radius)
+
+    // Level 1: localStorage
+    const cached = getCached(latitude, longitude, category, radius)
+    if (cached) {
+      return cached
+    }
+
+    // Level 2: importedCache（内存中的导入数据）
+    if (importedCache) {
+      const imported = importedCache.get(key)
+      if (imported && !isExpired(imported.timestamp)) {
+        // 提升到 localStorage
+        const { key: _, ...cacheEntry } = imported
+        storage.set(key, cacheEntry)
+        return imported
+      }
+    }
+
+    // Level 3: 返回 null（由调用方处理 API 请求）
+    return null
+  }
+
   return {
     getCached,
     setCached,
     clearCache,
-    isExpired
+    isExpired,
+    exportCache,
+    importCache,
+    getCachedWithImport
   }
 }

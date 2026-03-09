@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import { useFavoriteStore } from '@/stores/favorite'
+import { usePoiCache, type PoiExportData } from '@/composables/usePoiCache'
 
 const favoriteStore = useFavoriteStore()
+const { exportCache, importCache } = usePoiCache()
 const isMobileMenuOpen = ref(false)
+const fileInput = ref<HTMLInputElement | null>(null)
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
@@ -12,6 +16,60 @@ const toggleMobileMenu = () => {
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
+}
+
+// 导出POI缓存
+const handleExport = () => {
+  const data = exportCache()
+  if (!data || data.totalCount === 0) {
+    ElMessage.warning('没有可导出的POI缓存数据')
+    return
+  }
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `gzf-poi-cache-${new Date().toISOString().slice(0, 10)}.json`
+  link.click()
+  URL.revokeObjectURL(url)
+  ElMessage.success(`已导出 ${data.totalCount} 条数据`)
+}
+
+// 触发文件选择
+const triggerImport = () => {
+  fileInput.value?.click()
+}
+
+// 导入POI缓存
+const handleImport = async (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file) return
+
+  try {
+    const text = await file.text()
+    const data = JSON.parse(text) as PoiExportData
+
+    if (!data.version || !data.entries) {
+      ElMessage.error('无效的缓存文件格式')
+      return
+    }
+
+    const result = importCache(data)
+    if (result.imported > 0) {
+      ElMessage.success(`已导入 ${result.imported} 条数据${result.skipped > 0 ? `，跳过 ${result.skipped} 条` : ''}`)
+    } else if (result.skipped > 0) {
+      ElMessage.info(`跳过 ${result.skipped} 条数据（本地已有更新版本）`)
+    }
+  } catch (e) {
+    console.error('Import error:', e)
+    ElMessage.error('导入失败，请检查文件格式')
+  }
+
+  // 清空文件选择，允许重复导入同一文件
+  if (fileInput.value) {
+    fileInput.value.value = ''
+  }
 }
 </script>
 
@@ -71,6 +129,29 @@ const closeMobileMenu = () => {
             </svg>
             房源对比
           </RouterLink>
+          <!-- 导出按钮 -->
+          <button
+            @click="handleExport"
+            class="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-1.5 text-sm"
+            title="导出POI缓存"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            导出
+          </button>
+          <!-- 导入按钮 -->
+          <button
+            @click="triggerImport"
+            class="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-1.5 text-sm"
+            title="导入POI缓存"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            导入
+          </button>
+          <input ref="fileInput" type="file" accept=".json" @change="handleImport" class="hidden" />
         </nav>
 
         <!-- Mobile Menu Button -->
@@ -139,6 +220,26 @@ const closeMobileMenu = () => {
               </svg>
               房源对比
             </RouterLink>
+            <!-- 移动端导出按钮 -->
+            <button
+              @click="handleExport"
+              class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              导出缓存
+            </button>
+            <!-- 移动端导入按钮 -->
+            <button
+              @click="triggerImport"
+              class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              导入缓存
+            </button>
           </div>
         </nav>
       </Transition>
