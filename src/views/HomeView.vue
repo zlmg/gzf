@@ -117,6 +117,8 @@ watch(loadMoreTrigger, (el) => {
           <ElOption label="价格" value="price" />
           <ElOption label="可租数量" value="kezuCount" />
           <ElOption label="供应日期" value="openingDate" />
+          <ElOption label="最小面积" value="minArea" />
+          <ElOption label="最大面积" value="maxArea" />
         </ElSelect>
         <ElSelect
           v-model="sortOrder"

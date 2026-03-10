@@ -270,6 +270,44 @@ export const useFilterStore = defineStore('filter', () => {
           }
           valueA = parseDate(a.openingDate || '')
           valueB = parseDate(b.openingDate || '')
+        } else if (sortField.value === 'minArea') {
+          // 获取房源最小户型面积
+          const getMinArea = (property: Property): number => {
+            if (!property.roomTypeDetails) return 0
+            let minArea = Infinity
+            for (const detail of property.roomTypeDetails) {
+              if (!detail.houseTypeList) continue
+              for (const house of detail.houseTypeList) {
+                if (!house.area) continue
+                const area = parseFloat(house.area)
+                if (!isNaN(area) && area < minArea) {
+                  minArea = area
+                }
+              }
+            }
+            return minArea === Infinity ? 0 : minArea
+          }
+          valueA = getMinArea(a)
+          valueB = getMinArea(b)
+        } else if (sortField.value === 'maxArea') {
+          // 获取房源最大户型面积
+          const getMaxArea = (property: Property): number => {
+            if (!property.roomTypeDetails) return 0
+            let maxArea = 0
+            for (const detail of property.roomTypeDetails) {
+              if (!detail.houseTypeList) continue
+              for (const house of detail.houseTypeList) {
+                if (!house.area) continue
+                const area = parseFloat(house.area)
+                if (!isNaN(area) && area > maxArea) {
+                  maxArea = area
+                }
+              }
+            }
+            return maxArea
+          }
+          valueA = getMaxArea(a)
+          valueB = getMaxArea(b)
         } else {
           return 0
         }
