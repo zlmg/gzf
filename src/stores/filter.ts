@@ -253,9 +253,12 @@ export const useFilterStore = defineStore('filter', () => {
         let valueA: number
         let valueB: number
 
-        if (sortField.value === 'price') {
+        if (sortField.value === 'minPrice') {
           valueA = a.minRent || 0
           valueB = b.minRent || 0
+        } else if (sortField.value === 'maxPrice') {
+          valueA = a.maxRent || a.minRent || 0
+          valueB = b.maxRent || b.minRent || 0
         } else if (sortField.value === 'kezuCount') {
           valueA = a.kezuCount || 0
           valueB = b.kezuCount || 0

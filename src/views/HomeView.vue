@@ -114,7 +114,8 @@ watch(loadMoreTrigger, (el) => {
           size="small"
           class="flex-1 min-w-0 max-w-[120px]"
         >
-          <ElOption label="价格" value="price" />
+          <ElOption label="最低价格" value="minPrice" />
+          <ElOption label="最高价格" value="maxPrice" />
           <ElOption label="可租数量" value="kezuCount" />
           <ElOption label="供应日期" value="openingDate" />
           <ElOption label="最小面积" value="minArea" />
