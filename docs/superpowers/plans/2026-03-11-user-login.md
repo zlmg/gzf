@@ -219,7 +219,107 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 import type { FastifyRequest } from 'fastify'
 import type { User } from '@prisma/client'
 
-// 请求体类型
+// ============ 收藏相关类型 ============
+export interface FavoriteItem {
+  projectNo: string
+  projectName: string
+  location: string
+  layout: string
+  roomType: string
+  minRent: number
+  maxRent: number
+  thumbnail: string
+  kezuCount: number
+  openQueue: string
+  addedAt: number // timestamp
+  // 可选字段
+  district?: string
+  houseType?: string
+  totalCount?: string
+  openingDate?: string
+  totalArea?: string
+  houseSource?: string
+  roomTypeDetails?: RoomTypeDetail[]
+}
+
+// ============ 浏览记录相关类型 ============
+export interface HistoryItem {
+  projectNo: string
+  projectName: string
+  location: string
+  layout: string
+  roomType: string
+  minRent: number
+  maxRent: number
+  thumbnail: string
+  kezuCount: number
+  openQueue: string
+  viewedAt: number  // 浏览时间戳（毫秒）
+  // 可选字段
+  district?: string
+  houseType?: string
+  totalCount?: string
+  openingDate?: string
+  totalArea?: string
+  houseSource?: string
+  roomTypeDetails?: RoomTypeDetail[]
+}
+
+// ============ 户型详情类型 ============
+export interface HouseType {
+  area: string
+  vrUrl: string
+  roomPicUrl: string
+  roomDescription: string
+  roomLabel: string
+  houseTypeName: string
+  roomEquipment: string
+  towards: string
+  roomType: string
+}
+
+export interface RoomTypeDetail {
+  queueCount: number
+  maxRent: number
+  minRent: number
+  totalCount: number
+  kezuCount: number
+  houseTypeList: HouseType[]
+}
+
+// ============ 筛选偏好相关类型 ============
+export type SortField = 'minPrice' | 'maxPrice' | 'kezuCount' | 'openingDate' | 'minArea' | 'maxArea' | ''
+export type SortOrder = 'asc' | 'desc'
+
+export interface FilterState {
+  layout: string[]
+  roomType: string[]
+  priceRange: [number, number]
+  keyword: string
+  availableStatus: '' | 'available' | 'unavailable'
+  openStatus: '' | 'open' | 'closed'
+  equipment: string[]
+  label: string[]
+  areaRange: [number, number]
+  towards: string[]
+  excludeLayout: boolean
+  excludeRoomType: boolean
+  excludeEquipment: boolean
+  excludeLabel: boolean
+  excludeTowards: boolean
+}
+
+export interface SortState {
+  field: SortField
+  order: SortOrder
+}
+
+export interface Preferences {
+  filters: FilterState
+  sort: SortState
+}
+
+// ============ 请求体类型 ============
 export interface RegisterBody {
   username: string
   password: string
@@ -231,15 +331,15 @@ export interface LoginBody {
 }
 
 export interface SyncFavoritesBody {
-  favorites: unknown[]
+  favorites: FavoriteItem[]
 }
 
 export interface SyncHistoryBody {
-  history: unknown[]
+  history: HistoryItem[]
 }
 
 export interface SyncPreferencesBody {
-  preferences: unknown
+  preferences: Preferences
 }
 
 // 扩展 Fastify 类型
@@ -249,7 +349,7 @@ declare module 'fastify' {
   }
 }
 
-// 响应类型
+// ============ 响应类型 ============
 export interface AuthResponse {
   success: boolean
   message: string
@@ -263,9 +363,9 @@ export interface AuthResponse {
 export interface UserDataResponse {
   success: boolean
   data: {
-    favorites: unknown[]
-    history: unknown[]
-    preferences: unknown
+    favorites: FavoriteItem[]
+    history: HistoryItem[]
+    preferences: Preferences
   }
 }
 
@@ -655,7 +755,7 @@ export async function buildApp() {
 
   // 注册 CORS
   await app.register(cors, {
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://172.31.7.188:3000'],
     credentials: true
   })
 
@@ -724,13 +824,70 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 - [ ] **Step 1: 创建类型定义文件**
 
 ```typescript
-// 用户信息
+import type { RoomTypeDetail, FilterState, SortField, SortOrder } from './property'
+
+// ============ 用户信息 ============
 export interface User {
   id: number
   username: string
 }
 
-// 认证响应
+// ============ 收藏相关类型 ============
+export interface FavoriteItem {
+  projectNo: string
+  projectName: string
+  location: string
+  layout: string
+  roomType: string
+  minRent: number
+  maxRent: number
+  thumbnail: string
+  kezuCount: number
+  openQueue: string
+  addedAt: number
+  district?: string
+  houseType?: string
+  totalCount?: string
+  openingDate?: string
+  totalArea?: string
+  houseSource?: string
+  roomTypeDetails?: RoomTypeDetail[]
+}
+
+// ============ 浏览记录相关类型 ============
+export interface HistoryItem {
+  projectNo: string
+  projectName: string
+  location: string
+  layout: string
+  roomType: string
+  minRent: number
+  maxRent: number
+  thumbnail: string
+  kezuCount: number
+  openQueue: string
+  viewedAt: number
+  district?: string
+  houseType?: string
+  totalCount?: string
+  openingDate?: string
+  totalArea?: string
+  houseSource?: string
+  roomTypeDetails?: RoomTypeDetail[]
+}
+
+// ============ 筛选偏好相关类型 ============
+export interface SortState {
+  field: SortField
+  order: SortOrder
+}
+
+export interface Preferences {
+  filters: FilterState
+  sort: SortState
+}
+
+// ============ 认证响应 ============
 export interface AuthResponse {
   success: boolean
   message: string
@@ -738,30 +895,20 @@ export interface AuthResponse {
   user?: User
 }
 
-// 用户数据响应
+// ============ 用户数据响应 ============
 export interface UserDataResponse {
   success: boolean
   data: {
-    favorites: unknown[]
-    history: unknown[]
-    preferences: unknown
+    favorites: FavoriteItem[]
+    history: HistoryItem[]
+    preferences: Preferences
   }
 }
 
-// 同步响应
+// ============ 同步响应 ============
 export interface SyncResponse {
   success: boolean
   message: string
-}
-
-// 同步数据结构
-export interface SyncData {
-  favorites: unknown[]
-  history: unknown[]
-  preferences: {
-    filters?: unknown
-    sort?: unknown
-  }
 }
 ```
 
@@ -784,7 +931,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 - [ ] **Step 1: 创建 API 封装**
 
 ```typescript
-import type { AuthResponse, UserDataResponse, SyncResponse } from '@/types/user'
+import type { AuthResponse, UserDataResponse, SyncResponse, FavoriteItem, HistoryItem, Preferences } from '@/types/user'
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001'
 
@@ -852,19 +999,19 @@ export const userApi = {
   getData: () =>
     request<UserDataResponse>('/api/user/data'),
 
-  syncFavorites: (favorites: unknown[]) =>
+  syncFavorites: (favorites: FavoriteItem[]) =>
     request<SyncResponse>('/api/user/favorites', {
       method: 'PUT',
       body: JSON.stringify({ favorites })
     }),
 
-  syncHistory: (history: unknown[]) =>
+  syncHistory: (history: HistoryItem[]) =>
     request<SyncResponse>('/api/user/history', {
       method: 'PUT',
       body: JSON.stringify({ history })
     }),
 
-  syncPreferences: (preferences: unknown) =>
+  syncPreferences: (preferences: Preferences) =>
     request<SyncResponse>('/api/user/preferences', {
       method: 'PUT',
       body: JSON.stringify({ preferences })
@@ -898,7 +1045,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { authApi, userApi, ApiError } from '@/api'
-import type { User } from '@/types/user'
+import type { User, FavoriteItem, HistoryItem, Preferences } from '@/types/user'
+import type { FilterState, SortField, SortOrder } from '@/types/property'
 import { useFavoriteStore } from './favorite'
 import { useHistoryStore } from './history'
 import { useFilterStore } from './filter'
@@ -999,23 +1147,19 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await userApi.getData()
 
       if (response.success && response.data) {
-        const favoriteStore = useFavoriteStore()
-        const historyStore = useHistoryStore()
-        const filterStore = useFilterStore()
-
         // 合并收藏（本地优先）
         if (Array.isArray(response.data.favorites)) {
-          mergeFavorites(response.data.favorites as FavoriteItem[])
+          mergeFavorites(response.data.favorites)
         }
 
         // 合并浏览记录（本地优先）
         if (Array.isArray(response.data.history)) {
-          mergeHistory(response.data.history as HistoryItem[])
+          mergeHistory(response.data.history)
         }
 
         // 合并筛选偏好
-        if (response.data.preferences && typeof response.data.preferences === 'object') {
-          mergePreferences(response.data.preferences as { filters?: FilterState; sort?: { field: SortField; order: SortOrder } })
+        if (response.data.preferences) {
+          mergePreferences(response.data.preferences)
         }
       }
 
@@ -1087,7 +1231,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   // 合并筛选偏好
-  const mergePreferences = (prefs: { filters?: FilterState; sort?: { field: SortField; order: SortOrder } }) => {
+  const mergePreferences = (prefs: Preferences) => {
     const filterStore = useFilterStore()
 
     if (prefs.filters) {
@@ -1115,11 +1259,6 @@ export const useAuthStore = defineStore('auth', () => {
     pullCloudData
   }
 })
-
-// 类型导入
-import type { FavoriteItem } from './favorite'
-import type { HistoryItem } from './history'
-import type { FilterState, SortField, SortOrder } from '@/types/property'
 ```
 
 - [ ] **Step 2: Commit**
@@ -1150,6 +1289,7 @@ import { useHistoryStore } from '@/stores/history'
 import { useFilterStore } from '@/stores/filter'
 import { userApi } from '@/api'
 import { useDebounceFn } from '@vueuse/core'
+import type { Preferences } from '@/types/user'
 
 export function useSync() {
   const authStore = useAuthStore()
@@ -1196,13 +1336,14 @@ export function useSync() {
 
     try {
       isSyncing.value = true
-      await userApi.syncPreferences({
+      const preferences: Preferences = {
         filters: filterStore.filters,
         sort: {
           field: filterStore.sortField,
           order: filterStore.sortOrder
         }
-      })
+      }
+      await userApi.syncPreferences(preferences)
     } catch (e) {
       console.error('Failed to sync preferences:', e)
       syncError.value = '偏好同步失败'
