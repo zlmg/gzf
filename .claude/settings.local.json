@@ -13,7 +13,9 @@
       "Bash(pnpm exec:*)",
       "WebFetch(domain:lbs.amap.com)",
       "Bash(lsof:*)",
-      "WebFetch(domain:element-plus.org)"
+      "WebFetch(domain:element-plus.org)",
+      "Bash(git add:*)",
+      "Bash(cd /Users/minos/File/WebFile/demo/gzf/server && pnpm install)"
     ]
   }
 }
