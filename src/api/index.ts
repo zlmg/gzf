@@ -3,13 +3,14 @@ import type { AuthResponse, UserDataResponse, SyncResponse, FavoriteItem, Histor
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001'
 
 class ApiError extends Error {
-  constructor(
-    message: string,
-    public status: number,
-    public data?: unknown
-  ) {
+  status: number
+  data?: unknown
+
+  constructor(message: string, status: number, data?: unknown) {
     super(message)
     this.name = 'ApiError'
+    this.status = status
+    this.data = data
   }
 }
 

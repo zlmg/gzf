@@ -1,11 +1,11 @@
 import type { FastifyInstance } from 'fastify'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import jwt, { type SignOptions } from 'jsonwebtoken'
 import { z } from 'zod'
 import { prisma } from '../prisma/client.js'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default-secret'
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d'
+const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || '7d') as string
 
 const registerSchema = z.object({
   username: z.string().min(3, '用户名至少3个字符').max(20, '用户名最多20个字符'),
@@ -59,7 +59,7 @@ export async function authRoutes(app: FastifyInstance) {
     const token = jwt.sign(
       { userId: user.id, username: user.username },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
+      { expiresIn: JWT_EXPIRES_IN } as SignOptions
     )
 
     return reply.status(201).send({
@@ -113,7 +113,7 @@ export async function authRoutes(app: FastifyInstance) {
     const token = jwt.sign(
       { userId: user.id, username: user.username },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
+      { expiresIn: JWT_EXPIRES_IN } as SignOptions
     )
 
     return reply.send({
