@@ -27,6 +27,18 @@ const router = createRouter({
       path: '/history',
       name: 'history',
       component: () => import('@/views/HistoryView.vue')
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/LoginView.vue'),
+      meta: { guest: true }
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/RegisterView.vue'),
+      meta: { guest: true }
     }
   ],
   scrollBehavior(_to, _from, savedPosition) {
