@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useFavoriteStore } from '@/stores/favorite'
 import { useHistoryStore } from '@/stores/history'
+import { useAuthStore } from '@/stores/auth'
 import { usePoiCache, type PoiExportData } from '@/composables/usePoiCache'
 
+const router = useRouter()
 const favoriteStore = useFavoriteStore()
 const historyStore = useHistoryStore()
+const authStore = useAuthStore()
 const { exportCache, importCache } = usePoiCache()
 const isMobileMenuOpen = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -72,6 +75,13 @@ const handleImport = async (event: Event) => {
   if (fileInput.value) {
     fileInput.value.value = ''
   }
+}
+
+// 登出
+const handleLogout = () => {
+  authStore.logout()
+  ElMessage.success('已退出登录')
+  router.push('/')
 }
 </script>
 
@@ -171,6 +181,50 @@ const handleImport = async (event: Event) => {
             导入
           </button>
           <input ref="fileInput" type="file" accept=".json" @change="handleImport" class="hidden" />
+          <!-- 用户菜单 -->
+          <div v-if="authStore.isAuthenticated" class="flex items-center">
+            <el-dropdown trigger="click" @command="(cmd: string) => cmd === 'logout' && handleLogout()">
+              <button class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">
+                <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-sm font-medium">
+                  {{ authStore.username?.charAt(0).toUpperCase() }}
+                </div>
+                <span class="text-sm hidden lg:inline">{{ authStore.user?.nickname || authStore.username }}</span>
+              </button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="router.push('/user')">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      用户中心
+                    </div>
+                  </el-dropdown-item>
+                  <el-dropdown-item divided command="logout">
+                    <div class="flex items-center gap-2 text-red-500">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                      退出登录
+                    </div>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
+          <RouterLink
+            v-else
+            to="/login"
+            class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+            </svg>
+            登录
+          </RouterLink>
         </nav>
 
         <!-- Mobile Menu Button -->
@@ -277,6 +331,42 @@ const handleImport = async (event: Event) => {
               </svg>
               导入缓存
             </button>
+            <!-- 移动端用户菜单 -->
+            <template v-if="authStore.isAuthenticated">
+              <RouterLink
+                to="/user"
+                class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+                @click="closeMobileMenu"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                用户中心
+              </RouterLink>
+              <button
+                @click="handleLogout(); closeMobileMenu()"
+                class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left text-red-300"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                退出登录
+              </button>
+            </template>
+            <RouterLink
+              v-else
+              to="/login"
+              class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              @click="closeMobileMenu"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+              </svg>
+              登录
+            </RouterLink>
           </div>
         </nav>
       </Transition>
