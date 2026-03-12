@@ -178,29 +178,54 @@ export async function adminRoutes(app: FastifyInstance) {
 
       // 事务导入
       const result = await prisma.$transaction(async (tx) => {
-        // 批量导入用户
-        const usersResult = await tx.user.createMany({
-          data: validUsers.map(u => ({
-            username: u.username,
-            password: '', // 导入的用户需要重置密码
-            favorites: u.favorites,
-            history: u.history,
-            preferences: u.preferences
-          })),
-          skipDuplicates: true
+        // 获取已存在的用户名
+        const existingUsers = await tx.user.findMany({
+          where: { username: { in: validUsers.map(u => u.username) } },
+          select: { username: true }
         })
+        const existingUsernames = new Set(existingUsers.map(u => u.username))
+
+        // 过滤出新用户
+        const newUsers = validUsers.filter(u => !existingUsernames.has(u.username))
+
+        // 批量导入用户
+        if (newUsers.length > 0) {
+          await tx.user.createMany({
+            data: newUsers.map(u => ({
+              username: u.username,
+              password: '', // 导入的用户需要重置密码
+              favorites: u.favorites,
+              history: u.history,
+              preferences: u.preferences
+            }))
+          })
+        }
+
+        // 获取已存在的 POI 坐标+分类组合
+        const existingPois = await tx.poi.findMany({
+          select: { latitude: true, longitude: true, category: true }
+        })
+        const existingPoiKeys = new Set(
+          existingPois.map(p => `${p.latitude}:${p.longitude}:${p.category}`)
+        )
+
+        // 过滤出新 POI
+        const newPois = validPois.filter(
+          p => !existingPoiKeys.has(`${p.latitude}:${p.longitude}:${p.category}`)
+        )
 
         // 批量导入 POI
-        const poisResult = await tx.poi.createMany({
-          data: validPois,
-          skipDuplicates: true
-        })
+        if (newPois.length > 0) {
+          await tx.poi.createMany({
+            data: newPois
+          })
+        }
 
         return {
-          usersImported: usersResult.count,
-          usersSkipped: validUsers.length - usersResult.count,
-          poisImported: poisResult.count,
-          poisSkipped: validPois.length - poisResult.count
+          usersImported: newUsers.length,
+          usersSkipped: validUsers.length - newUsers.length,
+          poisImported: newPois.length,
+          poisSkipped: validPois.length - newPois.length
         }
       })
 

@@ -118,6 +118,9 @@ importers:
       '@types/node':
         specifier: ^22.13.5
         version: 22.19.15
+      '@types/unzipper':
+        specifier: ^0.10.11
+        version: 0.10.11
       prisma:
         specifier: ^6.4.1
         version: 6.19.2(typescript@5.9.3)
@@ -1014,6 +1017,9 @@ packages:
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
+
+  '@types/unzipper@0.10.11':
+    resolution: {integrity: sha512-D25im2zjyMCcgL9ag6N46+wbtJBnXIr7SI4zHf9eJD2Dw2tEB5e+p5MYkrxKIVRscs5QV0EhtU9rgXSPx90oJg==}
 
   '@types/web-bluetooth@0.0.20':
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
@@ -3790,6 +3796,10 @@ snapshots:
       '@types/node': 24.12.0
 
   '@types/unist@3.0.3': {}
+
+  '@types/unzipper@0.10.11':
+    dependencies:
+      '@types/node': 24.12.0
 
   '@types/web-bluetooth@0.0.20': {}
 
