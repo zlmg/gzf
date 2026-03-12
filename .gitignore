@@ -1,3 +1,16 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+apps/frontend/dist/
+apps/server/dist/
+
+# Environment files
+.env
+apps/*/.env
+!apps/*/.env.example
+
 # Logs
 logs
 *.log
@@ -6,17 +19,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Environment files
-.env
-
-# ESLint cache
-.eslintcache
 
 # Editor directories and files
 .vscode/*
@@ -29,4 +31,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ESLint cache
+.eslintcache
+
+# Python cache
 script/__pycache__
