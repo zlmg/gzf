@@ -1,0 +1,9 @@
+[build]
+builder = "railpack"
+buildCommand = "pnpm install && pnpm --filter frontend build"
+
+[deploy]
+# Static site - no start command needed, Railpack will serve the SPA
+
+[variables]
+RAILPACK_SPA_OUTPUT_DIR = "apps/frontend/dist"
