@@ -3,10 +3,9 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "lib": [
-      "ES2020",
+      "ES2023",
       "DOM",
-      "DOM.Iterable",
-      "ES2015"
+      "DOM.Iterable"
     ],
     "baseUrl": ".",
     "paths": {

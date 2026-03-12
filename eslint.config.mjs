@@ -19,5 +19,6 @@ export default antfu({
     'perfectionist/sort-imports': 'off',
     'perfectionist/sort-named-imports': 'off',
     'perfectionist/sort-modules': 'off',
+    'unicorn/prefer-spread': 'off',
   },
 })

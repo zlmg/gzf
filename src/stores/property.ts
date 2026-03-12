@@ -48,7 +48,7 @@ export const usePropertyStore = defineStore('property', () => {
       if (p.layout)
         layouts.add(p.layout)
     })
-    return layouts.toSorted()
+    return [...layouts].toSorted()
   })
 
   const getUniqueRoomTypes = computed(() => {
@@ -59,7 +59,7 @@ export const usePropertyStore = defineStore('property', () => {
         p.roomType.split(',').forEach(t => types.add(t.trim()))
       }
     })
-    return types.toSorted()
+    return [...types].toSorted()
   })
 
   // 提取所有设备选项
