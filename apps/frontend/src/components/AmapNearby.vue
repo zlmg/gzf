@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PoiItem } from '@/composables/usePoiCache'
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePoiCache } from '@/composables/usePoiCache'
 import { poiApi } from '@/api/index'
