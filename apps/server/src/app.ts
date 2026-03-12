@@ -10,31 +10,9 @@ export async function buildApp() {
     }
   })
 
-  // 注册 CORS
-  const allowedOrigins = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'http://172.31.7.188:3000',
-    // Railway 前端域名（通过环境变量配置）
-    process.env.FRONTEND_URL,
-    // 支持 Vercel 预览部署
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
-  ].filter(Boolean) as string[]
-
+  // 注册 CORS - 允许所有来源
   await app.register(cors, {
-    origin: (origin, callback) => {
-      // 允许无 origin 的请求（如移动端、curl）
-      if (!origin) return callback(null, true)
-      // 生产环境允许所有 Railway/Vercel 域名
-      if (process.env.NODE_ENV === 'production') {
-        const isAllowed = allowedOrigins.some(allowed => origin === allowed) ||
-          origin.includes('.railway.app') ||
-          origin.includes('.vercel.app')
-        return callback(null, isAllowed)
-      }
-      // 开发环境只允许白名单
-      callback(null, allowedOrigins.includes(origin))
-    },
+    origin: true,
     credentials: true
   })
 
