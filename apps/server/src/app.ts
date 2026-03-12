@@ -2,6 +2,7 @@ import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { authRoutes } from './routes/auth.js'
 import { userRoutes } from './routes/user.js'
+import { poiRoutes } from './routes/poi.js'
 
 export async function buildApp() {
   const app = Fastify({
@@ -24,6 +25,7 @@ export async function buildApp() {
   // 注册路由
   app.register(authRoutes, { prefix: '/api/auth' })
   app.register(userRoutes, { prefix: '/api/user' })
+  app.register(poiRoutes, { prefix: '/api/poi' })
 
   return app
 }
