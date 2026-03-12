@@ -1,6 +1,4 @@
-shellEmulator: true
-
-trustPolicy: no-downgrade
-
 packages:
-  - 'apps/*'
+  - apps/*
+
+onlyBuiltDependencies: '@prisma/client,@prisma/engines,esbuild,prisma,simple-git-hooks'
