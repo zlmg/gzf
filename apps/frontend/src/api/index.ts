@@ -1,6 +1,18 @@
 import type { AuthResponse, FavoriteItem, HistoryItem, Preferences, SyncResponse, UserDataResponse } from '@/types/user'
+import type { PoiItem } from '@/composables/usePoiCache'
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001'
+
+// POI 搜索响应接口
+export interface PoiSearchResponse {
+  success: boolean
+  data: {
+    pois: PoiItem[]
+    searchRadius: number
+    fromCache: boolean
+  }
+  message?: string
+}
 
 class ApiError extends Error {
   status: number
@@ -84,6 +96,12 @@ export const userApi = {
       method: 'PUT',
       body: JSON.stringify({ preferences }),
     }),
+}
+
+// POI API
+export const poiApi = {
+  search: (latitude: number | string, longitude: number | string, category: string) =>
+    request<PoiSearchResponse>(`/api/poi/search?latitude=${latitude}&longitude=${longitude}&category=${category}`),
 }
 
 export { ApiError }
