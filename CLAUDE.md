@@ -4,19 +4,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A Vue 3 application for browsing and comparing public rental housing (公租房) listings in Shanghai Baoshan. Features include property search/filtering, favorites, comparison, and nearby amenities via AMap API.
+A pnpm monorepo for browsing and comparing public rental housing (公租房) listings in Shanghai Baoshan. Features include property search/filtering, favorites, comparison, nearby amenities via AMap API, user authentication, and browse history.
 
 ## Commands
 
 ```bash
-pnpm dev        # Start dev server (port 3000, auto-opens browser)
-pnpm build      # Type-check with vue-tsc and build for production
-pnpm preview    # Preview production build
+# Development (runs both frontend and backend)
+pnpm dev              # Start all apps
+pnpm dev:frontend     # Start frontend only (port 3000)
+pnpm dev:server       # Start backend only (port 3001)
+
+# Build
+pnpm build            # Build all apps
+pnpm build:frontend   # Build frontend only
+pnpm build:server     # Build backend only
+
+# Other
+pnpm lint             # Lint all apps
+pnpm clean            # Clean all node_modules
 ```
 
 ## Architecture
 
-### Tech Stack
+### Monorepo Structure
+```
+gzf/
+├── apps/
+│   ├── frontend/         # Vue 3 frontend application
+│   └── server/           # Fastify backend service
+├── docs/                 # Documentation
+├── script/               # data scripts
+├── pnpm-workspace.yaml   # pnpm workspace config
+└── package.json          # Root package.json with workspace scripts
+```
+
+### Frontend (apps/frontend/)
+
+**Tech Stack:**
 - **Vue 3.5** with Composition API (`<script setup lang="ts">`)
 - **TypeScript 5.9** for type safety
 - **Vite 7** as build tool
@@ -27,23 +51,10 @@ pnpm preview    # Preview production build
 - **VueUse Core** for utility composables
 - **AMap JS API** for maps and POI search
 
-### Directory Structure
+**Directory Structure:**
 ```
-src/
-├── types/           # TypeScript interfaces
-│   ├── property.ts  # Property, HouseType, FilterState, SortField, etc.
-│   └── element-plus.d.ts
-├── stores/          # Pinia stores (setup store syntax)
-│   ├── index.ts     # Re-exports all stores
-│   ├── property.ts  # Property data and computed values
-│   ├── filter.ts    # Filter state, sorting, and filter logic
-│   ├── favorite.ts  # Favorites with localStorage persistence
-│   └── compare.ts   # Compare list (max 4 items)
-├── composables/     # Vue composables
-│   ├── useProperty.ts    # Property fetching and filtering
-│   ├── useStorage.ts     # Reactive localStorage wrapper
-│   ├── usePoiCache.ts    # POI data caching (90-day TTL)
-│   └── usePagination.ts
+apps/frontend/src/
+├── api/             # API request modules
 ├── components/      # Reusable Vue components
 │   ├── Layout/      # AppHeader, AppFooter
 │   ├── PropertyCard.vue
@@ -51,23 +62,64 @@ src/
 │   ├── FavoriteButton.vue
 │   ├── ImageGallery.vue
 │   ├── CompareBar.vue
-│   ├── AmapNearby.vue    # POI search with AMap
+│   ├── AmapNearby.vue
 │   └── FavoriteNotification.vue
-├── views/           # Page-level routed components
-│   ├── HomeView.vue      # Infinite scroll property list
-│   ├── PropertyDetail.vue
-│   ├── FavoritesView.vue
-│   └── CompareView.vue
-├── utils/
-│   ├── format.ts    # Formatting utilities
-│   └── storage.ts   # localStorage wrapper with prefix
+├── composables/     # Vue composables
+│   ├── useProperty.ts
+│   ├── useStorage.ts
+│   ├── usePoiCache.ts
+│   └── usePagination.ts
+├── config/          # App configuration
 ├── router/          # Vue Router config
-└── style.css        # Global styles + Element Plus overrides
+├── stores/          # Pinia stores (setup store syntax)
+│   ├── property.ts  # Property data and computed values
+│   ├── filter.ts    # Filter state, sorting, and filter logic
+│   ├── favorite.ts  # Favorites with localStorage persistence
+│   └── compare.ts   # Compare list (max 4 items)
+├── types/           # TypeScript interfaces
+├── utils/           # Utility functions
+└── views/           # Page-level routed components
+    ├── HomeView.vue
+    ├── PropertyDetail.vue
+    ├── FavoritesView.vue
+    └── CompareView.vue
+```
+
+### Backend (apps/server/)
+
+**Tech Stack:**
+- **Node.js** with TypeScript
+- **Fastify** - high-performance web framework
+- **Prisma** - ORM for database access
+- **SQLite** - lightweight database
+- **JWT** - authentication
+- **Zod** - request validation
+
+**Directory Structure:**
+```
+apps/server/
+├── src/
+│   ├── routes/      # API route handlers
+│   ├── middleware/  # Auth and other middleware
+│   ├── prisma/      # Prisma client instance
+│   ├── types/       # TypeScript types
+│   ├── app.ts       # Fastify app configuration
+│   └── index.ts     # Server entry point
+├── prisma/
+│   └── schema.prisma    # Database schema
+└── package.json
+```
+
+**Database Commands:**
+```bash
+pnpm --filter server db:generate   # Generate Prisma client
+pnpm --filter server db:migrate    # Run database migrations
+pnpm --filter server db:studio     # Open Prisma Studio
 ```
 
 ### Key Patterns
 
-**Pinia Stores (Setup Store Syntax)**:
+**Pinia Stores (Setup Store Syntax):**
 ```typescript
 export const useXxxStore = defineStore('xxx', () => {
   const state = ref<Type>(initialValue)
@@ -77,7 +129,7 @@ export const useXxxStore = defineStore('xxx', () => {
 })
 ```
 
-**Vue Components (Script Setup)**:
+**Vue Components (Script Setup):**
 ```vue
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
@@ -89,21 +141,21 @@ const computed = computed(() => ...)
 </script>
 ```
 
-**Data Source**:
-- Property data: `/data/bsgz.json` (static file in `public/`)
+**Data Sources:**
+- Frontend static data: `/data/bsgz.json` (in `apps/frontend/public/`)
+- Backend API: REST endpoints at `http://localhost:3001/api/*`
 - AMap POI: `https://restapi.amap.com/v3/place/around` API
-- No backend API
 
-**State Persistence**:
+**State Persistence:**
 - All stores persist to localStorage via `storage` utility
 - Storage key prefix: `gzf-`
 - POI cache: 90-day TTL with coordinate-based keys
 
-**Infinite Scroll**:
+**Infinite Scroll:**
 - HomeView uses IntersectionObserver for lazy loading
 - Page size: 12 items
 
-**Filtering & Sorting**:
+**Filtering & Sorting:**
 - FilterStore handles all filter logic and sorting
 - Sort fields: `price`, `kezuCount`, `openingDate`
 - Sort order persisted to localStorage
@@ -123,11 +175,27 @@ const computed = computed(() => ...)
 
 **FilterState**: Filter configuration with `layout[]`, `roomType[]`, `priceRange`, `equipment[]`, `label[]`, `towards[]`, `areaRange`
 
+### Environment Variables
+
+**Frontend (`apps/frontend/.env`):**
+- `VITE_AMAP_KEY` - AMap API Key
+- `VITE_API_BASE_URL` - Backend API URL (optional, defaults to localhost:3001)
+
+**Backend (`apps/server/.env`):**
+- `JWT_SECRET` - JWT signing secret
+- `DATABASE_URL` - SQLite database path
+
 ### External Services
-- **AMap API Key**: Required in `.env` as `VITE_AMAP_KEY`
+- **AMap API Key**: Required in frontend `.env` as `VITE_AMAP_KEY`
 - **Image Base URL**: `https://www.bsgzf.com.cn` (prepended to relative paths)
 
 ### Component Communication
 - Stores for global state (favorites, compare, filters)
 - Props for parent-child communication
 - No event bus or provide/inject patterns used
+
+### Deployment
+
+Configured for Vercel deployment via `vercel.json`:
+- Build command: `pnpm build:frontend`
+- Output directory: `apps/frontend/dist`
