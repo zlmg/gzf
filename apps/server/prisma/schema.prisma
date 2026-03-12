@@ -17,3 +17,14 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Poi {
+  id        Int      @id @default(autoincrement())
+  latitude  String   // 纬度，3位小数
+  longitude String   // 经度，3位小数
+  category  String   // 分类 key (subway, bus, mall...)
+  data      String   // POI 数据 JSON 数组
+  createdAt DateTime @default(now())
+
+  @@unique([latitude, longitude, category])
+}
