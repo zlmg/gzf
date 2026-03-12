@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { PoiExportData } from '@/composables/usePoiCache'
 import { ElMessage } from 'element-plus'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import { adminApi } from '@/api'
 import { usePoiCache } from '@/composables/usePoiCache'
 import { useAuthStore } from '@/stores/auth'
 import { useFavoriteStore } from '@/stores/favorite'
@@ -14,6 +15,66 @@ const authStore = useAuthStore()
 const { exportCache, importCache } = usePoiCache()
 const isMobileMenuOpen = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null)
+
+// 管理员功能
+const isAdmin = computed(() => authStore.user?.username === 'minos')
+const adminFileInput = ref<HTMLInputElement | null>(null)
+const importDialogVisible = ref(false)
+const importFile = ref<File | null>(null)
+const importing = ref(false)
+const importResult = ref<{ usersImported: number, usersSkipped: number, poisImported: number, poisSkipped: number } | null>(null)
+
+// 数据库导出
+async function handleDbExport() {
+  try {
+    ElMessage.info('正在导出数据库...')
+    await adminApi.exportDatabase()
+    ElMessage.success('数据库导出成功')
+  }
+  catch (e) {
+    const message = e instanceof Error ? e.message : '导出失败'
+    ElMessage.error(message)
+  }
+}
+
+// 触发数据库导入文件选择
+function triggerDbImport() {
+  adminFileInput.value?.click()
+}
+
+// 选择导入文件
+function handleDbFileSelect(event: Event) {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (file) {
+    importFile.value = file
+    importResult.value = null
+    importDialogVisible.value = true
+  }
+  // 清空文件选择
+  if (adminFileInput.value) {
+    adminFileInput.value.value = ''
+  }
+}
+
+// 确认导入
+async function confirmImport() {
+  if (!importFile.value)
+    return
+
+  importing.value = true
+  try {
+    const result = await adminApi.importDatabase(importFile.value)
+    importResult.value = result.data
+    ElMessage.success(`导入成功：用户 ${result.data.usersImported} 条，POI ${result.data.poisImported} 条`)
+  }
+  catch (e) {
+    const message = e instanceof Error ? e.message : '导入失败'
+    ElMessage.error(message)
+  }
+  finally {
+    importing.value = false
+  }
+}
 
 function toggleMobileMenu() {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
@@ -205,7 +266,26 @@ async function handleImport(event: Event) {
                 </button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item @click="handleLogout">
+                    <!-- 管理员菜单 -->
+                    <template v-if="isAdmin">
+                      <el-dropdown-item @click="handleDbExport">
+                        <div class="flex items-center gap-2">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                          </svg>
+                          数据库导出
+                        </div>
+                      </el-dropdown-item>
+                      <el-dropdown-item @click="triggerDbImport">
+                        <div class="flex items-center gap-2">
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                          </svg>
+                          数据库导入
+                        </div>
+                      </el-dropdown-item>
+                    </template>
+                    <el-dropdown-item :divided="isAdmin" @click="handleLogout">
                       退出登录
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -349,6 +429,28 @@ async function handleImport(event: Event) {
                   退出
                 </button>
               </div>
+              <!-- 移动端管理员菜单 -->
+              <template v-if="isAdmin">
+                <div class="border-t border-white/20 my-1" />
+                <button
+                  class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left w-full"
+                  @click="handleDbExport(); closeMobileMenu()"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  数据库导出
+                </button>
+                <button
+                  class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left w-full"
+                  @click="triggerDbImport(); closeMobileMenu()"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  </svg>
+                  数据库导入
+                </button>
+              </template>
             </template>
             <RouterLink
               v-else
@@ -365,5 +467,41 @@ async function handleImport(event: Event) {
         </nav>
       </Transition>
     </div>
+
+    <!-- 管理员导入文件选择器 -->
+    <input ref="adminFileInput" type="file" accept=".zip" class="hidden" @change="handleDbFileSelect">
+
+    <!-- 导入结果对话框 -->
+    <el-dialog
+      v-model="importDialogVisible"
+      title="数据库导入"
+      width="400px"
+    >
+      <div v-if="!importResult">
+        <p class="mb-4">
+          确认导入文件：<strong>{{ importFile?.name }}</strong>
+        </p>
+        <p class="text-gray-500 text-sm">
+          导入时会跳过已存在的记录（用户名相同的用户，坐标和分类相同的POI）
+        </p>
+      </div>
+      <div v-else>
+        <p class="font-medium mb-3">
+          导入完成
+        </p>
+        <div class="space-y-2 text-sm">
+          <p>用户：导入 {{ importResult.usersImported }} 条，跳过 {{ importResult.usersSkipped }} 条</p>
+          <p>POI：导入 {{ importResult.poisImported }} 条，跳过 {{ importResult.poisSkipped }} 条</p>
+        </div>
+      </div>
+      <template #footer>
+        <el-button @click="importDialogVisible = false">
+          关闭
+        </el-button>
+        <el-button v-if="!importResult" type="primary" :loading="importing" @click="confirmImport">
+          确认导入
+        </el-button>
+      </template>
+    </el-dialog>
   </header>
 </template>
