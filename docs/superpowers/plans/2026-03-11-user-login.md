@@ -1202,7 +1202,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     // 更新 store
-    favoriteStore.favorites = merged.values().toSorted((a, b) => b.addedAt - a.addedAt).slice(0, 50) // 限制最大数量
+    favoriteStore.favorites = [...merged.values()].sort((a, b) => b.addedAt - a.addedAt).slice(0, 50) // 限制最大数量
 
     // 保存到 localStorage
     localStorage.setItem('gzf-favorites', JSON.stringify(favoriteStore.favorites))
@@ -1230,7 +1230,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     // 更新 store
-    historyStore.history = merged.values().toSorted((a, b) => b.viewedAt - a.viewedAt).slice(0, 100) // 限制最大数量
+    historyStore.history = [...merged.values()].sort((a, b) => b.viewedAt - a.viewedAt).slice(0, 100) // 限制最大数量
 
     // 保存到 localStorage
     localStorage.setItem('gzf-history', JSON.stringify(historyStore.history))
