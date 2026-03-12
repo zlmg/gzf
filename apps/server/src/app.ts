@@ -28,8 +28,8 @@ export async function buildApp() {
       // 生产环境允许所有 Railway/Vercel 域名
       if (process.env.NODE_ENV === 'production') {
         const isAllowed = allowedOrigins.some(allowed => origin === allowed) ||
-          origin.endsWith('.railway.app') ||
-          origin.endsWith('.vercel.app')
+          origin.includes('.railway.app') ||
+          origin.includes('.vercel.app')
         return callback(null, isAllowed)
       }
       // 开发环境只允许白名单
