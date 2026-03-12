@@ -37,3 +37,6 @@ lerna-debug.log*
 
 # Python cache
 script/__pycache__
+
+# Git worktrees
+.worktrees/
