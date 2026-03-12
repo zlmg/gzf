@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useProperty } from '@/composables/useProperty'
-import { useFilterStore } from '@/stores/filter'
-import { ElSelect, ElOption, ElEmpty, ElSkeleton } from 'element-plus'
+import { ElEmpty, ElOption, ElSelect, ElSkeleton } from 'element-plus'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import CompareBar from '@/components/CompareBar.vue'
 import PropertyCard from '@/components/PropertyCard.vue'
 import PropertyFilter from '@/components/PropertyFilter.vue'
-import CompareBar from '@/components/CompareBar.vue'
+import { useProperty } from '@/composables/useProperty'
+import { useFilterStore } from '@/stores/filter'
 
 const { filteredProperties, loading, error, fetchProperties } = useProperty()
 const filterStore = useFilterStore()
@@ -19,11 +19,11 @@ let observer: IntersectionObserver | null = null
 // 使用 store 中的排序状态
 const sortField = computed({
   get: () => filterStore.sortField,
-  set: (value) => filterStore.setSort(value, filterStore.sortOrder)
+  set: value => filterStore.setSort(value, filterStore.sortOrder),
 })
 const sortOrder = computed({
   get: () => filterStore.sortOrder,
-  set: (value) => filterStore.setSort(filterStore.sortField, value)
+  set: value => filterStore.setSort(filterStore.sortField, value),
 })
 
 const displayedProperties = computed(() => {
@@ -34,8 +34,9 @@ const total = computed(() => filteredProperties.value.length)
 
 const hasMore = computed(() => displayedCount.value < total.value)
 
-const loadMore = () => {
-  if (isLoadingMore.value || !hasMore.value) return
+function loadMore() {
+  if (isLoadingMore.value || !hasMore.value)
+    return
   isLoadingMore.value = true
   // 模拟加载延迟，提升用户体验
   setTimeout(() => {
@@ -44,7 +45,7 @@ const loadMore = () => {
   }, 300)
 }
 
-const setupObserver = () => {
+function setupObserver() {
   if (observer) {
     observer.disconnect()
   }
@@ -55,7 +56,7 @@ const setupObserver = () => {
         loadMore()
       }
     },
-    { threshold: 0.1 }
+    { threshold: 0.1 },
   )
 
   if (loadMoreTrigger.value) {
@@ -68,7 +69,7 @@ watch(
   () => filteredProperties.value.length,
   () => {
     displayedCount.value = pageSize
-  }
+  },
 )
 
 onMounted(() => {
@@ -95,7 +96,9 @@ watch(loadMoreTrigger, (el) => {
     <div class="container-app py-6">
       <!-- Page header -->
       <div class="mb-6">
-        <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">公租房房源列表</h1>
+        <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">
+          公租房房源列表
+        </h1>
         <p class="text-gray-600 text-sm md:text-base">
           共找到 <span class="font-semibold text-blue-600">{{ total }}</span> 套房源
         </p>
@@ -176,8 +179,8 @@ watch(loadMoreTrigger, (el) => {
       >
         <div v-if="isLoadingMore" class="flex items-center gap-2 text-gray-500">
           <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
           </svg>
           <span>加载中...</span>
         </div>

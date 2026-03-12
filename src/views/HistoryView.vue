@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { ElButton, ElEmpty, ElMessage } from 'element-plus'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElButton, ElEmpty, ElMessage } from 'element-plus'
-import { useHistoryStore } from '@/stores/history'
-import { useCompareStore } from '@/stores/compare'
-import { formatPriceRange, formatRoomType, formatOpenQueue } from '@/utils/format'
 import { getImageUrl } from '@/config'
+import { useCompareStore } from '@/stores/compare'
+import { useHistoryStore } from '@/stores/history'
+import { formatOpenQueue, formatPriceRange, formatRoomType } from '@/utils/format'
 
 const router = useRouter()
 const historyStore = useHistoryStore()
@@ -13,60 +13,66 @@ const compareStore = useCompareStore()
 
 const hasHistory = computed(() => historyStore.history.length > 0)
 
-const getThumbnailUrl = (thumbnail: string): string => {
-  if (!thumbnail) return ''
+function getThumbnailUrl(thumbnail: string): string {
+  if (!thumbnail)
+    return ''
   const images = thumbnail.split(',')
   const path = images[0]
-  if (!path) return ''
-  if (path.startsWith('http')) return path
+  if (!path)
+    return ''
+  if (path.startsWith('http'))
+    return path
   return getImageUrl(path)
 }
 
-const goToDetail = (projectNo: string) => {
+function goToDetail(projectNo: string) {
   router.push(`/property/${projectNo}`)
 }
 
-const handleRemove = (projectNo: string) => {
+function handleRemove(projectNo: string) {
   historyStore.removeFromHistory(projectNo)
 }
 
-const handleClearAll = () => {
+function handleClearAll() {
   if (confirm('确定要清空所有浏览记录吗？此操作不可撤销。')) {
     historyStore.clearHistory()
   }
 }
 
-const formatViewedAt = (timestamp: number): string => {
+function formatViewedAt(timestamp: number): string {
   return new Date(timestamp).toLocaleString('zh-CN', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit'
+    second: '2-digit',
   })
 }
 
 // 汇总所有房型的设备并去重
-const getEquipmentList = (item: typeof historyStore.history[0]): string[] => {
-  if (!item.roomTypeDetails) return []
+function getEquipmentList(item: typeof historyStore.history[0]): string[] {
+  if (!item.roomTypeDetails)
+    return []
   const equipmentSet = new Set<string>()
-  item.roomTypeDetails.forEach(detail => {
-    detail.houseTypeList?.forEach(houseType => {
+  item.roomTypeDetails.forEach((detail) => {
+    detail.houseTypeList?.forEach((houseType) => {
       if (houseType.roomEquipment) {
-        houseType.roomEquipment.split(',').forEach(eq => {
+        houseType.roomEquipment.split(',').forEach((eq) => {
           const trimmed = eq.trim()
-          if (trimmed) equipmentSet.add(trimmed)
+          if (trimmed)
+            equipmentSet.add(trimmed)
         })
       }
     })
   })
-  return Array.from(equipmentSet)
+  return [...equipmentSet]
 }
 
 // 检查房源是否有"近地铁"标签
-const hasSubwayLabel = (item: typeof historyStore.history[0]): boolean => {
-  if (!item.roomTypeDetails) return false
+function hasSubwayLabel(item: typeof historyStore.history[0]): boolean {
+  if (!item.roomTypeDetails)
+    return false
   for (const detail of item.roomTypeDetails) {
     if (detail.houseTypeList) {
       for (const houseType of detail.houseTypeList) {
@@ -80,24 +86,26 @@ const hasSubwayLabel = (item: typeof historyStore.history[0]): boolean => {
 }
 
 // 提取房型的面积范围
-const getFormattedArea = (item: typeof historyStore.history[0]): string | null => {
-  if (!item.roomTypeDetails) return null
+function getFormattedArea(item: typeof historyStore.history[0]): string | null {
+  if (!item.roomTypeDetails)
+    return null
   const areas = new Set<string>()
-  item.roomTypeDetails.forEach(detail => {
-    detail.houseTypeList?.forEach(houseType => {
+  item.roomTypeDetails.forEach((detail) => {
+    detail.houseTypeList?.forEach((houseType) => {
       if (houseType.area) {
         areas.add(houseType.area.trim())
       }
     })
   })
 
-  if (areas.size === 0) return null
+  if (areas.size === 0)
+    return null
 
-  const numbers = Array.from(areas)
-    .map(area => parseFloat(area.replace(/[^\d.]/g, '')))
-    .filter(n => !isNaN(n))
+  const numbers = Array.from(areas, area => Number.parseFloat(area.replace(/[^\d.]/g, '')))
+    .filter(n => !Number.isNaN(n))
 
-  if (numbers.length === 0) return null
+  if (numbers.length === 0)
+    return null
 
   const min = Math.min(...numbers)
   const max = Math.max(...numbers)
@@ -109,12 +117,12 @@ const getFormattedArea = (item: typeof historyStore.history[0]): string | null =
 }
 
 // 检查是否在对比列表中
-const isInCompare = (projectNo: string): boolean => {
+function isInCompare(projectNo: string): boolean {
   return compareStore.isInCompare(projectNo)
 }
 
 // 切换对比状态
-const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => {
+function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
   e.stopPropagation()
   const property = {
     projectNo: item.projectNo,
@@ -139,12 +147,13 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
     totalArea: item.totalArea || '',
     textContent: '',
     roomTypeCount: '',
-    roomTypeDetails: item.roomTypeDetails || []
+    roomTypeDetails: item.roomTypeDetails || [],
   }
 
   if (isInCompare(item.projectNo)) {
     compareStore.toggleCompare(property)
-  } else {
+  }
+  else {
     if (compareStore.isFull) {
       ElMessage.warning('对比列表已满，最多只能添加4个房源')
       return
@@ -160,13 +169,15 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
       <!-- Page header -->
       <div class="flex items-center justify-between mb-4 md:mb-6">
         <div>
-          <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-1 md:mb-2">浏览记录</h1>
+          <h1 class="text-xl md:text-2xl font-bold text-gray-800 mb-1 md:mb-2">
+            浏览记录
+          </h1>
           <p class="text-sm md:text-base text-gray-600">
             共 <span class="font-semibold text-red-600">{{ historyStore.count }}</span> 条浏览记录
           </p>
         </div>
         <div v-if="hasHistory" class="flex items-center gap-2 md:gap-3">
-          <ElButton @click="handleClearAll" type="danger" plain size="small" class="!text-xs md:!text-sm">
+          <ElButton type="danger" plain size="small" class="!text-xs md:!text-sm" @click="handleClearAll">
             清空全部
           </ElButton>
         </div>
@@ -200,23 +211,24 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
                   :src="getThumbnailUrl(item.thumbnail)"
                   :alt="item.projectName"
                   class="w-full h-full object-cover cursor-pointer"
-                  @click="goToDetail(item.projectNo)"
                   loading="lazy"
-                />
+                  @click="goToDetail(item.projectNo)"
+                >
                 <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
                   <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <path
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
                   </svg>
                 </div>
                 <!-- Status badge -->
                 <div class="absolute top-2 left-2">
                   <span
-                    :class="[
-                      'px-2 py-1 text-xs font-medium rounded-full shadow-sm',
+                    class="px-2 py-1 text-xs font-medium rounded-full shadow-sm" :class="[
                       (item.openQueue === '1' || item.openQueue === '是')
                         ? 'bg-green-500 text-white'
-                        : 'bg-gray-500/80 text-white'
+                        : 'bg-gray-500/80 text-white',
                     ]"
                   >
                     {{ (item.openQueue === '1' || item.openQueue === '是') ? '开放排队' : '暂未开放' }}
@@ -241,7 +253,9 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
 
                 <!-- Location and Opening Date -->
                 <div class="flex items-center justify-between gap-2 mb-2">
-                  <p class="text-xs text-gray-500 line-clamp-1 flex-1">{{ item.location }}</p>
+                  <p class="text-xs text-gray-500 line-clamp-1 flex-1">
+                    {{ item.location }}
+                  </p>
                   <span v-if="item.openingDate" class="text-xs text-gray-400 shrink-0">
                     {{ item.openingDate }}
                   </span>
@@ -288,19 +302,18 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
                 <!-- Actions -->
                 <div class="flex items-center gap-2 pt-2 border-t border-gray-100">
                   <button
-                    @click.stop="handleToggleCompare($event, item)"
-                    :class="[
-                      'flex-1 py-2 text-sm rounded-lg transition-all active:scale-95',
+                    class="flex-1 py-2 text-sm rounded-lg transition-all active:scale-95" :class="[
                       isInCompare(item.projectNo)
                         ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-700 active:bg-gray-200'
+                        : 'bg-gray-100 text-gray-700 active:bg-gray-200',
                     ]"
+                    @click.stop="handleToggleCompare($event, item)"
                   >
                     {{ isInCompare(item.projectNo) ? '已加入对比' : '加入对比' }}
                   </button>
                   <button
-                    @click.stop="handleRemove(item.projectNo)"
                     class="px-4 py-2 text-sm text-red-600 bg-red-50 rounded-lg transition-all active:scale-95 active:bg-red-100"
+                    @click.stop="handleRemove(item.projectNo)"
                   >
                     删除
                   </button>
@@ -322,13 +335,15 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
                   :src="getThumbnailUrl(item.thumbnail)"
                   :alt="item.projectName"
                   class="w-full h-full object-cover cursor-pointer"
-                  @click="goToDetail(item.projectNo)"
                   loading="lazy"
-                />
+                  @click="goToDetail(item.projectNo)"
+                >
                 <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
                   <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <path
+                      stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
                   </svg>
                 </div>
               </div>
@@ -347,7 +362,9 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
                     </div>
                     <!-- Location and Opening Date -->
                     <div class="flex items-center justify-between gap-2 mb-3">
-                      <p class="text-sm text-gray-500 line-clamp-1 flex-1">{{ item.location }}</p>
+                      <p class="text-sm text-gray-500 line-clamp-1 flex-1">
+                        {{ item.location }}
+                      </p>
                       <span v-if="item.openingDate" class="text-xs text-gray-400 shrink-0">
                         {{ item.openingDate }}
                       </span>
@@ -416,9 +433,8 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
                     浏览时间: {{ formatViewedAt(item.viewedAt) }}
                   </span>
                   <span
-                    :class="[
-                      'text-xs',
-                      item.openQueue === '1' || item.openQueue === '是' ? 'text-green-600' : 'text-gray-400'
+                    class="text-xs" :class="[
+                      item.openQueue === '1' || item.openQueue === '是' ? 'text-green-600' : 'text-gray-400',
                     ]"
                   >
                     {{ formatOpenQueue(item.openQueue) }}
@@ -434,8 +450,10 @@ const handleToggleCompare = (e: Event, item: typeof historyStore.history[0]) => 
       <div v-if="hasHistory" class="mt-4 md:mt-6 p-3 md:p-4 bg-blue-50 rounded-lg">
         <div class="flex items-center gap-2 text-blue-700 text-sm">
           <svg class="w-4 h-4 md:w-5 md:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <span>浏览记录保存在浏览器本地，最多保留100条，清除浏览器数据后将会丢失</span>
         </div>

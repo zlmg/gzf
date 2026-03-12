@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
+import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { User, Lock } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -15,24 +15,26 @@ const formRef = ref()
 const rules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 3, max: 20, message: '用户名长度为3-20个字符', trigger: 'blur' }
+    { min: 3, max: 20, message: '用户名长度为3-20个字符', trigger: 'blur' },
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码至少6个字符', trigger: 'blur' }
-  ]
+    { min: 6, message: '密码至少6个字符', trigger: 'blur' },
+  ],
 }
 
-const handleLogin = async () => {
+async function handleLogin() {
   const valid = await formRef.value?.validate().catch(() => false)
-  if (!valid) return
+  if (!valid)
+    return
 
   const result = await authStore.login(username.value, password.value)
 
   if (result.success) {
     ElMessage.success('登录成功')
     router.push('/')
-  } else {
+  }
+  else {
     ElMessage.error(result.message || '登录失败')
   }
 }

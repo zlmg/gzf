@@ -2,8 +2,11 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "types": [
-      "vite/client"
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable",
+      "ES2015"
     ],
     "baseUrl": ".",
     "paths": {
@@ -11,18 +14,15 @@
         "src/*"
       ]
     },
-    "lib": [
-      "ES2020",
-      "DOM",
-      "DOM.Iterable",
-      "ES2015"
+    "types": [
+      "vite/client"
     ],
     /* Linting */
     "strict": true,
+    "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
   "include": [

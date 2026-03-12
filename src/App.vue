@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import AppHeader from '@/components/Layout/AppHeader.vue'
-import AppFooter from '@/components/Layout/AppFooter.vue'
 import FavoriteNotification from '@/components/FavoriteNotification.vue'
+import AppFooter from '@/components/Layout/AppFooter.vue'
+import AppHeader from '@/components/Layout/AppHeader.vue'
 import { useSync } from '@/composables/useSync'
 
 const { startAutoSync } = useSync()

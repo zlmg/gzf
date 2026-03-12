@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
 import type { Property, RoomTypeDetail } from '@/types/property'
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 
 export interface HistoryItem {
   projectNo: string
@@ -13,7 +13,7 @@ export interface HistoryItem {
   thumbnail: string
   kezuCount: number
   openQueue: string
-  viewedAt: number  // 浏览时间戳（毫秒）
+  viewedAt: number // 浏览时间戳（毫秒）
   // 可选字段
   district?: string
   houseType?: string
@@ -28,7 +28,7 @@ const STORAGE_KEY = 'gzf-history'
 const MAX_HISTORY = 100
 
 // 从 localStorage 加载
-const loadFromStorage = (): HistoryItem[] => {
+function loadFromStorage(): HistoryItem[] {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
@@ -36,21 +36,23 @@ const loadFromStorage = (): HistoryItem[] => {
       // Validate data structure
       if (Array.isArray(parsed)) {
         return parsed.filter(item =>
-          item.projectNo && item.projectName && item.viewedAt
+          item.projectNo && item.projectName && item.viewedAt,
         )
       }
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Failed to load history from storage:', e)
   }
   return []
 }
 
 // 保存到 localStorage
-const saveToStorage = (list: HistoryItem[]) => {
+function saveToStorage(list: HistoryItem[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Failed to save history to storage:', e)
   }
 }
@@ -99,7 +101,7 @@ export const useHistoryStore = defineStore('history', () => {
       openingDate: property.openingDate,
       totalArea: property.totalArea,
       houseSource: property.houseSource,
-      roomTypeDetails: property.roomTypeDetails
+      roomTypeDetails: property.roomTypeDetails,
     }
 
     history.value.unshift(item)
@@ -136,6 +138,6 @@ export const useHistoryStore = defineStore('history', () => {
     getHistoryItem,
     addToHistory,
     removeFromHistory,
-    clearHistory
+    clearHistory,
   }
 })

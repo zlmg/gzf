@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
-import { usePoiCache, type PoiItem } from '@/composables/usePoiCache'
+import type { PoiItem } from '@/composables/usePoiCache'
+import { computed, onMounted, ref, watch } from 'vue'
+import { usePoiCache } from '@/composables/usePoiCache'
 
 interface Props {
   latitude: string | number
@@ -41,7 +42,7 @@ const POI_TYPES = [
   { key: 'mall', name: '购物中心', types: '060101', keywords: '', icon: '🏬' },
   { key: 'shopping', name: '商场', types: '060100', keywords: '', icon: '🛍️' },
   { key: 'cinema', name: '影院', types: '080600|080601|080602', keywords: '', icon: '🎬' },
-    { key: 'park', name: '公园广场', types: '110100', keywords: '', icon: '🌳' },
+  { key: 'park', name: '公园广场', types: '110100', keywords: '', icon: '🌳' },
   { key: 'supermarket', name: '超市', types: '060400', keywords: '', icon: '🛒' },
   { key: 'convenience', name: '便利店', types: '060200', keywords: '', icon: '🏪' },
   { key: 'market', name: '综合市场', types: '060700', keywords: '', icon: '🏬' },
@@ -89,12 +90,13 @@ const filteredPoiList = computed(() => {
 })
 
 // 搜索周边 POI
-const searchPOI = async (category: string, radius?: number, forceRefresh = false) => {
+async function searchPOI(category: string, radius?: number, forceRefresh = false) {
   activeCategory.value = category
   loading.value = true
 
   const poiConfig = POI_TYPES.find(p => p.key === category)
-  if (!poiConfig) return
+  if (!poiConfig)
+    return
 
   // 使用传入的半径或当前选择的半径，取最大值5km
   const searchRadius = radius || selectedRadius.value || 3000
@@ -114,7 +116,7 @@ const searchPOI = async (category: string, radius?: number, forceRefresh = false
     const key = import.meta.env.VITE_AMAP_KEY
 
     const response = await fetch(
-      `https://restapi.amap.com/v3/place/around?key=${key}&location=${location}&keywords=${poiConfig.keywords}&types=${poiConfig.types}&radius=${searchRadius}&offset=25&page=1&extensions=all`
+      `https://restapi.amap.com/v3/place/around?key=${key}&location=${location}&keywords=${poiConfig.keywords}&types=${poiConfig.types}&radius=${searchRadius}&offset=25&page=1&extensions=all`,
     )
 
     const result = await response.json()
@@ -142,12 +144,14 @@ const searchPOI = async (category: string, radius?: number, forceRefresh = false
         searchRadius,
         pois,
         searchRadius,
-        location
+        location,
       )
-    } else {
+    }
+    else {
       poiData.value[category] = []
     }
-  } catch (e) {
+  }
+  catch (e) {
     loading.value = false
     isRefreshing.value = false
     console.error('POI search error:', e)
@@ -156,18 +160,18 @@ const searchPOI = async (category: string, radius?: number, forceRefresh = false
 }
 
 // 刷新当前分类数据
-const refreshCurrentCategory = () => {
+function refreshCurrentCategory() {
   isRefreshing.value = true
   searchPOI(activeCategory.value, selectedRadius.value, true)
 }
 
 // 切换距离筛选
-const changeRadius = (radius: number) => {
+function changeRadius(radius: number) {
   selectedRadius.value = radius
   // 如果当前分类数据为空或需要更大范围的搜索，重新请求
   const currentData = poiData.value[activeCategory.value] || []
-  const needRefetch = currentData.length === 0 ||
-    currentData.some((poi: any) => radius > selectedRadius.value && Number(poi.distance) > 3000)
+  const needRefetch = currentData.length === 0
+    || currentData.some((poi: any) => radius > selectedRadius.value && Number(poi.distance) > 3000)
 
   if (needRefetch || radius > 3000) {
     searchPOI(activeCategory.value, radius)
@@ -175,7 +179,7 @@ const changeRadius = (radius: number) => {
 }
 
 // 打开高德地图查看位置
-const openInAmap = (poi?: any) => {
+function openInAmap(poi?: any) {
   const lat = poi ? poi.location.split(',')[1] : props.latitude
   const lng = poi ? poi.location.split(',')[0] : props.longitude
   const name = poi ? poi.name : props.propertyName || '房源位置'
@@ -200,12 +204,13 @@ watch(activeCategory, (newCategory) => {
   <div class="nearby-facilities">
     <!-- 分类选择 -->
     <div class="flex flex-wrap gap-2 mb-3">
-      <button v-for="cat in POI_TYPES" :key="cat.key" @click="searchPOI(cat.key)" :class="[
-        'px-3 py-1.5 rounded-full text-sm font-medium transition-colors',
-        activeCategory === cat.key
-          ? 'bg-blue-500 text-white'
-          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-      ]">
+      <button
+        v-for="cat in POI_TYPES" :key="cat.key" class="px-3 py-1.5 rounded-full text-sm font-medium transition-colors" :class="[
+          activeCategory === cat.key
+            ? 'bg-blue-500 text-white'
+            : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
+        ]" @click="searchPOI(cat.key)"
+      >
         <span class="mr-1">{{ cat.icon }}</span>
         {{ cat.name }}
       </button>
@@ -215,24 +220,25 @@ watch(activeCategory, (newCategory) => {
     <div class="flex items-center gap-2 mb-4 flex-wrap">
       <span class="text-xs text-gray-500">范围:</span>
       <div class="flex flex-wrap gap-1">
-        <button v-for="opt in DISTANCE_OPTIONS" :key="opt.value" @click="changeRadius(opt.value)" :class="[
-          'px-2 py-1 rounded text-xs font-medium transition-colors',
-          selectedRadius === opt.value
-            ? 'bg-blue-100 text-blue-700 border border-blue-300'
-            : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300'
-        ]">
+        <button
+          v-for="opt in DISTANCE_OPTIONS" :key="opt.value" class="px-2 py-1 rounded text-xs font-medium transition-colors" :class="[
+            selectedRadius === opt.value
+              ? 'bg-blue-100 text-blue-700 border border-blue-300'
+              : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300',
+          ]" @click="changeRadius(opt.value)"
+        >
           {{ opt.label }}
         </button>
       </div>
       <!-- 刷新按钮 -->
       <button
-        @click="refreshCurrentCategory"
         :disabled="loading"
         class="ml-auto p-1.5 rounded text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         title="刷新当前分类数据"
+        @click="refreshCurrentCategory"
       >
         <svg
-          :class="['w-4 h-4', isRefreshing && 'animate-spin']"
+          class="w-4 h-4" :class="[isRefreshing && 'animate-spin']"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -242,12 +248,10 @@ watch(activeCategory, (newCategory) => {
       </button>
     </div>
 
-
-
     <!-- POI 列表 -->
     <div class="bg-gray-50 rounded-lg p-3 h-120 overflow-y-auto">
       <div v-if="loading" class="flex items-center justify-center h-32">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
       </div>
 
       <div v-else-if="filteredPoiList.length === 0" class="flex items-center justify-center h-32 text-gray-500 text-sm">
@@ -260,12 +264,18 @@ watch(activeCategory, (newCategory) => {
           共 {{ filteredPoiList.length }} 个结果
         </div>
         <ul class="space-y-1.5">
-          <li v-for="(poi, index) in filteredPoiList" :key="poi.id || index" @click="openInAmap(poi)"
-            class="px-3 py-2 bg-white rounded-lg hover:bg-blue-50 cursor-pointer transition-colors border border-gray-100 hover:border-blue-200">
+          <li
+            v-for="(poi, index) in filteredPoiList" :key="poi.id || index" class="px-3 py-2 bg-white rounded-lg hover:bg-blue-50 cursor-pointer transition-colors border border-gray-100 hover:border-blue-200"
+            @click="openInAmap(poi)"
+          >
             <div class="flex items-center justify-between gap-2">
               <div class="flex-1 min-w-0">
-                <h4 class="font-medium text-gray-800 text-sm truncate">{{ poi.name }}</h4>
-                <p v-if="poi.address" class="text-xs text-gray-500 truncate">{{ poi.address }}</p>
+                <h4 class="font-medium text-gray-800 text-sm truncate">
+                  {{ poi.name }}
+                </h4>
+                <p v-if="poi.address" class="text-xs text-gray-500 truncate">
+                  {{ poi.address }}
+                </p>
               </div>
               <span class="text-xs text-blue-600 font-medium whitespace-nowrap bg-blue-50 px-2 py-0.5 rounded">
                 {{ poi.distance }}m

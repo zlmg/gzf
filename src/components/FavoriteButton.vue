@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Property } from '@/types/property'
 import { computed } from 'vue'
 import { useFavoriteStore } from '@/stores/favorite'
-import type { Property } from '@/types/property'
 
 const props = defineProps<{
   property: Property
@@ -18,7 +18,7 @@ const isFavorite = computed(() => {
   return favoriteStore.isFavorite(props.property.projectNo)
 })
 
-const handleClick = (e: Event) => {
+function handleClick(e: Event) {
   e.preventDefault()
   e.stopPropagation()
   const result = favoriteStore.toggleFavorite(props.property)
@@ -44,16 +44,15 @@ const sizeClass = computed(() => {
     :class="[
       isFavorite
         ? 'bg-red-50 hover:bg-red-100 active:bg-red-200'
-        : 'bg-white/80 hover:bg-white active:bg-gray-100'
+        : 'bg-white/80 hover:bg-white active:bg-gray-100',
     ]"
     @click="handleClick"
   >
     <svg
-      :class="[
+      class="transition-transform duration-200" :class="[
         sizeClass,
-        'transition-transform duration-200',
         { 'scale-110': isFavorite },
-        isFavorite ? 'text-red-500' : 'text-gray-400 hover:text-gray-600'
+        isFavorite ? 'text-red-500' : 'text-gray-400 hover:text-gray-600',
       ]"
       :fill="isFavorite ? 'currentColor' : 'none'"
       stroke="currentColor"

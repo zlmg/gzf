@@ -1,29 +1,31 @@
+import type { FilterState, Property, SortField, SortOrder } from '@/types/property'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Property, FilterState, SortField, SortOrder } from '@/types/property'
 
 const STORAGE_KEY = 'gzf-filters'
 const SORT_STORAGE_KEY = 'gzf-sort'
 
-const loadFromStorage = (): FilterState | null => {
+function loadFromStorage(): FilterState | null {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       return JSON.parse(stored)
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Failed to load filters from storage:', e)
   }
   return null
 }
 
-const loadSortFromStorage = (): { field: SortField; order: SortOrder } => {
+function loadSortFromStorage(): { field: SortField, order: SortOrder } {
   try {
     const stored = localStorage.getItem(SORT_STORAGE_KEY)
     if (stored) {
       return JSON.parse(stored)
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Failed to load sort from storage:', e)
   }
   return { field: '', order: 'asc' }
@@ -46,7 +48,7 @@ const defaultFilters: FilterState = {
   excludeRoomType: false,
   excludeEquipment: false,
   excludeLabel: false,
-  excludeTowards: false
+  excludeTowards: false,
 }
 
 export const useFilterStore = defineStore('filter', () => {
@@ -61,7 +63,8 @@ export const useFilterStore = defineStore('filter', () => {
   const saveToStorage = () => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(filters.value))
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to save filters to storage:', e)
     }
   }
@@ -70,9 +73,10 @@ export const useFilterStore = defineStore('filter', () => {
     try {
       localStorage.setItem(SORT_STORAGE_KEY, JSON.stringify({
         field: sortField.value,
-        order: sortOrder.value
+        order: sortOrder.value,
       }))
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to save sort to storage:', e)
     }
   }
@@ -98,11 +102,14 @@ export const useFilterStore = defineStore('filter', () => {
 
   // 辅助函数：检查房源是否包含指定设备
   const hasEquipment = (property: Property, equipments: string[]): boolean => {
-    if (!property.roomTypeDetails) return false
-    return property.roomTypeDetails.some(detail => {
-      if (!detail.houseTypeList) return false
-      return detail.houseTypeList.some(house => {
-        if (!house.roomEquipment) return false
+    if (!property.roomTypeDetails)
+      return false
+    return property.roomTypeDetails.some((detail) => {
+      if (!detail.houseTypeList)
+        return false
+      return detail.houseTypeList.some((house) => {
+        if (!house.roomEquipment)
+          return false
         const houseEquipments = house.roomEquipment.split(',').map(e => e.trim())
         return equipments.some(eq => houseEquipments.includes(eq))
       })
@@ -111,11 +118,14 @@ export const useFilterStore = defineStore('filter', () => {
 
   // 辅助函数：检查房源是否包含指定标签
   const hasLabel = (property: Property, labels: string[]): boolean => {
-    if (!property.roomTypeDetails) return false
-    return property.roomTypeDetails.some(detail => {
-      if (!detail.houseTypeList) return false
-      return detail.houseTypeList.some(house => {
-        if (!house.roomLabel) return false
+    if (!property.roomTypeDetails)
+      return false
+    return property.roomTypeDetails.some((detail) => {
+      if (!detail.houseTypeList)
+        return false
+      return detail.houseTypeList.some((house) => {
+        if (!house.roomLabel)
+          return false
         const houseLabels = house.roomLabel.split(',').map(l => l.trim())
         return labels.some(label => houseLabels.includes(label))
       })
@@ -124,13 +134,17 @@ export const useFilterStore = defineStore('filter', () => {
 
   // 辅助函数：检查房源是否有指定面积范围的房型
   const hasAreaInRange = (property: Property, areaRange: [number, number]): boolean => {
-    if (!property.roomTypeDetails) return false
-    return property.roomTypeDetails.some(detail => {
-      if (!detail.houseTypeList) return false
-      return detail.houseTypeList.some(house => {
-        if (!house.area) return false
-        const area = parseFloat(house.area)
-        if (isNaN(area)) return false
+    if (!property.roomTypeDetails)
+      return false
+    return property.roomTypeDetails.some((detail) => {
+      if (!detail.houseTypeList)
+        return false
+      return detail.houseTypeList.some((house) => {
+        if (!house.area)
+          return false
+        const area = Number.parseFloat(house.area)
+        if (Number.isNaN(area))
+          return false
         return area >= areaRange[0] && area <= areaRange[1]
       })
     })
@@ -138,11 +152,14 @@ export const useFilterStore = defineStore('filter', () => {
 
   // 辅助函数：检查房源是否有指定朝向
   const hasTowards = (property: Property, towardsList: string[]): boolean => {
-    if (!property.roomTypeDetails) return false
-    return property.roomTypeDetails.some(detail => {
-      if (!detail.houseTypeList) return false
-      return detail.houseTypeList.some(house => {
-        if (!house.towards) return false
+    if (!property.roomTypeDetails)
+      return false
+    return property.roomTypeDetails.some((detail) => {
+      if (!detail.houseTypeList)
+        return false
+      return detail.houseTypeList.some((house) => {
+        if (!house.towards)
+          return false
         // 拆分房源朝向为单个方向，如 "朝南" -> "南", "朝南,朝北" -> ["南", "北"]
         const directions = house.towards.split(',').map(t => t.replace('朝', '').trim())
         return towardsList.some(t => directions.includes(t))
@@ -158,7 +175,8 @@ export const useFilterStore = defineStore('filter', () => {
       if (filters.value.excludeLayout) {
         // 反向筛选：排除包含该区域的房源
         result = result.filter(p => !filters.value.layout.includes(p.layout))
-      } else {
+      }
+      else {
         result = result.filter(p => filters.value.layout.includes(p.layout))
       }
     }
@@ -167,12 +185,13 @@ export const useFilterStore = defineStore('filter', () => {
     if (filters.value.roomType.length > 0) {
       if (filters.value.excludeRoomType) {
         // 反向筛选：排除包含该户型的房源
-        result = result.filter(p => {
+        result = result.filter((p) => {
           const types = p.roomType.split(',')
           return !filters.value.roomType.some(t => types.includes(t))
         })
-      } else {
-        result = result.filter(p => {
+      }
+      else {
+        result = result.filter((p) => {
           const types = p.roomType.split(',')
           return filters.value.roomType.some(t => types.includes(t))
         })
@@ -180,34 +199,36 @@ export const useFilterStore = defineStore('filter', () => {
     }
 
     // Filter by price range
-    result = result.filter(p => {
+    result = result.filter((p) => {
       const minPrice = p.minRent || 0
       const maxPrice = p.maxRent || p.minRent || 0
-      return minPrice >= filters.value.priceRange[0] &&
-             maxPrice <= filters.value.priceRange[1]
+      return minPrice >= filters.value.priceRange[0]
+        && maxPrice <= filters.value.priceRange[1]
     })
 
     // Filter by keyword
     if (filters.value.keyword.trim()) {
       const keyword = filters.value.keyword.toLowerCase()
       result = result.filter(p =>
-        p.projectName?.toLowerCase().includes(keyword) ||
-        p.location?.toLowerCase().includes(keyword) ||
-        p.district?.toLowerCase().includes(keyword)
+        p.projectName?.toLowerCase().includes(keyword)
+        || p.location?.toLowerCase().includes(keyword)
+        || p.district?.toLowerCase().includes(keyword),
       )
     }
 
     // Filter by availability
     if (filters.value.availableStatus === 'available') {
       result = result.filter(p => p.kezuCount > 0)
-    } else if (filters.value.availableStatus === 'unavailable') {
+    }
+    else if (filters.value.availableStatus === 'unavailable') {
       result = result.filter(p => p.kezuCount === 0)
     }
 
     // Filter by open status
     if (filters.value.openStatus === 'open') {
       result = result.filter(p => p.openQueue === '1')
-    } else if (filters.value.openStatus === 'closed') {
+    }
+    else if (filters.value.openStatus === 'closed') {
       result = result.filter(p => p.openQueue === '0')
     }
 
@@ -216,7 +237,8 @@ export const useFilterStore = defineStore('filter', () => {
       if (filters.value.excludeEquipment) {
         // 反向筛选：排除包含该设备的房源
         result = result.filter(p => !hasEquipment(p, filters.value.equipment))
-      } else {
+      }
+      else {
         result = result.filter(p => hasEquipment(p, filters.value.equipment))
       }
     }
@@ -226,7 +248,8 @@ export const useFilterStore = defineStore('filter', () => {
       if (filters.value.excludeLabel) {
         // 反向筛选：排除包含该标签的房源
         result = result.filter(p => !hasLabel(p, filters.value.label))
-      } else {
+      }
+      else {
         result = result.filter(p => hasLabel(p, filters.value.label))
       }
     }
@@ -242,7 +265,8 @@ export const useFilterStore = defineStore('filter', () => {
       if (filters.value.excludeTowards) {
         // 反向筛选：排除包含该朝向的房源
         result = result.filter(p => !hasTowards(p, filters.value.towards))
-      } else {
+      }
+      else {
         result = result.filter(p => hasTowards(p, filters.value.towards))
       }
     }
@@ -256,34 +280,42 @@ export const useFilterStore = defineStore('filter', () => {
         if (sortField.value === 'minPrice') {
           valueA = a.minRent || 0
           valueB = b.minRent || 0
-        } else if (sortField.value === 'maxPrice') {
+        }
+        else if (sortField.value === 'maxPrice') {
           valueA = a.maxRent || a.minRent || 0
           valueB = b.maxRent || b.minRent || 0
-        } else if (sortField.value === 'kezuCount') {
+        }
+        else if (sortField.value === 'kezuCount') {
           valueA = a.kezuCount || 0
           valueB = b.kezuCount || 0
-        } else if (sortField.value === 'openingDate') {
+        }
+        else if (sortField.value === 'openingDate') {
           // 解析日期字符串为时间戳
           const parseDate = (dateStr: string): number => {
-            if (!dateStr) return 0
+            if (!dateStr)
+              return 0
             // 支持 "2024-01-15" 和 "2024年1月15日" 格式
             const normalized = dateStr.replace(/[年月]/g, '-').replace(/日/g, '')
             const date = new Date(normalized)
-            return isNaN(date.getTime()) ? 0 : date.getTime()
+            return Number.isNaN(date.getTime()) ? 0 : date.getTime()
           }
           valueA = parseDate(a.openingDate || '')
           valueB = parseDate(b.openingDate || '')
-        } else if (sortField.value === 'minArea') {
+        }
+        else if (sortField.value === 'minArea') {
           // 获取房源最小户型面积
           const getMinArea = (property: Property): number => {
-            if (!property.roomTypeDetails) return 0
+            if (!property.roomTypeDetails)
+              return 0
             let minArea = Infinity
             for (const detail of property.roomTypeDetails) {
-              if (!detail.houseTypeList) continue
+              if (!detail.houseTypeList)
+                continue
               for (const house of detail.houseTypeList) {
-                if (!house.area) continue
-                const area = parseFloat(house.area)
-                if (!isNaN(area) && area < minArea) {
+                if (!house.area)
+                  continue
+                const area = Number.parseFloat(house.area)
+                if (!Number.isNaN(area) && area < minArea) {
                   minArea = area
                 }
               }
@@ -292,17 +324,21 @@ export const useFilterStore = defineStore('filter', () => {
           }
           valueA = getMinArea(a)
           valueB = getMinArea(b)
-        } else if (sortField.value === 'maxArea') {
+        }
+        else if (sortField.value === 'maxArea') {
           // 获取房源最大户型面积
           const getMaxArea = (property: Property): number => {
-            if (!property.roomTypeDetails) return 0
+            if (!property.roomTypeDetails)
+              return 0
             let maxArea = 0
             for (const detail of property.roomTypeDetails) {
-              if (!detail.houseTypeList) continue
+              if (!detail.houseTypeList)
+                continue
               for (const house of detail.houseTypeList) {
-                if (!house.area) continue
-                const area = parseFloat(house.area)
-                if (!isNaN(area) && area > maxArea) {
+                if (!house.area)
+                  continue
+                const area = Number.parseFloat(house.area)
+                if (!Number.isNaN(area) && area > maxArea) {
                   maxArea = area
                 }
               }
@@ -311,7 +347,8 @@ export const useFilterStore = defineStore('filter', () => {
           }
           valueA = getMaxArea(a)
           valueB = getMaxArea(b)
-        } else {
+        }
+        else {
           return 0
         }
 
@@ -329,6 +366,6 @@ export const useFilterStore = defineStore('filter', () => {
     updateFilters,
     resetFilters,
     setSort,
-    filterProperties
+    filterProperties,
   }
 })

@@ -1,35 +1,39 @@
+import type { CompareItem, Property } from '@/types/property'
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import type { Property, CompareItem } from '@/types/property'
+import { computed, ref } from 'vue'
 import { getImageUrl } from '@/config'
 
 const STORAGE_KEY = 'gzf-compare'
 const MAX_COMPARE = 4
 
-const loadFromStorage = (): CompareItem[] => {
+function loadFromStorage(): CompareItem[] {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       return JSON.parse(stored)
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Failed to load compare list from storage:', e)
   }
   return []
 }
 
-const saveToStorage = (list: CompareItem[]) => {
+function saveToStorage(list: CompareItem[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Failed to save compare list to storage:', e)
   }
 }
 
-const parseImages = (thumbnail: string): string[] => {
-  if (!thumbnail) return []
-  return thumbnail.split(',').map(path => {
-    if (path.startsWith('http')) return path
+function parseImages(thumbnail: string): string[] {
+  if (!thumbnail)
+    return []
+  return thumbnail.split(',').map((path) => {
+    if (path.startsWith('http'))
+      return path
     return getImageUrl(path)
   })
 }
@@ -52,7 +56,7 @@ export const useCompareStore = defineStore('compare', () => {
     }
     const item: CompareItem = {
       ...property,
-      images: parseImages(property.thumbnail)
+      images: parseImages(property.thumbnail),
     }
     compareList.value.push(item)
     saveToStorage(compareList.value)
@@ -76,7 +80,8 @@ export const useCompareStore = defineStore('compare', () => {
     if (isInCompare(property.projectNo)) {
       removeFromCompare(property.projectNo)
       return false
-    } else {
+    }
+    else {
       return addToCompare(property)
     }
   }
@@ -88,6 +93,6 @@ export const useCompareStore = defineStore('compare', () => {
     addToCompare,
     removeFromCompare,
     clearCompare,
-    toggleCompare
+    toggleCompare,
   }
 })

@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type { PoiExportData } from '@/composables/usePoiCache'
+import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { usePoiCache } from '@/composables/usePoiCache'
+import { useAuthStore } from '@/stores/auth'
 import { useFavoriteStore } from '@/stores/favorite'
 import { useHistoryStore } from '@/stores/history'
-import { useAuthStore } from '@/stores/auth'
-import { usePoiCache, type PoiExportData } from '@/composables/usePoiCache'
 
 const favoriteStore = useFavoriteStore()
 const historyStore = useHistoryStore()
@@ -14,21 +15,21 @@ const { exportCache, importCache } = usePoiCache()
 const isMobileMenuOpen = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null)
 
-const toggleMobileMenu = () => {
+function toggleMobileMenu() {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
 }
 
-const closeMobileMenu = () => {
+function closeMobileMenu() {
   isMobileMenuOpen.value = false
 }
 
-const handleLogout = () => {
+function handleLogout() {
   authStore.logout()
   ElMessage.success('已退出登录')
 }
 
 // 导出POI缓存
-const handleExport = () => {
+function handleExport() {
   const data = exportCache()
   if (!data || data.totalCount === 0) {
     ElMessage.warning('没有可导出的POI缓存数据')
@@ -46,14 +47,15 @@ const handleExport = () => {
 }
 
 // 触发文件选择
-const triggerImport = () => {
+function triggerImport() {
   fileInput.value?.click()
 }
 
 // 导入POI缓存
-const handleImport = async (event: Event) => {
+async function handleImport(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0]
-  if (!file) return
+  if (!file)
+    return
 
   try {
     const text = await file.text()
@@ -67,10 +69,12 @@ const handleImport = async (event: Event) => {
     const result = importCache(data)
     if (result.imported > 0) {
       ElMessage.success(`已导入 ${result.imported} 条数据${result.skipped > 0 ? `，跳过 ${result.skipped} 条` : ''}`)
-    } else if (result.skipped > 0) {
+    }
+    else if (result.skipped > 0) {
       ElMessage.info(`跳过 ${result.skipped} 条数据（本地已有更新版本）`)
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Import error:', e)
     ElMessage.error('导入失败，请检查文件格式')
   }
@@ -93,10 +97,14 @@ const handleImport = async (event: Event) => {
           @click="closeMobileMenu"
         >
           <svg class="w-7 h-7 md:w-8 md:h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            <path
+              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            />
           </svg>
-          <h1 class="text-base md:text-xl font-bold truncate">宝山公租房查询demo</h1>
+          <h1 class="text-base md:text-xl font-bold truncate">
+            宝山公租房查询demo
+          </h1>
         </RouterLink>
 
         <!-- Desktop Navigation -->
@@ -117,8 +125,10 @@ const handleImport = async (event: Event) => {
             active-class="bg-white/20"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              <path
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
             </svg>
             收藏
             <span
@@ -134,8 +144,10 @@ const handleImport = async (event: Event) => {
             active-class="bg-white/20"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path
+                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             浏览记录
             <span
@@ -157,9 +169,9 @@ const handleImport = async (event: Event) => {
           </RouterLink>
           <!-- 导出按钮 -->
           <button
-            @click="handleExport"
             class="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-1.5 text-sm"
             title="导出POI缓存"
+            @click="handleExport"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -168,16 +180,16 @@ const handleImport = async (event: Event) => {
           </button>
           <!-- 导入按钮 -->
           <button
-            @click="triggerImport"
             class="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-1.5 text-sm"
             title="导入POI缓存"
+            @click="triggerImport"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
             </svg>
             导入
           </button>
-          <input ref="fileInput" type="file" accept=".json" @change="handleImport" class="hidden" />
+          <input ref="fileInput" type="file" accept=".json" class="hidden" @change="handleImport">
           <!-- 登录/用户入口 -->
           <div class="flex items-center">
             <template v-if="authStore.isAuthenticated">
@@ -215,9 +227,9 @@ const handleImport = async (event: Event) => {
 
         <!-- Mobile Menu Button -->
         <button
-          @click="toggleMobileMenu"
           class="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
           aria-label="菜单"
+          @click="toggleMobileMenu"
         >
           <svg v-if="!isMobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -257,8 +269,10 @@ const handleImport = async (event: Event) => {
               @click="closeMobileMenu"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                <path
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
               </svg>
               收藏
               <span
@@ -275,8 +289,10 @@ const handleImport = async (event: Event) => {
               @click="closeMobileMenu"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <path
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
               浏览记录
               <span
@@ -299,8 +315,8 @@ const handleImport = async (event: Event) => {
             </RouterLink>
             <!-- 移动端导出按钮 -->
             <button
-              @click="handleExport"
               class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left"
+              @click="handleExport"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -309,8 +325,8 @@ const handleImport = async (event: Event) => {
             </button>
             <!-- 移动端导入按钮 -->
             <button
-              @click="triggerImport"
               class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left"
+              @click="triggerImport"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -327,8 +343,8 @@ const handleImport = async (event: Event) => {
                   {{ authStore.user?.username }}
                 </span>
                 <button
-                  @click="handleLogout"
                   class="text-sm text-red-200 hover:text-red-100"
+                  @click="handleLogout"
                 >
                   退出
                 </button>

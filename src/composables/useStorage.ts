@@ -1,7 +1,7 @@
 import { ref, watch } from 'vue'
 import { storage } from '@/utils/storage'
 
-export const useStorage = <T>(key: string, defaultValue: T) => {
+export function useStorage<T>(key: string, defaultValue: T) {
   const storedValue = storage.get<T>(key, defaultValue)
   const data = ref<T>(storedValue ?? defaultValue) as { value: T }
 
@@ -10,7 +10,7 @@ export const useStorage = <T>(key: string, defaultValue: T) => {
     (newValue) => {
       storage.set(key, newValue)
     },
-    { deep: true }
+    { deep: true },
   )
 
   const setData = (value: T) => {
@@ -24,6 +24,6 @@ export const useStorage = <T>(key: string, defaultValue: T) => {
   return {
     data,
     setData,
-    resetData
+    resetData,
   }
 }

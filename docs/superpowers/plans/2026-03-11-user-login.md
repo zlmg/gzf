@@ -186,7 +186,8 @@ const globalForPrisma = globalThis as unknown as {
 
 export const prisma = globalForPrisma.prisma ?? new PrismaClient()
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+if (process.env.NODE_ENV !== 'production')
+  globalForPrisma.prisma = prisma
 ```
 
 - [ ] **Step 4: 运行数据库迁移**
@@ -216,8 +217,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 - [ ] **Step 1: 创建类型定义文件**
 
 ```typescript
-import type { FastifyRequest } from 'fastify'
 import type { User } from '@prisma/client'
+import type { FastifyRequest } from 'fastify'
 
 // ============ 收藏相关类型 ============
 export interface FavoriteItem {
@@ -254,7 +255,7 @@ export interface HistoryItem {
   thumbnail: string
   kezuCount: number
   openQueue: string
-  viewedAt: number  // 浏览时间戳（毫秒）
+  viewedAt: number // 浏览时间戳（毫秒）
   // 可选字段
   district?: string
   houseType?: string
@@ -394,7 +395,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 - [ ] **Step 1: 创建认证中间件**
 
 ```typescript
-import type { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 import jwt from 'jsonwebtoken'
 import { prisma } from '../prisma/client.js'
 
@@ -416,7 +417,7 @@ export async function authMiddleware(
   const token = authHeader.slice(7)
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId: number; username: string }
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: number, username: string }
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
@@ -431,7 +432,8 @@ export async function authMiddleware(
     }
 
     request.user = user
-  } catch (error) {
+  }
+  catch (error) {
     return reply.status(401).send({
       success: false,
       message: '令牌无效或已过期'
@@ -612,8 +614,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 
 ```typescript
 import type { FastifyInstance } from 'fastify'
-import { prisma } from '../prisma/client.js'
 import { authMiddleware } from '../middleware/auth.js'
+import { prisma } from '../prisma/client.js'
 
 export async function userRoutes(app: FastifyInstance) {
   // 所有用户路由都需要认证
@@ -741,8 +743,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 
 `server/src/app.ts`:
 ```typescript
-import Fastify from 'fastify'
 import cors from '@fastify/cors'
+import Fastify from 'fastify'
 import { authRoutes } from './routes/auth.js'
 import { userRoutes } from './routes/user.js'
 
@@ -786,7 +788,8 @@ async function start() {
   try {
     await app.listen({ port: PORT, host: '0.0.0.0' })
     console.log(`Server running at http://localhost:${PORT}`)
-  } catch (err) {
+  }
+  catch (err) {
     app.log.error(err)
     process.exit(1)
   }
@@ -824,7 +827,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 - [ ] **Step 1: 创建类型定义文件**
 
 ```typescript
-import type { RoomTypeDetail, FilterState, SortField, SortOrder } from './property'
+import type { FilterState, RoomTypeDetail, SortField, SortOrder } from './property'
 
 // ============ 用户信息 ============
 export interface User {
@@ -931,7 +934,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 - [ ] **Step 1: 创建 API 封装**
 
 ```typescript
-import type { AuthResponse, UserDataResponse, SyncResponse, FavoriteItem, HistoryItem, Preferences } from '@/types/user'
+import type { AuthResponse, FavoriteItem, HistoryItem, Preferences, SyncResponse, UserDataResponse } from '@/types/user'
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001'
 
@@ -958,7 +961,7 @@ async function request<T>(
   }
 
   if (token) {
-    (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`
+    (headers as Record<string, string>).Authorization = `Bearer ${token}`
   }
 
   const response = await fetch(`${API_BASE}${path}`, {
@@ -1042,14 +1045,14 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 - [ ] **Step 1: 创建认证 store**
 
 ```typescript
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { authApi, userApi, ApiError } from '@/api'
-import type { User, FavoriteItem, HistoryItem, Preferences } from '@/types/user'
 import type { FilterState, SortField, SortOrder } from '@/types/property'
+import type { FavoriteItem, HistoryItem, Preferences, User } from '@/types/user'
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
+import { ApiError, authApi, userApi } from '@/api'
 import { useFavoriteStore } from './favorite'
-import { useHistoryStore } from './history'
 import { useFilterStore } from './filter'
+import { useHistoryStore } from './history'
 
 const TOKEN_KEY = 'gzf-token'
 const USER_KEY = 'gzf-user'
@@ -1066,7 +1069,8 @@ export const useAuthStore = defineStore('auth', () => {
   if (storedUser) {
     try {
       user.value = JSON.parse(storedUser)
-    } catch {
+    }
+    catch {
       localStorage.removeItem(USER_KEY)
     }
   }
@@ -1094,11 +1098,13 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       return { success: false, message: response.message }
-    } catch (e) {
+    }
+    catch (e) {
       const message = e instanceof ApiError ? e.message : '登录失败'
       error.value = message
       return { success: false, message }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -1121,11 +1127,13 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       return { success: false, message: response.message }
-    } catch (e) {
+    }
+    catch (e) {
       const message = e instanceof ApiError ? e.message : '注册失败'
       error.value = message
       return { success: false, message }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -1140,7 +1148,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   // 拉取云端数据并合并
   const pullCloudData = async () => {
-    if (!isAuthenticated.value) return
+    if (!isAuthenticated.value)
+      return
 
     try {
       syncStatus.value = 'syncing'
@@ -1164,7 +1173,8 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       syncStatus.value = 'idle'
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to pull cloud data:', e)
       syncStatus.value = 'error'
     }
@@ -1192,9 +1202,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     // 更新 store
-    favoriteStore.favorites = Array.from(merged.values())
-      .sort((a, b) => b.addedAt - a.addedAt)
-      .slice(0, 50) // 限制最大数量
+    favoriteStore.favorites = merged.values().toSorted((a, b) => b.addedAt - a.addedAt).slice(0, 50) // 限制最大数量
 
     // 保存到 localStorage
     localStorage.setItem('gzf-favorites', JSON.stringify(favoriteStore.favorites))
@@ -1222,9 +1230,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     // 更新 store
-    historyStore.history = Array.from(merged.values())
-      .sort((a, b) => b.viewedAt - a.viewedAt)
-      .slice(0, 100) // 限制最大数量
+    historyStore.history = merged.values().toSorted((a, b) => b.viewedAt - a.viewedAt).slice(0, 100) // 限制最大数量
 
     // 保存到 localStorage
     localStorage.setItem('gzf-history', JSON.stringify(historyStore.history))
@@ -1282,14 +1288,14 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 - [ ] **Step 1: 创建同步 composable**
 
 ```typescript
-import { watch, ref } from 'vue'
+import type { Preferences } from '@/types/user'
+import { useDebounceFn } from '@vueuse/core'
+import { ref, watch } from 'vue'
+import { userApi } from '@/api'
 import { useAuthStore } from '@/stores/auth'
 import { useFavoriteStore } from '@/stores/favorite'
-import { useHistoryStore } from '@/stores/history'
 import { useFilterStore } from '@/stores/filter'
-import { userApi } from '@/api'
-import { useDebounceFn } from '@vueuse/core'
-import type { Preferences } from '@/types/user'
+import { useHistoryStore } from '@/stores/history'
 
 export function useSync() {
   const authStore = useAuthStore()
@@ -1302,37 +1308,44 @@ export function useSync() {
 
   // 同步收藏
   const syncFavorites = async () => {
-    if (!authStore.isAuthenticated || isSyncing.value) return
+    if (!authStore.isAuthenticated || isSyncing.value)
+      return
 
     try {
       isSyncing.value = true
       await userApi.syncFavorites(favoriteStore.favorites)
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to sync favorites:', e)
       syncError.value = '收藏同步失败'
-    } finally {
+    }
+    finally {
       isSyncing.value = false
     }
   }
 
   // 同步浏览记录
   const syncHistory = async () => {
-    if (!authStore.isAuthenticated || isSyncing.value) return
+    if (!authStore.isAuthenticated || isSyncing.value)
+      return
 
     try {
       isSyncing.value = true
       await userApi.syncHistory(historyStore.history)
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to sync history:', e)
       syncError.value = '浏览记录同步失败'
-    } finally {
+    }
+    finally {
       isSyncing.value = false
     }
   }
 
   // 同步筛选偏好
   const syncPreferences = async () => {
-    if (!authStore.isAuthenticated || isSyncing.value) return
+    if (!authStore.isAuthenticated || isSyncing.value)
+      return
 
     try {
       isSyncing.value = true
@@ -1344,17 +1357,20 @@ export function useSync() {
         }
       }
       await userApi.syncPreferences(preferences)
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to sync preferences:', e)
       syncError.value = '偏好同步失败'
-    } finally {
+    }
+    finally {
       isSyncing.value = false
     }
   }
 
   // 同步所有数据
   const syncAll = async () => {
-    if (!authStore.isAuthenticated) return
+    if (!authStore.isAuthenticated)
+      return
 
     isSyncing.value = true
     syncError.value = null
@@ -1365,7 +1381,8 @@ export function useSync() {
         syncHistory(),
         syncPreferences()
       ])
-    } finally {
+    }
+    finally {
       isSyncing.value = false
     }
   }
@@ -1445,11 +1462,11 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
+import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { User, Lock } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -1469,16 +1486,18 @@ const rules = {
   ]
 }
 
-const handleLogin = async () => {
+async function handleLogin() {
   const valid = await formRef.value?.validate().catch(() => false)
-  if (!valid) return
+  if (!valid)
+    return
 
   const result = await authStore.login(username.value, password.value)
 
   if (result.success) {
     ElMessage.success('登录成功')
     router.push('/')
-  } else {
+  }
+  else {
     ElMessage.error(result.message || '登录失败')
   }
 }
@@ -1567,11 +1586,11 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
+import { Lock, User } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { User, Lock } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -1581,10 +1600,11 @@ const password = ref('')
 const confirmPassword = ref('')
 const formRef = ref()
 
-const validateConfirmPassword = (_rule: unknown, value: string, callback: (error?: Error) => void) => {
+function validateConfirmPassword(_rule: unknown, value: string, callback: (error?: Error) => void) {
   if (value !== password.value) {
     callback(new Error('两次输入的密码不一致'))
-  } else {
+  }
+  else {
     callback()
   }
 }
@@ -1604,16 +1624,18 @@ const rules = {
   ]
 }
 
-const handleRegister = async () => {
+async function handleRegister() {
   const valid = await formRef.value?.validate().catch(() => false)
-  if (!valid) return
+  if (!valid)
+    return
 
   const result = await authStore.register(username.value, password.value)
 
   if (result.success) {
     ElMessage.success('注册成功')
     router.push('/')
-  } else {
+  }
+  else {
     ElMessage.error(result.message || '注册失败')
   }
 }
@@ -1720,7 +1742,7 @@ import { useAuthStore } from '@/stores/auth'
 
 const authStore = useAuthStore()
 
-const handleLogout = () => {
+function handleLogout() {
   authStore.logout()
   ElMessage.success('已退出登录')
 }
@@ -1781,13 +1803,14 @@ const handleLogout = () => {
       {{ authStore.user?.username }}
     </span>
     <button
-      @click="handleLogout"
       class="text-sm text-red-200 hover:text-red-100"
+      @click="handleLogout"
     >
       退出
     </button>
   </div>
 </template>
+
 <RouterLink
   v-else
   to="/login"

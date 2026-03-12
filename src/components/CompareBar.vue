@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { ElButton } from 'element-plus'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCompareStore } from '@/stores/compare'
-import { ElButton } from 'element-plus'
 
 const router = useRouter()
 const compareStore = useCompareStore()
@@ -10,11 +10,11 @@ const compareStore = useCompareStore()
 const isVisible = computed(() => compareStore.compareList.length > 0)
 const count = computed(() => compareStore.compareList.length)
 
-const goToCompare = () => {
+function goToCompare() {
   router.push('/compare')
 }
 
-const clearAll = () => {
+function clearAll() {
   compareStore.clearCompare()
 }
 </script>
@@ -41,7 +41,7 @@ const clearAll = () => {
                   :src="item.images[0]"
                   :alt="item.projectName"
                   class="w-full h-full object-cover"
-                />
+                >
               </div>
             </div>
             <span class="text-sm text-gray-700 truncate">
@@ -63,8 +63,10 @@ const clearAll = () => {
           <div class="flex items-center gap-4">
             <div class="flex items-center gap-2">
               <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                <path
+                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                />
               </svg>
               <span class="font-semibold text-gray-800">
                 已选择 <span class="text-blue-600">{{ count }}</span> 个房源进行对比
@@ -81,7 +83,7 @@ const clearAll = () => {
                   :src="item.images[0]"
                   :alt="item.projectName"
                   class="w-full h-full object-cover"
-                />
+                >
               </div>
             </div>
           </div>
@@ -105,7 +107,9 @@ const clearAll = () => {
 <style scoped>
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .slide-up-enter-from,

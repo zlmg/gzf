@@ -1,11 +1,11 @@
-import { watch, ref } from 'vue'
+import type { Preferences } from '@/types/user'
+import { useDebounceFn } from '@vueuse/core'
+import { ref, watch } from 'vue'
+import { userApi } from '@/api'
 import { useAuthStore } from '@/stores/auth'
 import { useFavoriteStore } from '@/stores/favorite'
-import { useHistoryStore } from '@/stores/history'
 import { useFilterStore } from '@/stores/filter'
-import { userApi } from '@/api'
-import { useDebounceFn } from '@vueuse/core'
-import type { Preferences } from '@/types/user'
+import { useHistoryStore } from '@/stores/history'
 
 export function useSync() {
   const authStore = useAuthStore()
@@ -18,37 +18,44 @@ export function useSync() {
 
   // 同步收藏
   const syncFavorites = async () => {
-    if (!authStore.isAuthenticated || isSyncing.value) return
+    if (!authStore.isAuthenticated || isSyncing.value)
+      return
 
     try {
       isSyncing.value = true
       await userApi.syncFavorites(favoriteStore.favorites)
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to sync favorites:', e)
       syncError.value = '收藏同步失败'
-    } finally {
+    }
+    finally {
       isSyncing.value = false
     }
   }
 
   // 同步浏览记录
   const syncHistory = async () => {
-    if (!authStore.isAuthenticated || isSyncing.value) return
+    if (!authStore.isAuthenticated || isSyncing.value)
+      return
 
     try {
       isSyncing.value = true
       await userApi.syncHistory(historyStore.history)
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to sync history:', e)
       syncError.value = '浏览记录同步失败'
-    } finally {
+    }
+    finally {
       isSyncing.value = false
     }
   }
 
   // 同步筛选偏好
   const syncPreferences = async () => {
-    if (!authStore.isAuthenticated || isSyncing.value) return
+    if (!authStore.isAuthenticated || isSyncing.value)
+      return
 
     try {
       isSyncing.value = true
@@ -56,21 +63,24 @@ export function useSync() {
         filters: filterStore.filters,
         sort: {
           field: filterStore.sortField,
-          order: filterStore.sortOrder
-        }
+          order: filterStore.sortOrder,
+        },
       }
       await userApi.syncPreferences(preferences)
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to sync preferences:', e)
       syncError.value = '偏好同步失败'
-    } finally {
+    }
+    finally {
       isSyncing.value = false
     }
   }
 
   // 同步所有数据
   const syncAll = async () => {
-    if (!authStore.isAuthenticated) return
+    if (!authStore.isAuthenticated)
+      return
 
     isSyncing.value = true
     syncError.value = null
@@ -79,9 +89,10 @@ export function useSync() {
       await Promise.all([
         syncFavorites(),
         syncHistory(),
-        syncPreferences()
+        syncPreferences(),
       ])
-    } finally {
+    }
+    finally {
       isSyncing.value = false
     }
   }
@@ -101,7 +112,7 @@ export function useSync() {
           debouncedSyncFavorites()
         }
       },
-      { deep: true }
+      { deep: true },
     )
 
     // 监听浏览记录变化
@@ -112,7 +123,7 @@ export function useSync() {
           debouncedSyncHistory()
         }
       },
-      { deep: true }
+      { deep: true },
     )
 
     // 监听筛选偏好变化
@@ -123,7 +134,7 @@ export function useSync() {
           debouncedSyncPreferences()
         }
       },
-      { deep: true }
+      { deep: true },
     )
   }
 
@@ -134,6 +145,6 @@ export function useSync() {
     syncHistory,
     syncPreferences,
     syncAll,
-    startAutoSync
+    startAutoSync,
   }
 }

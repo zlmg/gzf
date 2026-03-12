@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
 import type { Property } from '@/types/property'
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 
 export const usePropertyStore = defineStore('property', () => {
   const properties = ref<Property[]>([])
@@ -19,50 +19,57 @@ export const usePropertyStore = defineStore('property', () => {
       // Handle different data structures
       if (Array.isArray(data)) {
         properties.value = data
-      } else if (data.pageContent && Array.isArray(data.pageContent)) {
+      }
+      else if (data.pageContent && Array.isArray(data.pageContent)) {
         properties.value = data.pageContent
-      } else if (data.data && Array.isArray(data.data)) {
+      }
+      else if (data.data && Array.isArray(data.data)) {
         properties.value = data.data
-      } else if (data.list && Array.isArray(data.list)) {
+      }
+      else if (data.list && Array.isArray(data.list)) {
         properties.value = data.list
-      } else {
+      }
+      else {
         properties.value = data
       }
-    } catch (e) {
+    }
+    catch (e) {
       error.value = e instanceof Error ? e.message : 'Unknown error'
       console.error('Failed to fetch properties:', e)
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
 
   const getUniqueLayouts = computed(() => {
     const layouts = new Set<string>()
-    properties.value.forEach(p => {
-      if (p.layout) layouts.add(p.layout)
+    properties.value.forEach((p) => {
+      if (p.layout)
+        layouts.add(p.layout)
     })
-    return Array.from(layouts).sort()
+    return layouts.toSorted()
   })
 
   const getUniqueRoomTypes = computed(() => {
     const types = new Set<string>()
-    properties.value.forEach(p => {
+    properties.value.forEach((p) => {
       if (p.roomType) {
         // 支持逗号分隔的多个户型
         p.roomType.split(',').forEach(t => types.add(t.trim()))
       }
     })
-    return Array.from(types).sort()
+    return types.toSorted()
   })
 
   // 提取所有设备选项
   const getUniqueEquipments = computed(() => {
     const equipments = new Set<string>()
-    properties.value.forEach(p => {
+    properties.value.forEach((p) => {
       if (p.roomTypeDetails) {
-        p.roomTypeDetails.forEach(detail => {
+        p.roomTypeDetails.forEach((detail) => {
           if (detail.houseTypeList) {
-            detail.houseTypeList.forEach(house => {
+            detail.houseTypeList.forEach((house) => {
               if (house.roomEquipment) {
                 house.roomEquipment.split(',').forEach(e => equipments.add(e.trim()))
               }
@@ -71,17 +78,17 @@ export const usePropertyStore = defineStore('property', () => {
         })
       }
     })
-    return Array.from(equipments).filter(Boolean).sort()
+    return [...equipments].filter(Boolean).sort()
   })
 
   // 提取所有标签选项
   const getUniqueLabels = computed(() => {
     const labels = new Set<string>()
-    properties.value.forEach(p => {
+    properties.value.forEach((p) => {
       if (p.roomTypeDetails) {
-        p.roomTypeDetails.forEach(detail => {
+        p.roomTypeDetails.forEach((detail) => {
           if (detail.houseTypeList) {
-            detail.houseTypeList.forEach(house => {
+            detail.houseTypeList.forEach((house) => {
               if (house.roomLabel) {
                 house.roomLabel.split(',').forEach(l => labels.add(l.trim()))
               }
@@ -90,21 +97,21 @@ export const usePropertyStore = defineStore('property', () => {
         })
       }
     })
-    return Array.from(labels).filter(Boolean).sort()
+    return [...labels].filter(Boolean).sort()
   })
 
   // 提取面积范围
   const getAreaRange = computed((): [number, number] => {
     let minArea = Infinity
     let maxArea = -Infinity
-    properties.value.forEach(p => {
+    properties.value.forEach((p) => {
       if (p.roomTypeDetails) {
-        p.roomTypeDetails.forEach(detail => {
+        p.roomTypeDetails.forEach((detail) => {
           if (detail.houseTypeList) {
-            detail.houseTypeList.forEach(house => {
+            detail.houseTypeList.forEach((house) => {
               if (house.area) {
-                const area = parseFloat(house.area)
-                if (!isNaN(area)) {
+                const area = Number.parseFloat(house.area)
+                if (!Number.isNaN(area)) {
                   minArea = Math.min(minArea, area)
                   maxArea = Math.max(maxArea, area)
                 }
@@ -124,16 +131,17 @@ export const usePropertyStore = defineStore('property', () => {
   // 提取朝向选项 - 拆分为单个方向
   const getUniqueTowards = computed(() => {
     const towards = new Set<string>()
-    properties.value.forEach(p => {
+    properties.value.forEach((p) => {
       if (p.roomTypeDetails) {
-        p.roomTypeDetails.forEach(detail => {
+        p.roomTypeDetails.forEach((detail) => {
           if (detail.houseTypeList) {
-            detail.houseTypeList.forEach(house => {
+            detail.houseTypeList.forEach((house) => {
               if (house.towards) {
                 // 拆分朝向，如 "朝南" -> "南", "朝南,朝北" -> ["南", "北"]
-                house.towards.split(',').forEach(t => {
+                house.towards.split(',').forEach((t) => {
                   const direction = t.replace('朝', '').trim()
-                  if (direction) towards.add(direction)
+                  if (direction)
+                    towards.add(direction)
                 })
               }
             })
@@ -141,16 +149,17 @@ export const usePropertyStore = defineStore('property', () => {
         })
       }
     })
-    return Array.from(towards).filter(Boolean).sort()
+    return [...towards].filter(Boolean).sort()
   })
 
   // 提取行政区选项
   const getUniqueDistricts = computed(() => {
     const districts = new Set<string>()
-    properties.value.forEach(p => {
-      if (p.district) districts.add(p.district)
+    properties.value.forEach((p) => {
+      if (p.district)
+        districts.add(p.district)
     })
-    return Array.from(districts).filter(Boolean).sort()
+    return [...districts].filter(Boolean).sort()
   })
 
   const getPropertyByNo = (projectNo: string) => {
@@ -169,6 +178,6 @@ export const usePropertyStore = defineStore('property', () => {
     getAreaRange,
     getUniqueTowards,
     getUniqueDistricts,
-    getPropertyByNo
+    getPropertyByNo,
   }
 })

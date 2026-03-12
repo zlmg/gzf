@@ -13,30 +13,30 @@ export interface PoiItem {
 
 // 缓存条目接口
 export interface PoiCacheEntry {
-  timestamp: number      // 缓存创建时间
-  pois: PoiItem[]        // POI 数据数组
-  searchRadius: number   // 实际搜索半径
-  location: string       // 原始搜索位置 "lng,lat"
+  timestamp: number // 缓存创建时间
+  pois: PoiItem[] // POI 数据数组
+  searchRadius: number // 实际搜索半径
+  location: string // 原始搜索位置 "lng,lat"
 }
 
 // 导出数据结构
 export interface PoiExportData {
-  version: string        // 版本号 "1.0"
-  exportTime: number     // 导出时间戳
-  totalCount: number     // 条目总数
+  version: string // 版本号 "1.0"
+  exportTime: number // 导出时间戳
+  totalCount: number // 条目总数
   entries: PoiCacheExportEntry[]
 }
 
 // 导出条目（包含key）
 export interface PoiCacheExportEntry extends PoiCacheEntry {
-  key: string            // 缓存key（不含gzf-前缀）
+  key: string // 缓存key（不含gzf-前缀）
 }
 
 // 导入结果
 export interface ImportResult {
-  imported: number       // 成功导入数量
-  skipped: number        // 跳过数量（已有更新的数据）
-  errors: number         // 错误数量
+  imported: number // 成功导入数量
+  skipped: number // 跳过数量（已有更新的数据）
+  errors: number // 错误数量
 }
 
 // 缓存过期时间：90天
@@ -53,7 +53,7 @@ function generateKey(
   latitude: number | string,
   longitude: number | string,
   category: string,
-  radius: number
+  radius: number,
 ): string {
   const lat = Number(latitude).toFixed(3)
   const lng = Number(longitude).toFixed(3)
@@ -79,7 +79,7 @@ export function usePoiCache() {
     latitude: number | string,
     longitude: number | string,
     category: string,
-    radius: number
+    radius: number,
   ): PoiCacheEntry | null => {
     const key = generateKey(latitude, longitude, category, radius)
 
@@ -97,7 +97,8 @@ export function usePoiCache() {
       }
 
       return entry
-    } catch {
+    }
+    catch {
       // 数据损坏时删除
       storage.remove(key)
       return null
@@ -114,7 +115,7 @@ export function usePoiCache() {
     radius: number,
     pois: PoiItem[],
     searchRadius: number,
-    location: string
+    location: string,
   ): void => {
     const key = generateKey(latitude, longitude, category, radius)
 
@@ -122,12 +123,13 @@ export function usePoiCache() {
       timestamp: Date.now(),
       pois,
       searchRadius,
-      location
+      location,
     }
 
     try {
       storage.set(key, entry)
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to cache POI data:', e)
     }
   }
@@ -139,13 +141,14 @@ export function usePoiCache() {
     latitude: number | string,
     longitude: number | string,
     category?: string,
-    radius?: number
+    radius?: number,
   ): void => {
     if (category && radius) {
       // 清除特定缓存
       const key = generateKey(latitude, longitude, category, radius)
       storage.remove(key)
-    } else {
+    }
+    else {
       // 清除该位置的所有缓存（遍历所有分类和半径）
       const lat = Number(latitude).toFixed(3)
       const lng = Number(longitude).toFixed(3)
@@ -154,12 +157,13 @@ export function usePoiCache() {
       // 遍历 localStorage 删除匹配的 key
       try {
         const keys = Object.keys(localStorage)
-        keys.forEach(key => {
+        keys.forEach((key) => {
           if (key.includes(prefix)) {
             localStorage.removeItem(key)
           }
         })
-      } catch (e) {
+      }
+      catch (e) {
         console.error('Failed to clear POI cache:', e)
       }
     }
@@ -179,9 +183,10 @@ export function usePoiCache() {
         version: '1.0',
         exportTime: Date.now(),
         totalCount: entries.length,
-        entries: entries.map(e => ({ ...e.value, key: e.key }))
+        entries: entries.map(e => ({ ...e.value, key: e.key })),
       }
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to export POI cache:', e)
       return null
     }
@@ -231,7 +236,8 @@ export function usePoiCache() {
         importedCache.set(key, entry)
 
         result.imported++
-      } catch (e) {
+      }
+      catch (e) {
         console.error('Failed to import cache entry:', e)
         result.errors++
       }
@@ -247,7 +253,7 @@ export function usePoiCache() {
     latitude: number | string,
     longitude: number | string,
     category: string,
-    radius: number
+    radius: number,
   ): PoiCacheEntry | null => {
     const key = generateKey(latitude, longitude, category, radius)
 
@@ -279,6 +285,6 @@ export function usePoiCache() {
     isExpired,
     exportCache,
     importCache,
-    getCachedWithImport
+    getCachedWithImport,
   }
 }

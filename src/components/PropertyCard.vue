@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import type { Property } from '@/types/property'
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import type { Property } from '@/types/property'
-import { formatPriceRange, formatRoomType, formatOpenQueue, truncateText } from '@/utils/format'
+import { getImageUrl } from '@/config'
 import { useCompareStore } from '@/stores/compare'
 import { useFilterStore } from '@/stores/filter'
 import { useHistoryStore } from '@/stores/history'
-import { getImageUrl } from '@/config'
+import { formatOpenQueue, formatPriceRange, formatRoomType, truncateText } from '@/utils/format'
 import FavoriteButton from './FavoriteButton.vue'
 
 const props = defineProps<{
@@ -18,11 +18,14 @@ const filterStore = useFilterStore()
 const historyStore = useHistoryStore()
 
 const mainImage = computed(() => {
-  if (!props.property.thumbnail) return ''
+  if (!props.property.thumbnail)
+    return ''
   const images = props.property.thumbnail.split(',')
   const path = images[0]
-  if (!path || !path.trim()) return ''
-  if (path.startsWith('http')) return path
+  if (!path || !path.trim())
+    return ''
+  if (path.startsWith('http'))
+    return path
   return getImageUrl(path)
 })
 
@@ -34,7 +37,7 @@ const isAvailable = computed(() => {
   return props.property.kezuCount > 0
 })
 
-const handleToggleCompare = (e: Event) => {
+function handleToggleCompare(e: Event) {
   e.preventDefault()
   e.stopPropagation()
   compareStore.toggleCompare(props.property)
@@ -44,9 +47,9 @@ const handleToggleCompare = (e: Event) => {
 const propertyEquipments = computed(() => {
   const equipments = new Set<string>()
   if (props.property.roomTypeDetails) {
-    props.property.roomTypeDetails.forEach(detail => {
+    props.property.roomTypeDetails.forEach((detail) => {
       if (detail.houseTypeList) {
-        detail.houseTypeList.forEach(house => {
+        detail.houseTypeList.forEach((house) => {
           if (house.roomEquipment) {
             house.roomEquipment.split(',').forEach(e => equipments.add(e.trim()))
           }
@@ -54,16 +57,16 @@ const propertyEquipments = computed(() => {
       }
     })
   }
-  return Array.from(equipments).filter(Boolean)
+  return [...equipments].filter(Boolean)
 })
 
 // 提取房源的所有标签
 const propertyLabels = computed(() => {
   const labels = new Set<string>()
   if (props.property.roomTypeDetails) {
-    props.property.roomTypeDetails.forEach(detail => {
+    props.property.roomTypeDetails.forEach((detail) => {
       if (detail.houseTypeList) {
-        detail.houseTypeList.forEach(house => {
+        detail.houseTypeList.forEach((house) => {
           if (house.roomLabel) {
             house.roomLabel.split(',').forEach(l => labels.add(l.trim()))
           }
@@ -71,16 +74,16 @@ const propertyLabels = computed(() => {
       }
     })
   }
-  return Array.from(labels).filter(Boolean)
+  return [...labels].filter(Boolean)
 })
 
 // 提取房源的所有面积
 const propertyAreas = computed(() => {
   const areas = new Set<string>()
   if (props.property.roomTypeDetails) {
-    props.property.roomTypeDetails.forEach(detail => {
+    props.property.roomTypeDetails.forEach((detail) => {
       if (detail.houseTypeList) {
-        detail.houseTypeList.forEach(house => {
+        detail.houseTypeList.forEach((house) => {
           if (house.area) {
             areas.add(house.area.trim())
           }
@@ -88,19 +91,21 @@ const propertyAreas = computed(() => {
       }
     })
   }
-  return Array.from(areas).filter(Boolean)
+  return [...areas].filter(Boolean)
 })
 
 // 格式化面积显示（提取数值，显示范围）
 const formattedArea = computed(() => {
-  if (propertyAreas.value.length === 0) return null
+  if (propertyAreas.value.length === 0)
+    return null
 
   // 提取数值（去掉m²等单位）
   const numbers = propertyAreas.value
-    .map(area => parseFloat(area.replace(/[^\d.]/g, '')))
-    .filter(n => !isNaN(n))
+    .map(area => Number.parseFloat(area.replace(/[^\d.]/g, '')))
+    .filter(n => !Number.isNaN(n))
 
-  if (numbers.length === 0) return null
+  if (numbers.length === 0)
+    return null
 
   const min = Math.min(...numbers)
   const max = Math.max(...numbers)
@@ -114,14 +119,16 @@ const formattedArea = computed(() => {
 // 显示在卡片上的设备：用户筛选了的 AND 房源有的
 const displayEquipments = computed(() => {
   const selected = filterStore.filters.equipment
-  if (!selected || selected.length === 0) return []
+  if (!selected || selected.length === 0)
+    return []
   return propertyEquipments.value.filter(eq => selected.includes(eq))
 })
 
 // 显示在卡片上的标签：用户筛选了的 AND 房源有的
 const displayLabels = computed(() => {
   const selected = filterStore.filters.label
-  if (!selected || selected.length === 0) return []
+  if (!selected || selected.length === 0)
+    return []
   return propertyLabels.value.filter(label => selected.includes(label))
 })
 
@@ -132,7 +139,8 @@ const viewedAt = computed(() => {
 
 // 格式化浏览时间（精确到秒）
 const formattedViewedAt = computed(() => {
-  if (!viewedAt.value) return null
+  if (!viewedAt.value)
+    return null
   const date = new Date(viewedAt.value)
   return date.toLocaleString('zh-CN', {
     year: 'numeric',
@@ -140,7 +148,7 @@ const formattedViewedAt = computed(() => {
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit'
+    second: '2-digit',
   })
 })
 </script>
@@ -157,17 +165,19 @@ const formattedViewedAt = computed(() => {
         :alt="property.projectName"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         loading="lazy"
-      />
+      >
       <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
         <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <path
+            stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
         </svg>
       </div>
       <div class="absolute top-2 right-2 flex gap-2">
         <button
-          @click.stop.prevent
           class="p-1.5 bg-white/80 backdrop-blur-sm rounded-full hover:bg-white transition-colors shadow-sm"
+          @click.stop.prevent
         >
           <FavoriteButton :property="property" size="small" />
         </button>
@@ -236,9 +246,8 @@ const formattedViewedAt = computed(() => {
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
           <span
-            :class="[
-              'text-xs',
-              property.openQueue === '是' ? 'text-green-600' : 'text-gray-500'
+            class="text-xs" :class="[
+              property.openQueue === '是' ? 'text-green-600' : 'text-gray-500',
             ]"
           >
             {{ formatOpenQueue(property.openQueue) }}
@@ -248,13 +257,12 @@ const formattedViewedAt = computed(() => {
           </span>
         </div>
         <button
-          @click="handleToggleCompare"
-          :class="[
-            'px-3 py-1.5 text-sm rounded-lg transition-colors',
+          class="px-3 py-1.5 text-sm rounded-lg transition-colors" :class="[
             isInCompare
               ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
           ]"
+          @click="handleToggleCompare"
         >
           {{ isInCompare ? '已添加对比' : '+ 加入对比' }}
         </button>

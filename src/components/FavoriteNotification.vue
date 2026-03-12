@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Transition } from 'vue'
 import { useFavoriteStore } from '@/stores/favorite'
 
 const favoriteStore = useFavoriteStore()
@@ -10,13 +9,12 @@ const favoriteStore = useFavoriteStore()
     <Transition name="notification">
       <div
         v-if="favoriteStore.notification.show"
-        :class="[
-          'fixed top-4 right-4 z-[9999] px-4 py-3 rounded-lg shadow-lg flex items-center gap-2',
+        class="fixed top-4 right-4 z-[9999] px-4 py-3 rounded-lg shadow-lg flex items-center gap-2" :class="[
           {
             'bg-green-50 text-green-800 border border-green-200': favoriteStore.notification.type === 'success',
             'bg-red-50 text-red-800 border border-red-200': favoriteStore.notification.type === 'error',
-            'bg-yellow-50 text-yellow-800 border border-yellow-200': favoriteStore.notification.type === 'warning'
-          }
+            'bg-yellow-50 text-yellow-800 border border-yellow-200': favoriteStore.notification.type === 'warning',
+          },
         ]"
       >
         <!-- Success Icon -->

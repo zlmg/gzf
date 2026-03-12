@@ -1,8 +1,8 @@
 import { computed } from 'vue'
-import { usePropertyStore } from '@/stores/property'
 import { useFilterStore } from '@/stores/filter'
+import { usePropertyStore } from '@/stores/property'
 
-export const useProperty = () => {
+export function useProperty() {
   const propertyStore = usePropertyStore()
   const filterStore = useFilterStore()
 
@@ -29,6 +29,6 @@ export const useProperty = () => {
     fetchProperties,
     getPropertyByNo,
     uniqueLayouts: computed(() => propertyStore.getUniqueLayouts),
-    uniqueRoomTypes: computed(() => propertyStore.getUniqueRoomTypes)
+    uniqueRoomTypes: computed(() => propertyStore.getUniqueRoomTypes),
   }
 }

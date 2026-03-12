@@ -1,10 +1,10 @@
+import type { FavoriteItem, HistoryItem, Preferences, User } from '@/types/user'
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
-import { authApi, userApi, ApiError } from '@/api'
-import type { User, FavoriteItem, HistoryItem, Preferences } from '@/types/user'
+import { computed, ref } from 'vue'
+import { ApiError, authApi, userApi } from '@/api'
 import { useFavoriteStore } from './favorite'
-import { useHistoryStore } from './history'
 import { useFilterStore } from './filter'
+import { useHistoryStore } from './history'
 
 const TOKEN_KEY = 'gzf-token'
 const USER_KEY = 'gzf-user'
@@ -21,7 +21,8 @@ export const useAuthStore = defineStore('auth', () => {
   if (storedUser) {
     try {
       user.value = JSON.parse(storedUser)
-    } catch {
+    }
+    catch {
       localStorage.removeItem(USER_KEY)
     }
   }
@@ -49,11 +50,13 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       return { success: false, message: response.message }
-    } catch (e) {
+    }
+    catch (e) {
       const message = e instanceof ApiError ? e.message : '登录失败'
       error.value = message
       return { success: false, message }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -76,11 +79,13 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       return { success: false, message: response.message }
-    } catch (e) {
+    }
+    catch (e) {
       const message = e instanceof ApiError ? e.message : '注册失败'
       error.value = message
       return { success: false, message }
-    } finally {
+    }
+    finally {
       loading.value = false
     }
   }
@@ -95,7 +100,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   // 拉取云端数据并合并
   const pullCloudData = async () => {
-    if (!isAuthenticated.value) return
+    if (!isAuthenticated.value)
+      return
 
     try {
       syncStatus.value = 'syncing'
@@ -119,7 +125,8 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       syncStatus.value = 'idle'
-    } catch (e) {
+    }
+    catch (e) {
       console.error('Failed to pull cloud data:', e)
       syncStatus.value = 'error'
     }
@@ -147,9 +154,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     // 更新 store
-    favoriteStore.favorites = Array.from(merged.values())
-      .sort((a, b) => b.addedAt - a.addedAt)
-      .slice(0, 50) // 限制最大数量
+    favoriteStore.favorites = merged.values().toSorted((a, b) => b.addedAt - a.addedAt).slice(0, 50) // 限制最大数量
 
     // 保存到 localStorage
     localStorage.setItem('gzf-favorites', JSON.stringify(favoriteStore.favorites))
@@ -177,9 +182,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     // 更新 store
-    historyStore.history = Array.from(merged.values())
-      .sort((a, b) => b.viewedAt - a.viewedAt)
-      .slice(0, 100) // 限制最大数量
+    historyStore.history = merged.values().toSorted((a, b) => b.viewedAt - a.viewedAt).slice(0, 100) // 限制最大数量
 
     // 保存到 localStorage
     localStorage.setItem('gzf-history', JSON.stringify(historyStore.history))
@@ -211,6 +214,6 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     register,
     logout,
-    pullCloudData
+    pullCloudData,
   }
 })

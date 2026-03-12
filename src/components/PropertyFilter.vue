@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { usePropertyStore } from '@/stores/property'
+import type { AvailableStatus, OpenStatus } from '@/types/property'
+import { ElButton, ElInput, ElOption, ElSelect, ElSlider } from 'element-plus'
+import { computed, ref, watch } from 'vue'
 import { useFilterStore } from '@/stores/filter'
-import { ElSlider, ElInput, ElButton, ElSelect, ElOption } from 'element-plus'
-import type { OpenStatus, AvailableStatus } from '@/types/property'
+import { usePropertyStore } from '@/stores/property'
 
-const openStatusOptions: { label: string; value: OpenStatus }[] = [
+const openStatusOptions: { label: string, value: OpenStatus }[] = [
   { label: '全部', value: '' },
   { label: '开放', value: 'open' },
-  { label: '未开放', value: 'closed' }
+  { label: '未开放', value: 'closed' },
 ]
 
-const availableStatusOptions: { label: string; value: AvailableStatus }[] = [
+const availableStatusOptions: { label: string, value: AvailableStatus }[] = [
   { label: '全部', value: '' },
   { label: '有房', value: 'available' },
-  { label: '无房', value: 'unavailable' }
+  { label: '无房', value: 'unavailable' },
 ]
 
 // 固定的户型选项
@@ -40,7 +40,7 @@ const localFilters = ref({
   excludeRoomType: filterStore.filters.excludeRoomType || false,
   excludeEquipment: filterStore.filters.excludeEquipment || false,
   excludeLabel: filterStore.filters.excludeLabel || false,
-  excludeTowards: filterStore.filters.excludeTowards || false
+  excludeTowards: filterStore.filters.excludeTowards || false,
 })
 
 const isExpanded = ref(false)
@@ -51,21 +51,23 @@ const labels = computed(() => propertyStore.getUniqueLabels)
 const towards = computed(() => propertyStore.getUniqueTowards)
 const areaRange = computed(() => propertyStore.getAreaRange)
 
-const toggleRoomType = (type: string) => {
+function toggleRoomType(type: string) {
   const index = localFilters.value.roomType.indexOf(type)
   if (index > -1) {
     localFilters.value.roomType.splice(index, 1)
-  } else {
+  }
+  else {
     localFilters.value.roomType.push(type)
   }
   filterStore.updateFilters({ roomType: [...localFilters.value.roomType] })
 }
 
-const toggleTowards = (t: string) => {
+function toggleTowards(t: string) {
   const index = localFilters.value.towards.indexOf(t)
   if (index > -1) {
     localFilters.value.towards.splice(index, 1)
-  } else {
+  }
+  else {
     localFilters.value.towards.push(t)
   }
   filterStore.updateFilters({ towards: [...localFilters.value.towards] })
@@ -76,7 +78,7 @@ const maxPrice = computed(() => {
   return Math.max(...prices, 10000)
 })
 
-const applyFilters = () => {
+function applyFilters() {
   filterStore.updateFilters({
     layout: localFilters.value.layout,
     roomType: localFilters.value.roomType,
@@ -93,11 +95,11 @@ const applyFilters = () => {
     excludeRoomType: localFilters.value.excludeRoomType,
     excludeEquipment: localFilters.value.excludeEquipment,
     excludeLabel: localFilters.value.excludeLabel,
-    excludeTowards: localFilters.value.excludeTowards
+    excludeTowards: localFilters.value.excludeTowards,
   })
 }
 
-const resetFilters = () => {
+function resetFilters() {
   localFilters.value = {
     layout: [],
     roomType: [],
@@ -114,7 +116,7 @@ const resetFilters = () => {
     excludeRoomType: false,
     excludeEquipment: false,
     excludeLabel: false,
-    excludeTowards: false
+    excludeTowards: false,
   }
   filterStore.resetFilters()
 }
@@ -132,13 +134,19 @@ watch(() => localFilters.value.keyword, (newVal) => {
 <template>
   <div class="bg-white rounded-xl shadow-md p-3 md:p-4 mb-6 overflow-x-hidden">
     <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-      <h2 class="text-base md:text-lg font-semibold text-gray-700">筛选条件</h2>
+      <h2 class="text-base md:text-lg font-semibold text-gray-700">
+        筛选条件
+      </h2>
       <div class="flex items-center gap-2">
-        <ElButton size="small" @click="resetFilters">重置</ElButton>
-        <ElButton type="primary" size="small" @click="applyFilters">应用</ElButton>
+        <ElButton size="small" @click="resetFilters">
+          重置
+        </ElButton>
+        <ElButton type="primary" size="small" @click="applyFilters">
+          应用
+        </ElButton>
         <button
-          @click="isExpanded = !isExpanded"
           class="text-gray-500 hover:text-gray-700 transition-colors p-1"
+          @click="isExpanded = !isExpanded"
         >
           <svg
             class="w-5 h-5 transition-transform"
@@ -170,11 +178,11 @@ watch(() => localFilters.value.keyword, (newVal) => {
         <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
           区域
           <input
-            type="checkbox"
             v-model="localFilters.excludeLayout"
+            type="checkbox"
             class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
             title="勾选表示排除所选区域"
-          />
+          >
           <span v-if="localFilters.excludeLayout" class="text-xs text-red-500">(排除)</span>
         </label>
         <ElSelect
@@ -200,11 +208,11 @@ watch(() => localFilters.value.keyword, (newVal) => {
         <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
           户型
           <input
-            type="checkbox"
             v-model="localFilters.excludeRoomType"
+            type="checkbox"
             class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
             title="勾选表示排除所选户型"
-          />
+          >
           <span v-if="localFilters.excludeRoomType" class="text-xs text-red-500">(排除)</span>
         </label>
         <div class="flex items-center gap-1">
@@ -267,11 +275,11 @@ watch(() => localFilters.value.keyword, (newVal) => {
         <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
           朝向
           <input
-            type="checkbox"
             v-model="localFilters.excludeTowards"
+            type="checkbox"
             class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
             title="勾选表示排除所选朝向"
-          />
+          >
           <span v-if="localFilters.excludeTowards" class="text-xs text-red-500">(排除)</span>
         </label>
         <div class="flex items-center gap-1 flex-wrap">
@@ -303,11 +311,11 @@ watch(() => localFilters.value.keyword, (newVal) => {
           <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
             设备
             <input
-              type="checkbox"
               v-model="localFilters.excludeEquipment"
+              type="checkbox"
               class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
               title="勾选表示排除所选设备"
-            />
+            >
             <span v-if="localFilters.excludeEquipment" class="text-xs text-red-500">(排除)</span>
           </label>
           <ElSelect
@@ -333,11 +341,11 @@ watch(() => localFilters.value.keyword, (newVal) => {
           <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
             标签
             <input
-              type="checkbox"
               v-model="localFilters.excludeLabel"
+              type="checkbox"
               class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
               title="勾选表示排除所选标签"
-            />
+            >
             <span v-if="localFilters.excludeLabel" class="text-xs text-red-500">(排除)</span>
           </label>
           <ElSelect
@@ -364,8 +372,8 @@ watch(() => localFilters.value.keyword, (newVal) => {
             面积: {{ localFilters.areaRange[0] }}m² - {{ localFilters.areaRange[1] }}m²
           </label>
           <ElSlider
-            class="px-2"
             v-model="localFilters.areaRange"
+            class="px-2"
             range
             :min="areaRange[0]"
             :max="areaRange[1]"
@@ -380,8 +388,8 @@ watch(() => localFilters.value.keyword, (newVal) => {
             价格: ¥{{ localFilters.priceRange[0] }} - ¥{{ localFilters.priceRange[1] }}
           </label>
           <ElSlider
-            class="px-2"
             v-model="localFilters.priceRange"
+            class="px-2"
             range
             :max="maxPrice"
             :step="100"

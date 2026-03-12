@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
 import type { Property, RoomTypeDetail } from '@/types/property'
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 import { getImageUrl } from '@/config'
 
 export interface FavoriteItem {
@@ -27,33 +27,33 @@ export interface FavoriteItem {
 
 // 导出数据结构
 export interface FavoriteExportData {
-  version: string        // "1.0"
-  exportTime: number     // 导出时间戳
-  totalCount: number     // 收藏总数
+  version: string // "1.0"
+  exportTime: number // 导出时间戳
+  totalCount: number // 收藏总数
   entries: FavoriteItem[] // 收藏数据
 }
 
 // 导入结果
 export interface FavoriteImportResult {
-  imported: number       // 成功导入数量
-  skipped: number        // 跳过数量（已存在）
-  errors: number         // 错误数量
-  total: number          // 文件中总数
+  imported: number // 成功导入数量
+  skipped: number // 跳过数量（已存在）
+  errors: number // 错误数量
+  total: number // 文件中总数
 }
 
 // 导入预览结果
 export interface FavoriteImportPreview {
-  newCount: number       // 新增数量
-  existingCount: number  // 已存在数量
-  invalidCount: number   // 无效数量
-  canImport: number      // 实际可导入数量
-  total: number          // 文件中总数
+  newCount: number // 新增数量
+  existingCount: number // 已存在数量
+  invalidCount: number // 无效数量
+  canImport: number // 实际可导入数量
+  total: number // 文件中总数
 }
 
 const STORAGE_KEY = 'gzf-favorites'
 const MAX_FAVORITES = 50
 
-const loadFromStorage = (): FavoriteItem[] => {
+function loadFromStorage(): FavoriteItem[] {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
@@ -61,30 +61,32 @@ const loadFromStorage = (): FavoriteItem[] => {
       // Validate data structure
       if (Array.isArray(parsed)) {
         return parsed.filter(item =>
-          item.projectNo && item.projectName && item.addedAt
+          item.projectNo && item.projectName && item.addedAt,
         )
       }
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Failed to load favorites from storage:', e)
   }
   return []
 }
 
-const saveToStorage = (list: FavoriteItem[]) => {
+function saveToStorage(list: FavoriteItem[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
-  } catch (e) {
+  }
+  catch (e) {
     console.error('Failed to save favorites to storage:', e)
   }
 }
 
 export const useFavoriteStore = defineStore('favorite', () => {
   const favorites = ref<FavoriteItem[]>(loadFromStorage())
-  const notification = ref<{ show: boolean; message: string; type: 'success' | 'error' | 'warning' }>({
+  const notification = ref<{ show: boolean, message: string, type: 'success' | 'error' | 'warning' }>({
     show: false,
     message: '',
-    type: 'success'
+    type: 'success',
   })
 
   const count = computed(() => favorites.value.length)
@@ -100,7 +102,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
     }, 2000)
   }
 
-  const addToFavorites = (property: Property): { success: boolean; message: string } => {
+  const addToFavorites = (property: Property): { success: boolean, message: string } => {
     // Check if already exists
     if (isFavorite(property.projectNo)) {
       showNotification('该房源已在收藏列表中', 'warning')
@@ -132,7 +134,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
       openingDate: property.openingDate,
       totalArea: property.totalArea,
       houseSource: property.houseSource,
-      roomTypeDetails: property.roomTypeDetails
+      roomTypeDetails: property.roomTypeDetails,
     }
 
     favorites.value.unshift(item) // Add to beginning
@@ -141,7 +143,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
     return { success: true, message: '收藏成功' }
   }
 
-  const removeFromFavorites = (projectNo: string): { success: boolean; message: string } => {
+  const removeFromFavorites = (projectNo: string): { success: boolean, message: string } => {
     const index = favorites.value.findIndex(item => item.projectNo === projectNo)
     if (index === -1) {
       showNotification('未找到该收藏', 'error')
@@ -158,7 +160,8 @@ export const useFavoriteStore = defineStore('favorite', () => {
     if (isFavorite(property.projectNo)) {
       removeFromFavorites(property.projectNo)
       return false
-    } else {
+    }
+    else {
       addToFavorites(property)
       return true
     }
@@ -175,11 +178,14 @@ export const useFavoriteStore = defineStore('favorite', () => {
   }
 
   const getThumbnailUrl = (thumbnail: string): string => {
-    if (!thumbnail) return ''
+    if (!thumbnail)
+      return ''
     const images = thumbnail.split(',')
     const path = images[0]
-    if (!path) return ''
-    if (path.startsWith('http')) return path
+    if (!path)
+      return ''
+    if (path.startsWith('http'))
+      return path
     return getImageUrl(path)
   }
 
@@ -194,7 +200,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
       version: '1.0',
       exportTime: Date.now(),
       totalCount: favorites.value.length,
-      entries: [...favorites.value]
+      entries: [...favorites.value],
     }
   }
 
@@ -207,7 +213,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
       existingCount: 0,
       invalidCount: 0,
       canImport: 0,
-      total: data.entries?.length || 0
+      total: data.entries?.length || 0,
     }
 
     if (!data.entries || !Array.isArray(data.entries)) {
@@ -224,7 +230,8 @@ export const useFavoriteStore = defineStore('favorite', () => {
 
       if (isFavorite(entry.projectNo)) {
         preview.existingCount++
-      } else {
+      }
+      else {
         preview.newCount++
       }
     }
@@ -244,7 +251,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
       imported: 0,
       skipped: 0,
       errors: 0,
-      total: data.entries?.length || 0
+      total: data.entries?.length || 0,
     }
 
     // 验证版本
@@ -285,12 +292,13 @@ export const useFavoriteStore = defineStore('favorite', () => {
         // 添加收藏（设置新的 addedAt 时间）
         const item: FavoriteItem = {
           ...entry,
-          addedAt: entry.addedAt || Date.now()
+          addedAt: entry.addedAt || Date.now(),
         }
         favorites.value.unshift(item)
         imported++
         result.imported++
-      } catch (e) {
+      }
+      catch (e) {
         console.error('Failed to import favorite entry:', e)
         result.errors++
       }
@@ -316,6 +324,6 @@ export const useFavoriteStore = defineStore('favorite', () => {
     getThumbnailUrl,
     exportFavorites,
     previewImport,
-    importFavorites
+    importFavorites,
   }
 })

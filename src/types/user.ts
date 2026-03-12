@@ -1,4 +1,4 @@
-import type { RoomTypeDetail, FilterState, SortField, SortOrder } from './property'
+import type { FilterState, RoomTypeDetail, SortField, SortOrder } from './property'
 
 // ============ 用户信息 ============
 export interface User {

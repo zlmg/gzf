@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, watch, onUnmounted } from 'vue'
 import { useSwipe } from '@vueuse/core'
+import { computed, onUnmounted, ref, watch } from 'vue'
 
 const props = defineProps<{
   images: string[]
@@ -28,18 +28,21 @@ const containerRef = ref<HTMLElement | null>(null)
 const { direction } = useSwipe(containerRef, {
   threshold: 50,
   onSwipeEnd() {
-    if (isPinching.value || scale.value !== 1) return
+    if (isPinching.value || scale.value !== 1)
+      return
 
     if (direction.value === 'left') {
       handleNext()
-    } else if (direction.value === 'right') {
+    }
+    else if (direction.value === 'right') {
       handlePrev()
     }
-  }
+  },
 })
 
 const parsedImages = computed(() => {
-  if (!props.images || props.images.length === 0) return []
+  if (!props.images || props.images.length === 0)
+    return []
   return props.images
 })
 
@@ -74,10 +77,12 @@ function handleClose() {
 
 // Get touch distance for pinch zoom
 function getTouchDistance(touches: TouchList): number {
-  if (touches.length < 2) return 0
+  if (touches.length < 2)
+    return 0
   const touch0 = touches[0]
   const touch1 = touches[1]
-  if (!touch0 || !touch1) return 0
+  if (!touch0 || !touch1)
+    return 0
   const dx = touch0.clientX - touch1.clientX
   const dy = touch0.clientY - touch1.clientY
   return Math.sqrt(dx * dx + dy * dy)
@@ -125,7 +130,8 @@ let lastTapTime = 0
 function handleDoubleTap() {
   if (scale.value === 1) {
     scale.value = 2
-  } else {
+  }
+  else {
     resetZoom()
   }
 }
@@ -140,10 +146,14 @@ function handleImageClick() {
 
 // Keyboard navigation
 function handleKeydown(e: KeyboardEvent) {
-  if (e.key === 'ArrowLeft') handlePrev()
-  if (e.key === 'ArrowRight') handleNext()
-  if (e.key === 'Escape') handleClose()
-  if (e.key === '0' || e.key === 'Home') resetZoom()
+  if (e.key === 'ArrowLeft')
+    handlePrev()
+  if (e.key === 'ArrowRight')
+    handleNext()
+  if (e.key === 'Escape')
+    handleClose()
+  if (e.key === '0' || e.key === 'Home')
+    resetZoom()
 }
 
 // Prevent body scroll when viewer is open
@@ -160,7 +170,8 @@ onUnmounted(() => {
 // Reset zoom when images change
 watch(() => props.images, resetZoom)
 watch(() => props.initialIndex, (val) => {
-  if (val !== undefined) currentIndex.value = val
+  if (val !== undefined)
+    currentIndex.value = val
   resetZoom()
 })
 </script>
@@ -169,6 +180,7 @@ watch(() => props.initialIndex, (val) => {
   <Teleport to="body">
     <Transition name="viewer-fade">
       <div
+        v-show="true"
         ref="containerRef"
         class="fixed inset-0 z-50 bg-black/95 flex flex-col touch-pan-y select-none"
         @touchstart="handleTouchStart"
@@ -180,9 +192,9 @@ watch(() => props.initialIndex, (val) => {
         <!-- Header -->
         <div class="flex items-center justify-between px-4 py-3 bg-gradient-to-b from-black/70 to-transparent text-white shrink-0">
           <button
-            @click="handleClose"
             class="p-2 -ml-2 hover:bg-white/10 rounded-full transition-colors"
             aria-label="关闭"
+            @click="handleClose"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -205,20 +217,20 @@ watch(() => props.initialIndex, (val) => {
               class="max-h-full max-w-full object-contain transition-transform duration-100"
               :style="{
                 transform: `scale(${scale}) translate(${translateX}px, ${translateY}px)`,
-                transformOrigin: 'center center'
+                transformOrigin: 'center center',
               }"
               draggable="false"
               @click="handleImageClick"
               @click.stop
-            />
+            >
           </TransitionGroup>
 
           <!-- Navigation buttons (desktop) -->
           <button
             v-if="canPrev"
-            @click="handlePrev"
             class="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
             aria-label="上一张"
+            @click="handlePrev"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -227,9 +239,9 @@ watch(() => props.initialIndex, (val) => {
 
           <button
             v-if="canNext"
-            @click="handleNext"
             class="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
             aria-label="下一张"
+            @click="handleNext"
           >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -239,10 +251,10 @@ watch(() => props.initialIndex, (val) => {
           <!-- Zoom controls -->
           <div class="absolute bottom-20 md:bottom-16 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/50 rounded-full px-4 py-2">
             <button
-              @click="scale = Math.max(scale - 0.25, 1)"
               :disabled="scale <= 1"
               class="w-8 h-8 flex items-center justify-center text-white hover:bg-white/10 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="缩小"
+              @click="scale = Math.max(scale - 0.25, 1)"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
@@ -250,10 +262,10 @@ watch(() => props.initialIndex, (val) => {
             </button>
             <span class="text-white text-sm min-w-[3rem] text-center">{{ Math.round(scale * 100) }}%</span>
             <button
-              @click="scale = Math.min(scale + 0.25, 4)"
               :disabled="scale >= 4"
               class="w-8 h-8 flex items-center justify-center text-white hover:bg-white/10 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="放大"
+              @click="scale = Math.min(scale + 0.25, 4)"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -261,9 +273,9 @@ watch(() => props.initialIndex, (val) => {
             </button>
             <button
               v-if="scale !== 1"
-              @click="resetZoom"
               class="w-8 h-8 flex items-center justify-center text-white hover:bg-white/10 rounded-full"
               aria-label="重置缩放"
+              @click="resetZoom"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -293,16 +305,16 @@ watch(() => props.initialIndex, (val) => {
           <button
             v-for="(image, index) in parsedImages"
             :key="index"
-            @click="currentIndex = index; resetZoom()"
             class="flex-shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-all"
             :class="currentIndex === index ? 'border-blue-500 ring-2 ring-blue-500/50' : 'border-white/30 hover:border-white/50'"
+            @click="currentIndex = index; resetZoom()"
           >
             <img
               :src="image"
               :alt="`缩略图 ${index + 1}`"
               class="w-full h-full object-cover"
               loading="lazy"
-            />
+            >
           </button>
         </div>
       </div>
@@ -325,7 +337,9 @@ watch(() => props.initialIndex, (val) => {
 /* Slide transition for images */
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
   position: absolute;
 }
 
