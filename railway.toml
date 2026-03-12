@@ -3,7 +3,7 @@ builder = "nixpacks"
 buildCommand = "pnpm install && pnpm --filter server db:generate && pnpm build:server"
 
 [deploy]
-startCommand = "cd apps/server && node dist/index.js"
+startCommand = "cd apps/server && npx prisma migrate deploy && node dist/index.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
