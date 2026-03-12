@@ -1,8 +1,39 @@
 import type { FastifyInstance } from 'fastify'
 import archiver from 'archiver'
 import { Readable } from 'stream'
+import { z } from 'zod'
 import { prisma } from '../prisma/client.js'
 import { adminMiddleware } from '../middleware/admin.js'
+
+// 验证 schema
+const UserImportSchema = z.object({
+  username: z.string().min(1).max(50),
+  favorites: z.string(),
+  history: z.string(),
+  preferences: z.string()
+})
+
+const PoiImportSchema = z.object({
+  latitude: z.string().regex(/^\d+\.\d{3}$/, '纬度格式错误'),
+  longitude: z.string().regex(/^\d+\.\d{3}$/, '经度格式错误'),
+  category: z.string().min(1),
+  data: z.string()
+})
+
+const ManifestSchema = z.object({
+  version: z.string(),
+  exportedAt: z.string().datetime(),
+  counts: z.object({
+    users: z.number().int().nonnegative(),
+    pois: z.number().int().nonnegative()
+  })
+})
+
+const ImportFileSchema = z.object({
+  manifest: ManifestSchema,
+  users: z.array(UserImportSchema),
+  pois: z.array(PoiImportSchema)
+})
 
 export async function adminRoutes(app: FastifyInstance) {
   // 所有管理路由都需要管理员权限
@@ -69,6 +100,120 @@ export async function adminRoutes(app: FastifyInstance) {
       return reply.status(500).send({
         success: false,
         message: '导出失败'
+      })
+    }
+  })
+
+  // 导入数据库
+  app.post('/import', async (request, reply) => {
+    try {
+      // 获取上传的文件
+      const file = await request.file()
+
+      if (!file) {
+        return reply.status(400).send({
+          success: false,
+          message: '未提供文件'
+        })
+      }
+
+      // 检查文件类型
+      if (!file.filename.endsWith('.zip') && file.mimetype !== 'application/zip') {
+        return reply.status(400).send({
+          success: false,
+          message: '无效的文件格式，请上传 ZIP 文件'
+        })
+      }
+
+      // 解析 ZIP 文件
+      const unzipper = await import('unzipper')
+      const buffer = await file.toBuffer()
+      const directory = await unzipper.Open.buffer(buffer)
+
+      const files: Record<string, string> = {}
+
+      for (const entry of directory.files) {
+        const content = await entry.buffer()
+        files[entry.path] = content.toString('utf-8')
+      }
+
+      // 验证必需文件存在
+      if (!files['manifest.json'] || !files['users.json'] || !files['pois.json']) {
+        return reply.status(400).send({
+          success: false,
+          message: 'ZIP 文件缺少必需文件：manifest.json, users.json 或 pois.json'
+        })
+      }
+
+      // 解析并验证数据
+      let manifest: unknown, users: unknown, pois: unknown
+
+      try {
+        manifest = JSON.parse(files['manifest.json'])
+        users = JSON.parse(files['users.json']).users
+        pois = JSON.parse(files['pois.json']).pois
+      } catch (e) {
+        return reply.status(400).send({
+          success: false,
+          message: 'JSON 解析失败，文件格式错误'
+        })
+      }
+
+      // 验证数据结构
+      const validationResult = ImportFileSchema.safeParse({
+        manifest,
+        users,
+        pois
+      })
+
+      if (!validationResult.success) {
+        return reply.status(400).send({
+          success: false,
+          message: `数据验证失败：${validationResult.error.message}`
+        })
+      }
+
+      const validUsers = validationResult.data.users
+      const validPois = validationResult.data.pois
+
+      // 事务导入
+      const result = await prisma.$transaction(async (tx) => {
+        // 批量导入用户
+        const usersResult = await tx.user.createMany({
+          data: validUsers.map(u => ({
+            username: u.username,
+            password: '', // 导入的用户需要重置密码
+            favorites: u.favorites,
+            history: u.history,
+            preferences: u.preferences
+          })),
+          skipDuplicates: true
+        })
+
+        // 批量导入 POI
+        const poisResult = await tx.poi.createMany({
+          data: validPois,
+          skipDuplicates: true
+        })
+
+        return {
+          usersImported: usersResult.count,
+          usersSkipped: validUsers.length - usersResult.count,
+          poisImported: poisResult.count,
+          poisSkipped: validPois.length - poisResult.count
+        }
+      })
+
+      return reply.send({
+        success: true,
+        message: '导入成功',
+        data: result
+      })
+    } catch (error) {
+      request.log.error(error)
+      return reply.status(500).send({
+        success: false,
+        message: '导入失败，请检查服务器日志'
       })
     }
   })
