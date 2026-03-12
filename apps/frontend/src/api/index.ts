@@ -14,6 +14,18 @@ export interface PoiSearchResponse {
   message?: string
 }
 
+// 管理员 API 响应类型
+export interface ImportResponse {
+  success: boolean
+  message: string
+  data: {
+    usersImported: number
+    usersSkipped: number
+    poisImported: number
+    poisSkipped: number
+  }
+}
+
 class ApiError extends Error {
   status: number
   data?: unknown
@@ -102,6 +114,52 @@ export const userApi = {
 export const poiApi = {
   search: (latitude: number | string, longitude: number | string, category: string) =>
     request<PoiSearchResponse>(`/api/poi/search?latitude=${latitude}&longitude=${longitude}&category=${category}`),
+}
+
+// 管理员 API
+export const adminApi = {
+  // 导出数据库
+  exportDatabase: async (): Promise<void> => {
+    const token = localStorage.getItem('gzf-token')
+    const response = await fetch(`${API_BASE}/api/admin/export`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+
+    if (!response.ok) {
+      const data = await response.json()
+      throw new ApiError(data.message || '导出失败', response.status)
+    }
+
+    const blob = await response.blob()
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    const filename = response.headers.get('content-disposition')?.match(/filename="(.+)"/)?.[1] || 'export.zip'
+    link.download = filename
+    link.click()
+    URL.revokeObjectURL(url)
+  },
+
+  // 导入数据库
+  importDatabase: async (file: File): Promise<ImportResponse> => {
+    const token = localStorage.getItem('gzf-token')
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const response = await fetch(`${API_BASE}/api/admin/import`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new ApiError(data.message || '导入失败', response.status, data)
+    }
+
+    return data
+  },
 }
 
 export { ApiError }
