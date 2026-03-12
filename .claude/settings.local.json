@@ -16,7 +16,9 @@
       "WebFetch(domain:element-plus.org)",
       "Bash(git add:*)",
       "Bash(cd /Users/minos/File/WebFile/demo/gzf/server && pnpm install)",
-      "Bash(cd /Users/minos/File/WebFile/demo/gzf/server && pnpm db:generate)"
+      "Bash(cd /Users/minos/File/WebFile/demo/gzf/server && pnpm db:generate)",
+      "Bash(ipconfig getifaddr:*)",
+      "Bash(ls -la /Users/minos/File/WebFile/demo/gzf/.env* 2>/dev/null || echo \"No .env files\")"
     ]
   }
 }
