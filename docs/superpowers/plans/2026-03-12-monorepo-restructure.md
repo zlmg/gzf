@@ -46,60 +46,34 @@ packages:
 Run: `cat pnpm-workspace.yaml`
 Expected: 输出 workspace 配置内容
 
-### Task 3: 创建根 package.json
+### Task 3: 创建 pnpm-workspace.yaml
 
 **Files:**
-- Create: `package.json` (覆盖现有文件)
+- Create: `pnpm-workspace.yaml`
 
-- [ ] **Step 1: 备份当前 package.json**
+- [ ] **Step 1: 创建 workspace 配置文件**
 
-```bash
-cp package.json package.json.backup
+```yaml
+packages:
+  - 'apps/*'
 ```
 
-- [ ] **Step 2: 创建新的根 package.json**
+- [ ] **Step 2: 验证文件内容**
 
-```json
-{
-  "name": "gzf-monorepo",
-  "private": true,
-  "scripts": {
-    "dev": "pnpm -r dev",
-    "dev:frontend": "pnpm --filter frontend dev",
-    "dev:server": "pnpm --filter server dev",
-    "build": "pnpm -r build",
-    "build:frontend": "pnpm --filter frontend build",
-    "build:server": "pnpm --filter server build",
-    "lint": "pnpm -r lint",
-    "clean": "pnpm -r clean && rm -rf node_modules"
-  },
-  "devDependencies": {
-    "simple-git-hooks": "^2.13.1",
-    "lint-staged": "^16.3.3"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
-  }
-}
-```
-
-- [ ] **Step 3: 验证文件创建成功**
-
-Run: `cat package.json`
-Expected: 输出新的根 package.json 内容
+Run: `cat pnpm-workspace.yaml`
+Expected: 输出 workspace 配置内容
 
 ### Task 4: 提交 Chunk 1
 
 - [ ] **Step 1: 提交 workspace 配置**
 
 ```bash
-git add apps/.gitkeep pnpm-workspace.yaml package.json
+git add apps/.gitkeep pnpm-workspace.yaml
 git commit -m "$(cat <<'EOF'
 chore: 创建 monorepo 目录结构和 workspace 配置
 
 - 创建 apps/ 目录
 - 添加 pnpm-workspace.yaml
-- 更新根 package.json 为 workspace 配置
 EOF
 )"
 ```
@@ -198,67 +172,66 @@ git mv .env.example apps/frontend/.env.example
 Run: `ls -la apps/frontend/.env*`
 Expected: 看到三个环境变量文件
 
-### Task 8: 创建前端 package.json
+### Task 8: 移动前端 package.json
 
 **Files:**
-- Create: `apps/frontend/package.json`
+- Move: `package.json` → `apps/frontend/package.json`
 
-- [ ] **Step 1: 读取原 package.json.backup 获取依赖**
+- [ ] **Step 1: 移动 package.json 到 frontend**
 
-Run: `cat package.json.backup`
-
-- [ ] **Step 2: 创建前端 package.json**
-
-```json
-{
-  "name": "frontend",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc -b && vite build",
-    "preview": "vite preview",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
-  },
-  "dependencies": {
-    "@amap/amap-jsapi-loader": "^1.0.1",
-    "@element-plus/icons-vue": "^2.3.2",
-    "@vueuse/core": "^14.2.1",
-    "element-plus": "^2.13.3",
-    "pinia": "^3.0.4",
-    "vue": "^3.5.25",
-    "vue-router": "^5.0.3"
-  },
-  "devDependencies": {
-    "@antfu/eslint-config": "^7.7.0",
-    "@tailwindcss/vite": "^4.2.1",
-    "@types/node": "^24.10.1",
-    "@vitejs/plugin-vue": "^6.0.2",
-    "@vue/tsconfig": "^0.8.1",
-    "autoprefixer": "^10.4.27",
-    "eslint-plugin-format": "^2.0.1",
-    "lint-staged": "^16.3.3",
-    "postcss": "^8.5.8",
-    "simple-git-hooks": "^2.13.1",
-    "tailwindcss": "^4.2.1",
-    "typescript": "~5.9.3",
-    "vite": "^7.3.1",
-    "vue-tsc": "^3.1.5"
-  }
-}
+```bash
+git mv package.json apps/frontend/package.json
 ```
 
-- [ ] **Step 3: 验证文件创建成功**
+- [ ] **Step 2: 更新前端 package.json 的 name 字段**
+
+将 `"name": "gzf"` 改为 `"name": "frontend"`
+
+- [ ] **Step 3: 验证文件移动成功**
 
 Run: `cat apps/frontend/package.json`
 Expected: 输出前端 package.json 内容
 
-### Task 9: 移动前端相关目录
+### Task 9: 创建根 package.json（workspace 配置）
+
+**Files:**
+- Create: `package.json`
+
+- [ ] **Step 1: 创建根 package.json**
+
+```json
+{
+  "name": "gzf-monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -r dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:server": "pnpm --filter server dev",
+    "build": "pnpm -r build",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:server": "pnpm --filter server build",
+    "lint": "pnpm -r lint",
+    "clean": "pnpm -r clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "simple-git-hooks": "^2.13.1",
+    "lint-staged": "^16.3.3"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  }
+}
+```
+
+- [ ] **Step 2: 验证文件创建成功**
+
+Run: `cat package.json`
+Expected: 输出根 package.json 内容
+
+### Task 10: 移动前端相关目录
 
 **Files:**
 - Move: `dist/` → `apps/frontend/dist/` (如果存在)
-- Remove: `package.json.backup`
 
 - [ ] **Step 1: 移动 dist 目录**
 
@@ -268,25 +241,20 @@ if [ -d "dist" ]; then
 fi
 ```
 
-- [ ] **Step 2: 清理备份文件**
-
-```bash
-rm package.json.backup
-```
-
-### Task 10: 提交 Chunk 2
+### Task 11: 提交 Chunk 2
 
 - [ ] **Step 1: 提交前端迁移**
 
 ```bash
-git add apps/frontend/
+git add apps/frontend/ package.json
 git commit -m "$(cat <<'EOF'
 chore: 迁移前端代码到 apps/frontend/
 
 - 移动 src/, public/ 目录
 - 移动配置文件 (vite, tsconfig, eslint)
 - 移动环境变量文件
-- 创建前端 package.json
+- 移动 package.json 到前端目录
+- 创建根 workspace package.json
 EOF
 )"
 ```
@@ -295,7 +263,7 @@ EOF
 
 ## Chunk 3: 迁移后端代码
 
-### Task 11: 移动后端代码目录
+### Task 12: 移动后端代码目录
 
 **Files:**
 - Move: `server/` → `apps/server/`
@@ -311,7 +279,7 @@ git mv server apps/server
 Run: `ls -la apps/server/`
 Expected: 看到后端所有文件和目录
 
-### Task 12: 更新后端 package.json 名称
+### Task 13: 更新后端 package.json 名称
 
 **Files:**
 - Modify: `apps/server/package.json`
@@ -324,7 +292,7 @@ Run: `cat apps/server/package.json`
 
 将 `"name": "gzf-server"` 改为 `"name": "server"`
 
-### Task 13: 提交 Chunk 3
+### Task 14: 提交 Chunk 3
 
 - [ ] **Step 1: 提交后端迁移**
 
@@ -343,7 +311,7 @@ EOF
 
 ## Chunk 4: 更新配置文件
 
-### Task 14: 更新 .gitignore
+### Task 15: 更新 .gitignore
 
 **Files:**
 - Modify: `.gitignore`
@@ -380,7 +348,7 @@ Thumbs.db
 *.log
 ```
 
-### Task 15: 更新 vercel.json
+### Task 16: 更新 vercel.json
 
 **Files:**
 - Modify: `vercel.json`
@@ -399,7 +367,7 @@ Run: `cat vercel.json`
 }
 ```
 
-### Task 16: 移动 .vscode 目录（如果保留）
+### Task 17: 移动 .vscode 目录（如果保留）
 
 **Files:**
 - Keep: `.vscode/` (在根目录)
@@ -413,7 +381,7 @@ Expected: 看到 VS Code 配置文件
 
 不移动，保持原位置
 
-### Task 17: 移动其他根目录文件
+### Task 18: 移动其他根目录文件
 
 **Files:**
 - Keep: `.nvmrc` (根目录)
@@ -425,7 +393,7 @@ Expected: 看到 VS Code 配置文件
 Run: `ls -la .nvmrc vercel.json .gitignore`
 Expected: 三个文件都在根目录
 
-### Task 18: 提交 Chunk 4
+### Task 19: 提交 Chunk 4
 
 - [ ] **Step 1: 提交配置更新**
 
@@ -444,7 +412,7 @@ EOF
 
 ## Chunk 5: 创建 README.md
 
-### Task 19: 创建项目 README.md
+### Task 20: 创建项目 README.md
 
 **Files:**
 - Modify: `README.md`
@@ -646,7 +614,7 @@ apps/frontend/dist
 Run: `head -50 README.md`
 Expected: 输出 README.md 前 50 行
 
-### Task 20: 提交 Chunk 5
+### Task 21: 提交 Chunk 5
 
 - [ ] **Step 1: 提交 README.md**
 
@@ -668,7 +636,7 @@ EOF
 
 ## Chunk 6: 安装依赖与验证
 
-### Task 21: 清理旧依赖
+### Task 22: 清理旧依赖
 
 - [ ] **Step 1: 删除旧的 node_modules**
 
@@ -679,7 +647,7 @@ rm -rf pnpm-lock.yaml
 rm -rf apps/server/pnpm-lock.yaml
 ```
 
-### Task 22: 安装 workspace 依赖
+### Task 23: 安装 workspace 依赖
 
 - [ ] **Step 1: 安装所有依赖**
 
@@ -694,7 +662,7 @@ Expected: 成功安装所有依赖，无错误输出
 Run: `ls -la node_modules/ | head -20`
 Expected: 看到依赖目录
 
-### Task 23: 验证前端构建
+### Task 24: 验证前端构建
 
 - [ ] **Step 1: 构建前端**
 
@@ -709,7 +677,7 @@ Expected: 构建成功，无错误
 Run: `ls -la apps/frontend/dist/`
 Expected: 看到 `index.html` 和 `assets/` 目录
 
-### Task 24: 验证后端构建
+### Task 25: 验证后端构建
 
 - [ ] **Step 1: 构建后端**
 
@@ -724,7 +692,7 @@ Expected: 构建成功，无错误
 Run: `ls -la apps/server/dist/`
 Expected: 看到 `index.js` 文件
 
-### Task 25: 提交最终状态
+### Task 26: 提交最终状态
 
 - [ ] **Step 1: 提交 pnpm-lock.yaml**
 
@@ -736,7 +704,7 @@ EOF
 )"
 ```
 
-### Task 26: 最终验证
+### Task 27: 最终验证
 
 - [ ] **Step 1: 运行前端开发服务器**
 
