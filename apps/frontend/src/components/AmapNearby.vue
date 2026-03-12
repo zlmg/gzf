@@ -2,6 +2,7 @@
 import type { PoiItem } from '@/composables/usePoiCache'
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePoiCache } from '@/composables/usePoiCache'
+import { poiApi } from '@/api/index'
 
 interface Props {
   latitude: string | number
@@ -90,7 +91,7 @@ const filteredPoiList = computed(() => {
 })
 
 // 搜索周边 POI
-async function searchPOI(category: string, radius?: number, forceRefresh = false) {
+async function searchPOI(category: string, forceRefresh = false) {
   activeCategory.value = category
   loading.value = true
 
@@ -98,13 +99,9 @@ async function searchPOI(category: string, radius?: number, forceRefresh = false
   if (!poiConfig)
     return
 
-  // 使用传入的半径或当前选择的半径，取最大值5km
-  const searchRadius = radius || selectedRadius.value || 3000
-  const location = `${props.longitude},${props.latitude}`
-
-  // 非强制刷新时，先检查缓存
+  // 非强制刷新时，先检查前端缓存
   if (!forceRefresh) {
-    const cached = getCached(props.latitude, props.longitude, category, searchRadius)
+    const cached = getCached(props.latitude, props.longitude, category, 20000)
     if (cached) {
       poiData.value[category] = cached.pois
       loading.value = false
@@ -113,38 +110,21 @@ async function searchPOI(category: string, radius?: number, forceRefresh = false
   }
 
   try {
-    const key = import.meta.env.VITE_AMAP_KEY
+    // 调用后端接口
+    const result = await poiApi.search(props.latitude, props.longitude, category)
 
-    const response = await fetch(
-      `https://restapi.amap.com/v3/place/around?key=${key}&location=${location}&keywords=${poiConfig.keywords}&types=${poiConfig.types}&radius=${searchRadius}&offset=25&page=1&extensions=all`,
-    )
+    if (result.success && result.data.pois.length > 0) {
+      poiData.value[category] = result.data.pois
 
-    const result = await response.json()
-    loading.value = false
-    isRefreshing.value = false
-
-    if (result.status === '1' && result.pois && result.pois.length > 0) {
-      const pois: PoiItem[] = result.pois.map((poi: any) => ({
-        id: poi.id,
-        name: poi.name,
-        address: poi.address,
-        distance: poi.distance,
-        type: poi.type,
-        location: poi.location,
-        tel: poi.tel,
-      }))
-
-      poiData.value[category] = pois
-
-      // 保存到缓存
+      // 保存到前端缓存
       setCached(
         props.latitude,
         props.longitude,
         category,
-        searchRadius,
-        pois,
-        searchRadius,
-        location,
+        20000,
+        result.data.pois,
+        result.data.searchRadius,
+        `${props.longitude},${props.latitude}`,
       )
     }
     else {
@@ -152,30 +132,25 @@ async function searchPOI(category: string, radius?: number, forceRefresh = false
     }
   }
   catch (e) {
-    loading.value = false
-    isRefreshing.value = false
     console.error('POI search error:', e)
     poiData.value[category] = []
+  }
+  finally {
+    loading.value = false
+    isRefreshing.value = false
   }
 }
 
 // 刷新当前分类数据
 function refreshCurrentCategory() {
   isRefreshing.value = true
-  searchPOI(activeCategory.value, selectedRadius.value, true)
+  searchPOI(activeCategory.value, true)
 }
 
 // 切换距离筛选
 function changeRadius(radius: number) {
   selectedRadius.value = radius
-  // 如果当前分类数据为空或需要更大范围的搜索，重新请求
-  const currentData = poiData.value[activeCategory.value] || []
-  const needRefetch = currentData.length === 0
-    || currentData.some((poi: any) => radius > selectedRadius.value && Number(poi.distance) > 3000)
-
-  if (needRefetch || radius > 3000) {
-    searchPOI(activeCategory.value, radius)
-  }
+  // 后端固定返回 20km 数据，前端只需筛选本地数据
 }
 
 // 打开高德地图查看位置
@@ -191,12 +166,12 @@ function openInAmap(poi?: any) {
 
 // 初始化
 onMounted(() => {
-  searchPOI('subway', selectedRadius.value)
+  searchPOI('subway')
 })
 
 // 监听分类切换
 watch(activeCategory, (newCategory) => {
-  searchPOI(newCategory, selectedRadius.value)
+  searchPOI(newCategory)
 })
 </script>
 
