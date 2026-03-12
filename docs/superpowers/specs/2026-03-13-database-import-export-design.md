@@ -79,7 +79,7 @@ gzf-export/
   ]
 }
 ```
-- 排除字段：`id`（避免自增冲突）、`password`（安全考虑）、`createdAt`、`updatedAt`
+- 排除字段：`id`（避免自增冲突）、`createdAt`、`updatedAt`
 - `favorites`、`history`、`preferences` 保持 JSON 字符串格式（与数据库存储一致）
 
 **pois.json 结构：**
