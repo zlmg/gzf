@@ -55,12 +55,14 @@ gzf/
 ```
 apps/frontend/src/
 ├── api/             # API request modules
+│   └── index.ts     # Auth and user data API (authApi, userApi)
 ├── components/      # Reusable Vue components
 │   ├── Layout/      # AppHeader, AppFooter
 │   ├── PropertyCard.vue
 │   ├── PropertyFilter.vue
 │   ├── FavoriteButton.vue
 │   ├── ImageGallery.vue
+│   ├── ImageViewer.vue
 │   ├── CompareBar.vue
 │   ├── AmapNearby.vue
 │   └── FavoriteNotification.vue
@@ -68,21 +70,29 @@ apps/frontend/src/
 │   ├── useProperty.ts
 │   ├── useStorage.ts
 │   ├── usePoiCache.ts
-│   └── usePagination.ts
+│   ├── usePagination.ts
+│   └── useSync.ts
 ├── config/          # App configuration
 ├── router/          # Vue Router config
 ├── stores/          # Pinia stores (setup store syntax)
 │   ├── property.ts  # Property data and computed values
 │   ├── filter.ts    # Filter state, sorting, and filter logic
 │   ├── favorite.ts  # Favorites with localStorage persistence
-│   └── compare.ts   # Compare list (max 4 items)
+│   ├── compare.ts   # Compare list (max 4 items)
+│   ├── history.ts   # Browse history (max 100 items)
+│   └── auth.ts      # Authentication and cloud data sync
 ├── types/           # TypeScript interfaces
+│   ├── property.ts  # Property, HouseType, FilterState
+│   └── user.ts      # User, FavoriteItem, HistoryItem, Preferences
 ├── utils/           # Utility functions
 └── views/           # Page-level routed components
     ├── HomeView.vue
     ├── PropertyDetail.vue
     ├── FavoritesView.vue
-    └── CompareView.vue
+    ├── CompareView.vue
+    ├── HistoryView.vue
+    ├── LoginView.vue
+    └── RegisterView.vue
 ```
 
 ### Backend (apps/server/)
@@ -175,6 +185,19 @@ const computed = computed(() => ...)
 
 **FilterState**: Filter configuration with `layout[]`, `roomType[]`, `priceRange`, `equipment[]`, `label[]`, `towards[]`, `areaRange`
 
+**User**: Basic user info with `id`, `username`
+
+**FavoriteItem/HistoryItem**: Property snapshot with timestamp (`addedAt`/`viewedAt`)
+
+**Preferences**: User's filter and sort preferences for cloud sync
+
+### Authentication & Data Sync
+
+- JWT-based authentication via `/api/auth/login` and `/api/auth/register`
+- Authenticated users can sync favorites, history, and preferences to cloud
+- `useSync` composable provides debounced auto-sync (2s delay) when data changes
+- On login, cloud data is pulled and merged with local data (local takes priority on conflict)
+
 ### Environment Variables
 
 **Frontend (`apps/frontend/.env`):**
@@ -196,6 +219,12 @@ const computed = computed(() => ...)
 
 ### Deployment
 
-Configured for Vercel deployment via `vercel.json`:
+**Vercel** (via `vercel.json`):
 - Build command: `pnpm build:frontend`
 - Output directory: `apps/frontend/dist`
+- SPA rewrites configured
+
+**Railway** (monorepo root):
+- Backend: Nixpacks builder, runs Prisma migrations on start
+- Frontend: Railpack static SPA (`apps/frontend/railway.toml`)
+- Health check on `/health` with 300s timeout
