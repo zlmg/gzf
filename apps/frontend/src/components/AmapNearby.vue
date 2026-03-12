@@ -28,7 +28,6 @@ const DISTANCE_OPTIONS = [
   { label: '3km', value: 3000 },
   { label: '5km', value: 5000 },
   { label: '10km', value: 10000 },
-  { label: '20km', value: 20000 },
 ]
 
 // 当前选择的距离范围
@@ -100,7 +99,7 @@ async function searchPOI(category: string, forceRefresh = false) {
 
   // 非强制刷新时，先检查前端缓存
   if (!forceRefresh) {
-    const cached = getCached(props.latitude, props.longitude, category, 20000)
+    const cached = getCached(props.latitude, props.longitude, category, 10000)
     if (cached) {
       poiData.value[category] = cached.pois
       loading.value = false
@@ -120,7 +119,7 @@ async function searchPOI(category: string, forceRefresh = false) {
         props.latitude,
         props.longitude,
         category,
-        20000,
+        10000,
         result.data.pois,
         result.data.searchRadius,
         `${props.longitude},${props.latitude}`,
@@ -149,7 +148,7 @@ function refreshCurrentCategory() {
 // 切换距离筛选
 function changeRadius(radius: number) {
   selectedRadius.value = radius
-  // 后端固定返回 20km 数据，前端只需筛选本地数据
+  // 后端固定返回 10km 数据，前端只需筛选本地数据
 }
 
 // 打开高德地图查看位置

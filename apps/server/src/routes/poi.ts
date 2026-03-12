@@ -3,7 +3,7 @@ import { prisma } from '../prisma/client.js'
 
 const AMAP_KEY = process.env.AMAP_KEY
 const AMAP_API_URL = 'https://restapi.amap.com/v3/place/around'
-const MAX_RADIUS = 20000
+const MAX_RADIUS = 10000
 
 // POI 分类配置 (与前端保持一致)
 const POI_CONFIG: Record<string, { types: string, keywords: string }> = {
