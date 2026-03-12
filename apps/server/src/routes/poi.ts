@@ -31,8 +31,8 @@ const POI_CONFIG: Record<string, { types: string, keywords: string }> = {
 export async function poiRoutes(app: FastifyInstance) {
   app.get('/search', async (request, reply) => {
     const query = request.query as {
-      latitude?: number
-      longitude?: number
+      latitude?: string
+      longitude?: string
       category?: string
     }
 
@@ -44,7 +44,17 @@ export async function poiRoutes(app: FastifyInstance) {
       })
     }
 
-    const { latitude, longitude, category } = query
+    const latitude = parseFloat(query.latitude)
+    const longitude = parseFloat(query.longitude)
+    const { category } = query
+
+    // 检查坐标是否有效
+    if (isNaN(latitude) || isNaN(longitude)) {
+      return reply.status(400).send({
+        success: false,
+        message: '无效的坐标'
+      })
+    }
 
     // 检查分类是否有效
     if (!POI_CONFIG[category]) {
