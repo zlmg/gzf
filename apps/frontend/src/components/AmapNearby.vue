@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { usePoiCache } from '@/composables/usePoiCache'
 import { poiApi } from '@/api/index'
 
@@ -165,11 +165,6 @@ function openInAmap(poi?: any) {
 // 初始化
 onMounted(() => {
   searchPOI('subway')
-})
-
-// 监听分类切换
-watch(activeCategory, (newCategory) => {
-  searchPOI(newCategory)
 })
 </script>
 

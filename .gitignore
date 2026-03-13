@@ -40,3 +40,5 @@ script/__pycache__
 
 # Git worktrees
 .worktrees/
+apps/server/prisma/data.db-shm
+apps/server/prisma/data.db-wal
