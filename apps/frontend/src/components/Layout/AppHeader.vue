@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { PoiExportData } from '@/composables/usePoiCache'
-import { ElMessage } from 'element-plus'
 import { computed, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { adminApi } from '@/api'
+import { useAppToast } from '@/composables/useAppToast'
 import { usePoiCache } from '@/composables/usePoiCache'
 import { useAuthStore } from '@/stores/auth'
 import { useFavoriteStore } from '@/stores/favorite'
@@ -12,6 +12,7 @@ import { useHistoryStore } from '@/stores/history'
 const favoriteStore = useFavoriteStore()
 const historyStore = useHistoryStore()
 const authStore = useAuthStore()
+const toast = useAppToast()
 const { exportCache, importCache } = usePoiCache()
 const isMobileMenuOpen = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null)
@@ -27,13 +28,13 @@ const importResult = ref<{ usersImported: number, usersSkipped: number, poisImpo
 // 数据库导出
 async function handleDbExport() {
   try {
-    ElMessage.info('正在导出数据库...')
+    toast.info('正在导出数据库...')
     await adminApi.exportDatabase()
-    ElMessage.success('数据库导出成功')
+    toast.success('数据库导出成功')
   }
   catch (e) {
     const message = e instanceof Error ? e.message : '导出失败'
-    ElMessage.error(message)
+    toast.error(message)
   }
 }
 
@@ -65,11 +66,11 @@ async function confirmImport() {
   try {
     const result = await adminApi.importDatabase(importFile.value)
     importResult.value = result.data
-    ElMessage.success(`导入成功：用户 ${result.data.usersImported} 条，POI ${result.data.poisImported} 条`)
+    toast.success(`导入成功：用户 ${result.data.usersImported} 条，POI ${result.data.poisImported} 条`)
   }
   catch (e) {
     const message = e instanceof Error ? e.message : '导入失败'
-    ElMessage.error(message)
+    toast.error(message)
   }
   finally {
     importing.value = false
@@ -86,14 +87,14 @@ function closeMobileMenu() {
 
 function handleLogout() {
   authStore.logout()
-  ElMessage.success('已退出登录')
+  toast.success('已退出登录')
 }
 
 // 导出POI缓存
 function handleExport() {
   const data = exportCache()
   if (!data || data.totalCount === 0) {
-    ElMessage.warning('没有可导出的POI缓存数据')
+    toast.warning('没有可导出的POI缓存数据')
     return
   }
 
@@ -104,7 +105,7 @@ function handleExport() {
   link.download = `gzf-poi-cache-${new Date().toISOString().slice(0, 10)}.json`
   link.click()
   URL.revokeObjectURL(url)
-  ElMessage.success(`已导出 ${data.totalCount} 条数据`)
+  toast.success(`已导出 ${data.totalCount} 条数据`)
 }
 
 // 触发文件选择
@@ -123,21 +124,21 @@ async function handleImport(event: Event) {
     const data = JSON.parse(text) as PoiExportData
 
     if (!data.version || !data.entries) {
-      ElMessage.error('无效的缓存文件格式')
+      toast.error('无效的缓存文件格式')
       return
     }
 
     const result = importCache(data)
     if (result.imported > 0) {
-      ElMessage.success(`已导入 ${result.imported} 条数据${result.skipped > 0 ? `，跳过 ${result.skipped} 条` : ''}`)
+      toast.success(`已导入 ${result.imported} 条数据${result.skipped > 0 ? `，跳过 ${result.skipped} 条` : ''}`)
     }
     else if (result.skipped > 0) {
-      ElMessage.info(`跳过 ${result.skipped} 条数据（本地已有更新版本）`)
+      toast.info(`跳过 ${result.skipped} 条数据（本地已有更新版本）`)
     }
   }
   catch (e) {
     console.error('Import error:', e)
-    ElMessage.error('导入失败，请检查文件格式')
+    toast.error('导入失败，请检查文件格式')
   }
 
   // 清空文件选择，允许重复导入同一文件
@@ -145,6 +146,29 @@ async function handleImport(event: Event) {
     fileInput.value.value = ''
   }
 }
+
+// 用户下拉菜单项
+const userMenuItems = computed(() => {
+  const items: Array<Array<{ label: string, icon: string, click: () => void }>> = [
+    [
+      { label: '导出缓存', icon: 'i-lucide-download', click: handleExport },
+      { label: '导入缓存', icon: 'i-lucide-upload', click: triggerImport },
+    ],
+  ]
+
+  if (isAdmin.value) {
+    items.push([
+      { label: '数据库导出', icon: 'i-lucide-database', click: handleDbExport },
+      { label: '数据库导入', icon: 'i-lucide-database', click: triggerDbImport },
+    ])
+  }
+
+  items.push([
+    { label: '退出登录', icon: 'i-lucide-log-out', click: handleLogout },
+  ])
+
+  return items
+})
 </script>
 
 <template>
@@ -157,12 +181,7 @@ async function handleImport(event: Event) {
           class="flex items-center gap-2 md:gap-3 hover:opacity-90 transition-opacity"
           @click="closeMobileMenu"
         >
-          <svg class="w-7 h-7 md:w-8 md:h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-            />
-          </svg>
+          <UIcon name="i-lucide-home" class="size-7 md:size-8 flex-shrink-0" />
           <h1 class="text-base md:text-xl font-bold truncate">
             宝山公租房查询demo
           </h1>
@@ -175,9 +194,7 @@ async function handleImport(event: Event) {
             class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
             active-class="bg-white/20"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-            </svg>
+            <UIcon name="i-lucide-list" class="size-5" />
             房源列表
           </RouterLink>
           <RouterLink
@@ -185,12 +202,7 @@ async function handleImport(event: Event) {
             class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
             active-class="bg-white/20"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
+            <UIcon name="i-lucide-heart" class="size-5" />
             收藏
             <span
               v-if="favoriteStore.count > 0"
@@ -204,12 +216,7 @@ async function handleImport(event: Event) {
             class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
             active-class="bg-white/20"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <UIcon name="i-lucide-clock" class="size-5" />
             浏览记录
             <span
               v-if="historyStore.count > 0"
@@ -223,76 +230,25 @@ async function handleImport(event: Event) {
             class="px-4 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
             active-class="bg-white/20"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
+            <UIcon name="i-lucide-bar-chart-3" class="size-5" />
             房源对比
           </RouterLink>
           <!-- 登录/用户入口 -->
           <div class="flex items-center">
             <template v-if="authStore.isAuthenticated">
-              <el-dropdown trigger="click">
-                <button class="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-1.5 text-sm text-white">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+              <UDropdownMenu :items="userMenuItems">
+                <UButton icon="i-lucide-chevron-down" variant="ghost" color="white">
+                  <UIcon name="i-lucide-user" class="size-4 mr-1.5" />
                   {{ authStore.user?.username }}
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item @click="handleExport">
-                      <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        导出缓存
-                      </div>
-                    </el-dropdown-item>
-                    <el-dropdown-item @click="triggerImport">
-                      <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                        </svg>
-                        导入缓存
-                      </div>
-                    </el-dropdown-item>
-                    <!-- 管理员菜单 -->
-                    <template v-if="isAdmin">
-                      <el-dropdown-item divided @click="handleDbExport">
-                        <div class="flex items-center gap-2">
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                          </svg>
-                          数据库导出
-                        </div>
-                      </el-dropdown-item>
-                      <el-dropdown-item @click="triggerDbImport">
-                        <div class="flex items-center gap-2">
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                          </svg>
-                          数据库导入
-                        </div>
-                      </el-dropdown-item>
-                    </template>
-                    <el-dropdown-item :divided="!isAdmin" @click="handleLogout">
-                      退出登录
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
+                </UButton>
+              </UDropdownMenu>
             </template>
             <RouterLink
               v-else
               to="/login"
               class="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-1.5 text-sm"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+              <UIcon name="i-lucide-user" class="size-4" />
               登录
             </RouterLink>
             <input ref="fileInput" type="file" accept=".json" class="hidden" @change="handleImport">
@@ -305,12 +261,8 @@ async function handleImport(event: Event) {
           aria-label="菜单"
           @click="toggleMobileMenu"
         >
-          <svg v-if="!isMobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <UIcon v-if="!isMobileMenuOpen" name="i-lucide-menu" class="size-6" />
+          <UIcon v-else name="i-lucide-x" class="size-6" />
         </button>
       </div>
 
@@ -331,9 +283,7 @@ async function handleImport(event: Event) {
               active-class="bg-white/20"
               @click="closeMobileMenu"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
+              <UIcon name="i-lucide-list" class="size-5" />
               房源列表
             </RouterLink>
             <RouterLink
@@ -342,12 +292,7 @@ async function handleImport(event: Event) {
               active-class="bg-white/20"
               @click="closeMobileMenu"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
+              <UIcon name="i-lucide-heart" class="size-5" />
               收藏
               <span
                 v-if="favoriteStore.count > 0"
@@ -362,12 +307,7 @@ async function handleImport(event: Event) {
               active-class="bg-white/20"
               @click="closeMobileMenu"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <UIcon name="i-lucide-clock" class="size-5" />
               浏览记录
               <span
                 v-if="historyStore.count > 0"
@@ -382,18 +322,14 @@ async function handleImport(event: Event) {
               active-class="bg-white/20"
               @click="closeMobileMenu"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
+              <UIcon name="i-lucide-bar-chart-3" class="size-5" />
               房源对比
             </RouterLink>
             <!-- 移动端登录入口 -->
             <template v-if="authStore.isAuthenticated">
               <div class="px-4 py-3 flex items-center justify-between">
                 <span class="flex items-center gap-2">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+                  <UIcon name="i-lucide-user" class="size-5" />
                   {{ authStore.user?.username }}
                 </span>
                 <button
@@ -409,18 +345,14 @@ async function handleImport(event: Event) {
                 class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left w-full"
                 @click="handleExport(); closeMobileMenu()"
               >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
+                <UIcon name="i-lucide-download" class="size-5" />
                 导出缓存
               </button>
               <button
                 class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left w-full"
                 @click="triggerImport(); closeMobileMenu()"
               >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                </svg>
+                <UIcon name="i-lucide-upload" class="size-5" />
                 导入缓存
               </button>
               <!-- 移动端管理员菜单 -->
@@ -430,18 +362,14 @@ async function handleImport(event: Event) {
                   class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left w-full"
                   @click="handleDbExport(); closeMobileMenu()"
                 >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
+                  <UIcon name="i-lucide-database" class="size-5" />
                   数据库导出
                 </button>
                 <button
                   class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left w-full"
                   @click="triggerDbImport(); closeMobileMenu()"
                 >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
+                  <UIcon name="i-lucide-database" class="size-5" />
                   数据库导入
                 </button>
               </template>
@@ -452,9 +380,7 @@ async function handleImport(event: Event) {
               class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
               @click="closeMobileMenu"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+              <UIcon name="i-lucide-user" class="size-5" />
               登录
             </RouterLink>
           </div>
@@ -466,36 +392,34 @@ async function handleImport(event: Event) {
     <input ref="adminFileInput" type="file" accept=".zip" class="hidden" @change="handleDbFileSelect">
 
     <!-- 导入结果对话框 -->
-    <el-dialog
-      v-model="importDialogVisible"
-      title="数据库导入"
-      width="400px"
-    >
-      <div v-if="!importResult">
-        <p class="mb-4">
-          确认导入文件：<strong>{{ importFile?.name }}</strong>
-        </p>
-        <p class="text-gray-500 text-sm">
-          导入时会跳过已存在的记录（用户名相同的用户，坐标和分类相同的POI）
-        </p>
-      </div>
-      <div v-else>
-        <p class="font-medium mb-3">
-          导入完成
-        </p>
-        <div class="space-y-2 text-sm">
-          <p>用户：导入 {{ importResult.usersImported }} 条，跳过 {{ importResult.usersSkipped }} 条</p>
-          <p>POI：导入 {{ importResult.poisImported }} 条，跳过 {{ importResult.poisSkipped }} 条</p>
+    <UModal v-model:open="importDialogVisible" title="数据库导入">
+      <template #body>
+        <div v-if="!importResult">
+          <p class="mb-4">
+            确认导入文件：<strong>{{ importFile?.name }}</strong>
+          </p>
+          <p class="text-gray-500 text-sm">
+            导入时会跳过已存在的记录（用户名相同的用户，坐标和分类相同的POI）
+          </p>
         </div>
-      </div>
-      <template #footer>
-        <el-button @click="importDialogVisible = false">
-          关闭
-        </el-button>
-        <el-button v-if="!importResult" type="primary" :loading="importing" @click="confirmImport">
-          确认导入
-        </el-button>
+        <div v-else>
+          <p class="font-medium mb-3">
+            导入完成
+          </p>
+          <div class="space-y-2 text-sm">
+            <p>用户：导入 {{ importResult.usersImported }} 条，跳过 {{ importResult.usersSkipped }} 条</p>
+            <p>POI：导入 {{ importResult.poisImported }} 条，跳过 {{ importResult.poisSkipped }} 条</p>
+          </div>
+        </div>
       </template>
-    </el-dialog>
+      <template #footer>
+        <UButton variant="ghost" @click="importDialogVisible = false">
+          关闭
+        </UButton>
+        <UButton v-if="!importResult" color="primary" :loading="importing" @click="confirmImport">
+          确认导入
+        </UButton>
+      </template>
+    </UModal>
   </header>
 </template>
