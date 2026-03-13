@@ -1,55 +1,39 @@
 <script setup lang="ts">
-import { Lock, User } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { z } from 'zod'
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+import { useAppToast } from '@/composables/useAppToast'
 import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const toast = useAppToast()
 
-const username = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const formRef = ref()
+const schema = z.object({
+  username: z.string().min(3, '用户名长度为3-20个字符').max(20, '用户名长度为3-20个字符'),
+  password: z.string().min(6, '密码至少6个字符'),
+  confirmPassword: z.string().min(6, '密码至少6个字符'),
+}).refine(data => data.password === data.confirmPassword, {
+  message: '两次输入的密码不一致',
+  path: ['confirmPassword'],
+})
 
-function validateConfirmPassword(_rule: unknown, value: string, callback: (error?: Error) => void) {
-  if (value !== password.value) {
-    callback(new Error('两次输入的密码不一致'))
-  }
-  else {
-    callback()
-  }
-}
+type Schema = z.output<typeof schema>
+const state = ref<Partial<Schema>>({
+  username: '',
+  password: '',
+  confirmPassword: '',
+})
 
-const rules = {
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 3, max: 20, message: '用户名长度为3-20个字符', trigger: 'blur' },
-  ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码至少6个字符', trigger: 'blur' },
-  ],
-  confirmPassword: [
-    { required: true, message: '请确认密码', trigger: 'blur' },
-    { validator: validateConfirmPassword, trigger: 'blur' },
-  ],
-}
-
-async function handleRegister() {
-  const valid = await formRef.value?.validate().catch(() => false)
-  if (!valid)
-    return
-
-  const result = await authStore.register(username.value, password.value)
+async function onSubmit() {
+  const result = await authStore.register(state.value.username ?? '', state.value.password ?? '')
 
   if (result.success) {
-    ElMessage.success('注册成功')
+    toast.success('注册成功')
     router.push('/')
   }
   else {
-    ElMessage.error(result.message || '注册失败')
+    toast.error(result.message || '注册失败')
   }
 }
 </script>
@@ -66,53 +50,54 @@ async function handleRegister() {
         </p>
       </div>
 
-      <el-form
-        ref="formRef"
-        :model="{ username, password, confirmPassword }"
-        :rules="rules"
-        class="mt-8 space-y-6"
-        @submit.prevent="handleRegister"
-      >
-        <el-form-item prop="username">
-          <el-input
-            v-model="username"
+      <UForm :schema="schema" :state="state" class="mt-8 space-y-6" @submit="onSubmit">
+        <UFormField name="username" required>
+          <UInput
+            v-model="state.username"
             placeholder="用户名"
-            size="large"
-            :prefix-icon="User"
-          />
-        </el-form-item>
+            size="lg"
+          >
+            <template #leading>
+              <UIcon name="i-lucide-user" class="size-5" />
+            </template>
+          </UInput>
+        </UFormField>
 
-        <el-form-item prop="password">
-          <el-input
-            v-model="password"
+        <UFormField name="password" required>
+          <UInput
+            v-model="state.password"
             type="password"
             placeholder="密码"
-            size="large"
-            :prefix-icon="Lock"
-            show-password
-          />
-        </el-form-item>
+            size="lg"
+          >
+            <template #leading>
+              <UIcon name="i-lucide-lock" class="size-5" />
+            </template>
+          </UInput>
+        </UFormField>
 
-        <el-form-item prop="confirmPassword">
-          <el-input
-            v-model="confirmPassword"
+        <UFormField name="confirmPassword" required>
+          <UInput
+            v-model="state.confirmPassword"
             type="password"
             placeholder="确认密码"
-            size="large"
-            :prefix-icon="Lock"
-            show-password
-          />
-        </el-form-item>
+            size="lg"
+          >
+            <template #leading>
+              <UIcon name="i-lucide-lock" class="size-5" />
+            </template>
+          </UInput>
+        </UFormField>
 
-        <el-button
-          type="primary"
-          size="large"
-          class="w-full"
+        <UButton
+          type="submit"
+          color="primary"
+          size="lg"
+          block
           :loading="authStore.loading"
-          @click="handleRegister"
         >
           注册
-        </el-button>
+        </UButton>
 
         <div class="text-center">
           <RouterLink
@@ -122,7 +107,7 @@ async function handleRegister() {
             已有账号？立即登录
           </RouterLink>
         </div>
-      </el-form>
+      </UForm>
     </div>
   </div>
 </template>
