@@ -66,15 +66,3 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
-
-/* Element Plus overrides */
-.el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
-  background-color: #2563eb;
-}
-
-.el-button--primary {
-  --el-button-bg-color: #2563eb;
-  --el-button-border-color: #2563eb;
-  --el-button-hover-bg-color: #1d4ed8;
-  --el-button-hover-border-color: #1d4ed8;
-}
