@@ -338,13 +338,25 @@ watch(() => localFilters.value.keyword, (newVal) => {
           <label class="block text-sm font-medium text-gray-700 mb-1">
             面积: {{ localFilters.areaRange[0] }}m² - {{ localFilters.areaRange[1] }}m²
           </label>
-          <URange
-            v-model="localFilters.areaRange"
-            :min="areaRange[0]"
-            :max="areaRange[1]"
-            :step="5"
-            @update:model-value="() => filterStore.updateFilters({ areaRange: localFilters.areaRange })"
-          />
+          <div class="flex items-center gap-3">
+            <input
+              v-model.number="localFilters.areaRange[0]"
+              type="range"
+              :min="areaRange[0]"
+              :max="areaRange[1]"
+              :step="5"
+              class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+            >
+            <input
+              v-model.number="localFilters.areaRange[1]"
+              type="range"
+              :min="areaRange[0]"
+              :max="areaRange[1]"
+              :step="5"
+              class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              @update:model-value="() => filterStore.updateFilters({ areaRange: localFilters.areaRange })"
+            >
+          </div>
         </div>
 
         <!-- 价格范围 -->
@@ -352,12 +364,25 @@ watch(() => localFilters.value.keyword, (newVal) => {
           <label class="block text-sm font-medium text-gray-700 mb-1">
             价格: ¥{{ localFilters.priceRange[0] }} - ¥{{ localFilters.priceRange[1] }}
           </label>
-          <URange
-            v-model="localFilters.priceRange"
-            :max="maxPrice"
-            :step="100"
-            @update:model-value="() => filterStore.updateFilters({ priceRange: localFilters.priceRange })"
-          />
+          <div class="flex items-center gap-3">
+            <input
+              v-model.number="localFilters.priceRange[0]"
+              type="range"
+              :min="0"
+              :max="maxPrice"
+              :step="100"
+              class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+            >
+            <input
+              v-model.number="localFilters.priceRange[1]"
+              type="range"
+              :min="0"
+              :max="maxPrice"
+              :step="100"
+              class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              @update:model-value="() => filterStore.updateFilters({ priceRange: localFilters.priceRange })"
+            >
+          </div>
         </div>
       </div>
     </div>
