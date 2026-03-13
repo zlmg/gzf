@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { Property } from '@/types/property'
-import { ElButton, ElEmpty, ElMessage } from 'element-plus'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { getImageUrl } from '@/config'
+import { useAppToast } from '@/composables/useAppToast'
 import { useCompareStore } from '@/stores/compare'
 import { useHistoryStore } from '@/stores/history'
 import { formatOpenQueue, formatPriceRange, formatRoomType } from '@/utils/format'
@@ -11,6 +11,7 @@ import { formatOpenQueue, formatPriceRange, formatRoomType } from '@/utils/forma
 const router = useRouter()
 const historyStore = useHistoryStore()
 const compareStore = useCompareStore()
+const toast = useAppToast()
 
 const hasHistory = computed(() => historyStore.count > 0)
 const hasInvalidHistory = computed(() => historyStore.invalidCount > 0)
@@ -44,7 +45,7 @@ function handleClearAll() {
 function handleRemoveInvalid() {
   const removed = historyStore.removeInvalidHistory()
   if (removed > 0) {
-    ElMessage.success(`已移除 ${removed} 条失效记录`)
+    toast.success(`已移除 ${removed} 条失效记录`)
   }
 }
 
@@ -138,7 +139,7 @@ function handleToggleCompare(e: Event, property: Property) {
   }
   else {
     if (compareStore.isFull) {
-      ElMessage.warning('对比列表已满，最多只能添加4个房源')
+      toast.warning('对比列表已满，最多只能添加4个房源')
       return
     }
     compareStore.toggleCompare(property)
@@ -161,25 +162,28 @@ function handleToggleCompare(e: Event, property: Property) {
           </p>
         </div>
         <div v-if="hasHistory" class="flex items-center gap-2 md:gap-3">
-          <ElButton v-if="hasInvalidHistory" type="warning" plain size="small" class="!text-xs md:!text-sm" @click="handleRemoveInvalid">
+          <UButton v-if="hasInvalidHistory" color="warning" variant="outline" size="sm" @click="handleRemoveInvalid">
             清理失效
-          </ElButton>
-          <ElButton type="danger" plain size="small" class="!text-xs md:!text-sm" @click="handleClearAll">
+          </UButton>
+          <UButton color="error" variant="outline" size="sm" @click="handleClearAll">
             清空全部
-          </ElButton>
+          </UButton>
         </div>
       </div>
 
       <!-- Empty state -->
-      <ElEmpty
+      <div
         v-if="!hasHistory"
-        description="暂无浏览记录"
-        class="py-16 md:py-20"
+        class="flex flex-col items-center justify-center py-16 md:py-20"
       >
-        <ElButton type="primary" @click="router.push('/')">
+        <UIcon name="i-lucide-clock" class="size-16 text-gray-300 mb-4" />
+        <p class="text-gray-500 mb-4">
+          暂无浏览记录
+        </p>
+        <UButton color="primary" @click="router.push('/')">
           去浏览房源
-        </ElButton>
-      </ElEmpty>
+        </UButton>
+      </div>
 
       <!-- History list -->
       <div v-else class="space-y-3 md:space-y-4">
@@ -194,9 +198,7 @@ function handleToggleCompare(e: Event, property: Property) {
             <div v-if="!item.property" class="p-4 flex items-center justify-between">
               <div class="flex items-center gap-3">
                 <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
+                  <UIcon name="i-lucide-alert-triangle" class="size-6 text-gray-400" />
                 </div>
                 <div>
                   <p class="text-sm text-gray-500">
@@ -207,9 +209,9 @@ function handleToggleCompare(e: Event, property: Property) {
                   </p>
                 </div>
               </div>
-              <ElButton type="danger" plain size="small" @click="handleRemove(item.ref.projectNo)">
+              <UButton color="error" variant="outline" size="sm" @click="handleRemove(item.ref.projectNo)">
                 删除
-              </ElButton>
+              </UButton>
             </div>
 
             <!-- Valid history - Mobile Layout -->
@@ -225,12 +227,7 @@ function handleToggleCompare(e: Event, property: Property) {
                   @click="goToDetail(item.property.projectNo)"
                 >
                 <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
-                  <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
+                  <UIcon name="i-lucide-image" class="size-12" />
                 </div>
                 <!-- Status badge -->
                 <div class="absolute top-2 left-2">
@@ -294,9 +291,7 @@ function handleToggleCompare(e: Event, property: Property) {
                 <!-- Equipment -->
                 <div v-if="getEquipmentList(item.property).length > 0" class="mb-2">
                   <div class="flex items-start gap-1 text-xs text-gray-500">
-                    <svg class="w-3.5 h-3.5 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <UIcon name="i-lucide-check-circle" class="size-3.5 mt-0.5 shrink-0" />
                     <div class="flex flex-wrap gap-1">
                       <span
                         v-for="eq in getEquipmentList(item.property)"
@@ -349,12 +344,7 @@ function handleToggleCompare(e: Event, property: Property) {
                   @click="goToDetail(item.property.projectNo)"
                 >
                 <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
-                  <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
+                  <UIcon name="i-lucide-image" class="size-12" />
                 </div>
               </div>
 
@@ -419,22 +409,22 @@ function handleToggleCompare(e: Event, property: Property) {
                   </div>
                   <div class="ml-4 text-right flex flex-col items-end gap-2">
                     <div class="flex gap-2">
-                      <ElButton
-                        :type="isInCompare(item.property.projectNo) ? 'primary' : 'default'"
-                        plain
-                        size="small"
+                      <UButton
+                        :color="isInCompare(item.property.projectNo) ? 'primary' : 'neutral'"
+                        variant="outline"
+                        size="sm"
                         @click.stop="handleToggleCompare($event, item.property)"
                       >
                         {{ isInCompare(item.property.projectNo) ? '已加入对比' : '加入对比' }}
-                      </ElButton>
-                      <ElButton
-                        type="danger"
-                        plain
-                        size="small"
+                      </UButton>
+                      <UButton
+                        color="error"
+                        variant="outline"
+                        size="sm"
                         @click.stop="handleRemove(item.property.projectNo)"
                       >
                         删除
-                      </ElButton>
+                      </UButton>
                     </div>
                   </div>
                 </div>
@@ -459,12 +449,7 @@ function handleToggleCompare(e: Event, property: Property) {
       <!-- Tips -->
       <div v-if="hasHistory" class="mt-4 md:mt-6 p-3 md:p-4 bg-blue-50 rounded-lg">
         <div class="flex items-center gap-2 text-blue-700 text-sm">
-          <svg class="w-4 h-4 md:w-5 md:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <UIcon name="i-lucide-info" class="size-4 md:size-5 shrink-0" />
           <span>浏览记录保存在浏览器本地，最多保留100条，清除浏览器数据后将会丢失</span>
         </div>
       </div>
