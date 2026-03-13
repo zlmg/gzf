@@ -161,6 +161,20 @@ const computed = computed(() => ...)
 - Storage key prefix: `gzf-`
 - POI cache: 90-day TTL with coordinate-based keys
 
+**Data Storage Architecture (v2.0 引用存储):**
+收藏、浏览记录、对比列表采用引用存储，只保存 `projectNo` 和时间戳：
+```typescript
+FavoriteRef  = { projectNo: string, addedAt: number }
+HistoryRef   = { projectNo: string, viewedAt: number }
+CompareRef   = { projectNo: string }
+```
+- 通过 `PropertyStore.getPropertyByNo()` 实时获取完整房源信息
+- 提供 `xxxWithProperties` computed 返回带完整信息的列表
+- 提供 `invalidCount` 检测失效项（房源不存在）
+- 提供 `removeInvalidXxx()` 方法清理失效项
+- `loadFromStorage()` 自动检测并转换旧格式（含 `projectName` 字段）
+- 导入支持 v1.0（完整数据）和 v2.0（简化格式），导出使用 v2.0
+
 **Infinite Scroll:**
 - HomeView uses IntersectionObserver for lazy loading
 - Page size: 12 items
@@ -187,7 +201,14 @@ const computed = computed(() => ...)
 
 **User**: Basic user info with `id`, `username`
 
-**FavoriteItem/HistoryItem**: Property snapshot with timestamp (`addedAt`/`viewedAt`)
+**FavoriteRef/HistoryRef (v2.0 简化存储)**:
+- `FavoriteRef`: `{ projectNo: string, addedAt: number }` - 收藏引用
+- `HistoryRef`: `{ projectNo: string, viewedAt: number }` - 浏览记录引用
+- 只存储 `projectNo` 和时间戳，通过 `PropertyStore` 获取完整房源信息
+
+**FavoriteItem/HistoryItem (v1.0 完整数据)**:
+- 旧格式，包含完整房源快照，用于向后兼容导入和云端旧数据
+- 自动转换为 `FavoriteRef`/`HistoryRef` 格式
 
 **Preferences**: User's filter and sort preferences for cloud sync
 
