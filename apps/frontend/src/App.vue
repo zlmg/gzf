@@ -4,6 +4,7 @@ import FavoriteNotification from '@/components/FavoriteNotification.vue'
 import AppFooter from '@/components/Layout/AppFooter.vue'
 import AppHeader from '@/components/Layout/AppHeader.vue'
 import { useSync } from '@/composables/useSync'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 const { startAutoSync } = useSync()
 
@@ -12,18 +13,20 @@ startAutoSync()
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col bg-gray-50">
-    <AppHeader />
-    <main class="flex-1 pt-16 md:pt-20">
-      <RouterView v-slot="{ Component }">
-        <Transition name="fade" mode="out-in">
-          <component :is="Component" />
-        </Transition>
-      </RouterView>
-    </main>
-    <AppFooter />
-    <FavoriteNotification />
-  </div>
+  <el-config-provider :locale="zhCn">
+    <div class="min-h-screen flex flex-col bg-gray-50">
+      <AppHeader />
+      <main class="flex-1 pt-16 md:pt-20">
+        <RouterView v-slot="{ Component }">
+          <Transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </Transition>
+        </RouterView>
+      </main>
+      <AppFooter />
+      <FavoriteNotification />
+    </div>
+  </el-config-provider>
 </template>
 
 <style scoped>
