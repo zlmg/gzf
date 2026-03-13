@@ -78,7 +78,8 @@ export async function adminRoutes(app: FastifyInstance) {
       const manifestData = JSON.stringify(manifest, null, 2)
 
       // 设置响应头
-      const filename = `gzf-db-export-${new Date().toISOString().slice(0, 10)}.zip`
+      const timestamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)
+      const filename = `gzf-db-${timestamp}-u${users.length}-p${pois.length}.zip`
       reply.header('Content-Type', 'application/zip')
       reply.header('Content-Disposition', `attachment; filename="${filename}"`)
 

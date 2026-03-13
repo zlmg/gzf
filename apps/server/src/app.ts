@@ -16,7 +16,8 @@ export async function buildApp() {
   // 注册 CORS - 允许所有来源
   await app.register(cors, {
     origin: true,
-    credentials: true
+    credentials: true,
+    exposedHeaders: ['Content-Disposition']
   })
 
   // 注册 multipart - 用于文件上传，限制 50MB
