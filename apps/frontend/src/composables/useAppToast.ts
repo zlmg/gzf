@@ -1,4 +1,4 @@
-import { useToast } from '#imports'
+import { useToast } from '@nuxt/ui'
 
 export function useAppToast() {
   const toast = useToast()

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { AvailableStatus, OpenStatus } from '@/types/property'
-import { ElButton, ElInput, ElOption, ElSelect, ElSlider } from 'element-plus'
 import { computed, ref, watch } from 'vue'
 import { useFilterStore } from '@/stores/filter'
 import { usePropertyStore } from '@/stores/property'
@@ -138,25 +137,21 @@ watch(() => localFilters.value.keyword, (newVal) => {
         筛选条件
       </h2>
       <div class="flex items-center gap-2">
-        <ElButton size="small" @click="resetFilters">
+        <UButton size="sm" variant="outline" @click="resetFilters">
           重置
-        </ElButton>
-        <ElButton type="primary" size="small" @click="applyFilters">
+        </UButton>
+        <UButton color="primary" size="sm" @click="applyFilters">
           应用
-        </ElButton>
+        </UButton>
         <button
           class="text-gray-500 hover:text-gray-700 transition-colors p-1"
           @click="isExpanded = !isExpanded"
         >
-          <svg
-            class="w-5 h-5 transition-transform"
+          <UIcon
+            name="i-lucide-chevron-down"
+            class="size-5 transition-transform"
             :class="{ 'rotate-180': isExpanded }"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
+          />
         </button>
       </div>
     </div>
@@ -166,10 +161,9 @@ watch(() => localFilters.value.keyword, (newVal) => {
       <!-- Keyword search -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">关键词</label>
-        <ElInput
+        <UInput
           v-model="localFilters.keyword"
           placeholder="项目名称或地址"
-          clearable
         />
       </div>
 
@@ -185,22 +179,13 @@ watch(() => localFilters.value.keyword, (newVal) => {
           >
           <span v-if="localFilters.excludeLayout" class="text-xs text-red-500">(排除)</span>
         </label>
-        <ElSelect
+        <USelect
           v-model="localFilters.layout"
           multiple
-          clearable
-          collapse-tags-tooltip
           placeholder="选择区域"
-          class="w-full"
-          @change="() => filterStore.updateFilters({ layout: localFilters.layout })"
-        >
-          <ElOption
-            v-for="layout in layouts"
-            :key="layout"
-            :label="layout"
-            :value="layout"
-          />
-        </ElSelect>
+          :items="layouts.map(l => ({ label: l, value: l }))"
+          @update:model-value="() => filterStore.updateFilters({ layout: localFilters.layout })"
+        />
       </div>
 
       <!-- Room type filter -->
@@ -318,22 +303,13 @@ watch(() => localFilters.value.keyword, (newVal) => {
             >
             <span v-if="localFilters.excludeEquipment" class="text-xs text-red-500">(排除)</span>
           </label>
-          <ElSelect
+          <USelect
             v-model="localFilters.equipment"
             multiple
-            clearable
-            collapse-tags-tooltip
             placeholder="选择设备"
-            class="w-full"
-            @change="() => filterStore.updateFilters({ equipment: localFilters.equipment })"
-          >
-            <ElOption
-              v-for="eq in equipments"
-              :key="eq"
-              :label="eq"
-              :value="eq"
-            />
-          </ElSelect>
+            :items="equipments.map(e => ({ label: e, value: e }))"
+            @update:model-value="() => filterStore.updateFilters({ equipment: localFilters.equipment })"
+          />
         </div>
 
         <!-- 标签筛选 -->
@@ -348,22 +324,13 @@ watch(() => localFilters.value.keyword, (newVal) => {
             >
             <span v-if="localFilters.excludeLabel" class="text-xs text-red-500">(排除)</span>
           </label>
-          <ElSelect
+          <USelect
             v-model="localFilters.label"
             multiple
-            clearable
-            collapse-tags-tooltip
             placeholder="选择标签"
-            class="w-full"
-            @change="() => filterStore.updateFilters({ label: localFilters.label })"
-          >
-            <ElOption
-              v-for="label in labels"
-              :key="label"
-              :label="label"
-              :value="label"
-            />
-          </ElSelect>
+            :items="labels.map(l => ({ label: l, value: l }))"
+            @update:model-value="() => filterStore.updateFilters({ label: localFilters.label })"
+          />
         </div>
 
         <!-- 面积筛选 -->
@@ -371,14 +338,12 @@ watch(() => localFilters.value.keyword, (newVal) => {
           <label class="block text-sm font-medium text-gray-700 mb-1">
             面积: {{ localFilters.areaRange[0] }}m² - {{ localFilters.areaRange[1] }}m²
           </label>
-          <ElSlider
+          <URange
             v-model="localFilters.areaRange"
-            class="px-2"
-            range
             :min="areaRange[0]"
             :max="areaRange[1]"
             :step="5"
-            @change="() => filterStore.updateFilters({ areaRange: localFilters.areaRange })"
+            @update:model-value="() => filterStore.updateFilters({ areaRange: localFilters.areaRange })"
           />
         </div>
 
@@ -387,13 +352,11 @@ watch(() => localFilters.value.keyword, (newVal) => {
           <label class="block text-sm font-medium text-gray-700 mb-1">
             价格: ¥{{ localFilters.priceRange[0] }} - ¥{{ localFilters.priceRange[1] }}
           </label>
-          <ElSlider
+          <URange
             v-model="localFilters.priceRange"
-            class="px-2"
-            range
             :max="maxPrice"
             :step="100"
-            @change="() => filterStore.updateFilters({ priceRange: localFilters.priceRange })"
+            @update:model-value="() => filterStore.updateFilters({ priceRange: localFilters.priceRange })"
           />
         </div>
       </div>

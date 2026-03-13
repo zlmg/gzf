@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ElButton, ElEmpty, ElTag } from 'element-plus'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCompareStore } from '@/stores/compare'
@@ -43,25 +42,28 @@ function goToDetail(projectNo: string) {
           </p>
         </div>
         <div class="flex items-center gap-2 md:gap-3">
-          <ElButton v-if="hasItems" size="small" class="md:!size-default" @click="handleClear">
+          <UButton v-if="hasItems" variant="outline" @click="handleClear">
             清空全部
-          </ElButton>
-          <ElButton type="primary" size="small" class="md:!size-default" @click="goToList">
+          </UButton>
+          <UButton color="primary" @click="goToList">
             添加更多房源
-          </ElButton>
+          </UButton>
         </div>
       </div>
 
       <!-- Empty state -->
-      <ElEmpty
+      <div
         v-if="!hasItems"
-        description="还没有选择要对比的房源"
-        class="py-20"
+        class="flex flex-col items-center justify-center py-20"
       >
-        <ElButton type="primary" @click="goToList">
+        <UIcon name="i-lucide-git-compare" class="size-16 text-gray-300 mb-4" />
+        <p class="text-gray-500 mb-4">
+          还没有选择要对比的房源
+        </p>
+        <UButton color="primary" @click="goToList">
           去选择房源
-        </ElButton>
-      </ElEmpty>
+        </UButton>
+      </div>
 
       <!-- Mobile: Card layout -->
       <div v-if="hasItems" class="md:hidden space-y-4">
@@ -83,9 +85,7 @@ function goToDetail(projectNo: string) {
               class="absolute top-2 right-2 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center shadow-md hover:bg-red-50 transition-colors"
               @click="handleRemove(item.projectNo)"
             >
-              <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <UIcon name="i-lucide-x" class="size-4 text-red-600" />
             </button>
           </div>
 
@@ -106,9 +106,9 @@ function goToDetail(projectNo: string) {
 
               <div class="flex justify-between items-center">
                 <span class="text-sm text-gray-500">区域</span>
-                <ElTag size="small" type="info">
+                <UBadge color="neutral" variant="subtle">
                   {{ item.layout || '-' }}
-                </ElTag>
+                </UBadge>
               </div>
 
               <div class="pt-2 border-t border-gray-100">
@@ -120,9 +120,9 @@ function goToDetail(projectNo: string) {
 
               <div class="flex justify-between items-center">
                 <span class="text-sm text-gray-500">户型</span>
-                <ElTag size="small" type="warning">
+                <UBadge color="warning" variant="subtle">
                   {{ formatRoomType(item.roomType) }}
-                </ElTag>
+                </UBadge>
               </div>
 
               <div class="flex justify-between items-center">
@@ -147,9 +147,9 @@ function goToDetail(projectNo: string) {
 
               <div class="flex justify-between items-center">
                 <span class="text-sm text-gray-500">可租数量</span>
-                <ElTag size="small" :type="item.kezuCount > 0 ? 'success' : 'info'">
+                <UBadge :color="item.kezuCount > 0 ? 'success' : 'neutral'" variant="subtle">
                   {{ item.kezuCount }} 套
-                </ElTag>
+                </UBadge>
               </div>
 
               <div class="flex justify-between items-center">
@@ -227,10 +227,7 @@ function goToDetail(projectNo: string) {
                           rel="noopener noreferrer"
                           class="inline-flex items-center gap-1 text-xs bg-blue-500 text-white px-2 py-1 rounded-full mt-1 hover:bg-blue-600 transition-colors"
                         >
-                          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
+                          <UIcon name="i-lucide-eye" class="size-3" />
                           VR看房
                         </a>
                       </div>
@@ -318,9 +315,9 @@ function goToDetail(projectNo: string) {
             :key="item.projectNo"
             class="p-4 border-r border-gray-200 last:border-r-0"
           >
-            <ElTag type="info">
+            <UBadge color="neutral" variant="subtle">
               {{ item.layout || '-' }}
-            </ElTag>
+            </UBadge>
           </div>
         </div>
 
@@ -348,9 +345,9 @@ function goToDetail(projectNo: string) {
             :key="item.projectNo"
             class="p-4 border-r border-gray-200 last:border-r-0"
           >
-            <ElTag type="warning">
+            <UBadge color="warning" variant="subtle">
               {{ formatRoomType(item.roomType) }}
-            </ElTag>
+            </UBadge>
           </div>
         </div>
 
@@ -420,9 +417,9 @@ function goToDetail(projectNo: string) {
             :key="item.projectNo"
             class="p-4 border-r border-gray-200 last:border-r-0"
           >
-            <ElTag :type="item.kezuCount > 0 ? 'success' : 'info'">
+            <UBadge :color="item.kezuCount > 0 ? 'success' : 'neutral'" variant="subtle">
               {{ item.kezuCount }} 套
-            </ElTag>
+            </UBadge>
           </div>
         </div>
 
@@ -533,10 +530,7 @@ function goToDetail(projectNo: string) {
                       rel="noopener noreferrer"
                       class="inline-flex items-center gap-1 text-xs bg-blue-500 text-white px-2 py-1 rounded-full mt-1 hover:bg-blue-600 transition-colors"
                     >
-                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
+                      <UIcon name="i-lucide-eye" class="size-3" />
                       VR看房
                     </a>
                   </div>
@@ -551,12 +545,7 @@ function goToDetail(projectNo: string) {
       <!-- Tips -->
       <div v-if="hasItems && compareList.length < 4" class="mt-4 md:mt-6 p-3 md:p-4 bg-blue-50 rounded-lg">
         <div class="flex items-center gap-2 text-blue-700">
-          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <UIcon name="i-lucide-info" class="size-5 flex-shrink-0" />
           <span class="text-sm">最多可以对比 4 个房源，还可以添加 {{ 4 - compareList.length }} 个</span>
         </div>
       </div>

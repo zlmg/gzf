@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ElEmpty, ElOption, ElSelect, ElSkeleton } from 'element-plus'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import CompareBar from '@/components/CompareBar.vue'
 import PropertyCard from '@/components/PropertyCard.vue'
@@ -89,6 +88,20 @@ watch(loadMoreTrigger, (el) => {
     observer.observe(el)
   }
 })
+
+const sortFieldOptions = [
+  { label: '最低价格', value: 'minPrice' },
+  { label: '最高价格', value: 'maxPrice' },
+  { label: '可租数量', value: 'kezuCount' },
+  { label: '供应日期', value: 'openingDate' },
+  { label: '最小面积', value: 'minArea' },
+  { label: '最大面积', value: 'maxArea' },
+]
+
+const sortOrderOptions = [
+  { label: '升序 ↑', value: 'asc' },
+  { label: '降序 ↓', value: 'desc' },
+]
 </script>
 
 <template>
@@ -110,52 +123,55 @@ watch(loadMoreTrigger, (el) => {
       <!-- Sort and view controls -->
       <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-4">
         <span class="text-sm text-gray-700 font-medium shrink-0">排序:</span>
-        <ElSelect
+        <USelect
           v-model="sortField"
           placeholder="排序字段"
-          clearable
-          size="small"
+          :items="sortFieldOptions"
           class="flex-1 min-w-0 max-w-[120px]"
-        >
-          <ElOption label="最低价格" value="minPrice" />
-          <ElOption label="最高价格" value="maxPrice" />
-          <ElOption label="可租数量" value="kezuCount" />
-          <ElOption label="供应日期" value="openingDate" />
-          <ElOption label="最小面积" value="minArea" />
-          <ElOption label="最大面积" value="maxArea" />
-        </ElSelect>
-        <ElSelect
+        />
+        <USelect
           v-model="sortOrder"
           placeholder="方向"
           :disabled="!sortField"
-          size="small"
+          :items="sortOrderOptions"
           class="flex-1 min-w-0 max-w-[120px]"
-        >
-          <ElOption label="升序 ↑" value="asc" />
-          <ElOption label="降序 ↓" value="desc" />
-        </ElSelect>
+        />
       </div>
 
       <!-- Loading state -->
       <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <div v-for="i in 8" :key="i" class="bg-white rounded-xl shadow-md overflow-hidden">
-          <ElSkeleton :rows="5" animated />
+        <div v-for="i in 8" :key="i" class="bg-white rounded-xl shadow-md overflow-hidden p-4">
+          <div class="animate-pulse space-y-4">
+            <div class="h-40 bg-gray-200 rounded" />
+            <div class="h-4 bg-gray-200 rounded w-3/4" />
+            <div class="h-4 bg-gray-200 rounded w-1/2" />
+            <div class="h-4 bg-gray-200 rounded w-full" />
+            <div class="h-4 bg-gray-200 rounded w-2/3" />
+          </div>
         </div>
       </div>
 
       <!-- Error state -->
-      <ElEmpty
+      <div
         v-else-if="error"
-        :description="error"
-        class="py-20"
-      />
+        class="flex flex-col items-center justify-center py-20"
+      >
+        <UIcon name="i-lucide-alert-circle" class="size-16 text-gray-300 mb-4" />
+        <p class="text-gray-500">
+          {{ error }}
+        </p>
+      </div>
 
       <!-- Empty state -->
-      <ElEmpty
+      <div
         v-else-if="total === 0"
-        description="没有找到符合条件的房源"
-        class="py-20"
-      />
+        class="flex flex-col items-center justify-center py-20"
+      >
+        <UIcon name="i-lucide-search-x" class="size-16 text-gray-300 mb-4" />
+        <p class="text-gray-500">
+          没有找到符合条件的房源
+        </p>
+      </div>
 
       <!-- Property grid -->
       <div
@@ -178,10 +194,7 @@ watch(loadMoreTrigger, (el) => {
         class="flex justify-center items-center py-8"
       >
         <div v-if="isLoadingMore" class="flex items-center gap-2 text-gray-500">
-          <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-          </svg>
+          <UIcon name="i-lucide-loader-2" class="size-5 animate-spin" />
           <span>加载中...</span>
         </div>
         <div v-else class="text-gray-400 text-sm">

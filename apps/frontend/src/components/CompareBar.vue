@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ElButton } from 'element-plus'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCompareStore } from '@/stores/compare'
@@ -51,12 +50,12 @@ function clearAll() {
             </span>
           </div>
           <div class="flex items-center gap-2 flex-shrink-0">
-            <ElButton size="small" @click="clearAll">
+            <UButton size="sm" variant="outline" @click="clearAll">
               清空
-            </ElButton>
-            <ElButton type="primary" size="small" @click="goToCompare">
+            </UButton>
+            <UButton color="primary" size="sm" @click="goToCompare">
               对比
-            </ElButton>
+            </UButton>
           </div>
         </div>
 
@@ -64,12 +63,7 @@ function clearAll() {
         <div class="hidden md:flex items-center justify-between">
           <div class="flex items-center gap-4">
             <div class="flex items-center gap-2">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                />
-              </svg>
+              <UIcon name="i-lucide-clipboard-list" class="size-6 text-blue-600" />
               <span class="font-semibold text-gray-800">
                 已选择 <span class="text-blue-600">{{ count }}</span> 个房源进行对比
               </span>
@@ -90,15 +84,13 @@ function clearAll() {
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <ElButton size="default" @click="clearAll">
+            <UButton variant="outline" @click="clearAll">
               清空
-            </ElButton>
-            <ElButton type="primary" size="default" @click="goToCompare">
+            </UButton>
+            <UButton color="primary" @click="goToCompare">
               开始对比
-              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </ElButton>
+              <UIcon name="i-lucide-chevron-right" class="size-4 ml-1" />
+            </UButton>
           </div>
         </div>
       </div>

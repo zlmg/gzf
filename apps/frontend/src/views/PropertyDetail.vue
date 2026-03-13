@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { HouseType, Property } from '@/types/property'
-import { ElButton, ElDescriptions, ElDescriptionsItem, ElSkeleton, ElTag } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import AmapNearby from '@/components/AmapNearby.vue'
@@ -168,35 +167,36 @@ function toggleNearby() {
           class="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors text-sm md:text-base"
           @click="goBack"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
+          <UIcon name="i-lucide-arrow-left" class="size-5" />
           返回房源列表
         </button>
       </div>
 
       <!-- Loading state -->
       <div v-if="loading" class="bg-white rounded-xl shadow-md p-4 md:p-6">
-        <ElSkeleton :rows="10" animated />
+        <div class="animate-pulse space-y-4">
+          <div class="h-64 bg-gray-200 rounded" />
+          <div class="h-4 bg-gray-200 rounded w-3/4" />
+          <div class="h-4 bg-gray-200 rounded w-1/2" />
+          <div class="h-4 bg-gray-200 rounded w-full" />
+          <div class="h-4 bg-gray-200 rounded w-2/3" />
+          <div class="h-4 bg-gray-200 rounded w-full" />
+          <div class="h-4 bg-gray-200 rounded w-1/2" />
+          <div class="h-4 bg-gray-200 rounded w-3/4" />
+          <div class="h-4 bg-gray-200 rounded w-full" />
+          <div class="h-4 bg-gray-200 rounded w-2/3" />
+        </div>
       </div>
 
       <!-- Error state -->
       <div v-else-if="error" class="bg-white rounded-xl shadow-md p-8 md:p-12 text-center">
-        <svg
-          class="w-12 h-12 md:w-16 md:h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
+        <UIcon name="i-lucide-frown" class="size-12 md:size-16 mx-auto text-gray-400 mb-4" />
         <p class="text-gray-600 mb-4 text-sm md:text-base">
           {{ error }}
         </p>
-        <ElButton type="primary" @click="goBack">
+        <UButton color="primary" @click="goBack">
           返回首页
-        </ElButton>
+        </UButton>
       </div>
 
       <!-- Property detail -->
@@ -218,15 +218,15 @@ function toggleNearby() {
               </p>
             </div>
             <div class="flex items-center gap-2 md:gap-3 shrink-0">
-              <ElTag v-if="isAvailable" type="success" size="default">
+              <UBadge v-if="isAvailable" color="success">
                 可租
-              </ElTag>
-              <ElTag v-else type="info" size="default">
+              </UBadge>
+              <UBadge v-else color="neutral" variant="subtle">
                 已满
-              </ElTag>
-              <ElTag v-if="property.district" type="primary" size="default">
+              </UBadge>
+              <UBadge v-if="property.district" color="primary">
                 {{ property.district }}
-              </ElTag>
+              </UBadge>
             </div>
           </div>
 
@@ -367,64 +367,72 @@ function toggleNearby() {
             </div>
           </div>
 
-          <!-- 桌面端: Descriptions 组件 -->
-          <ElDescriptions :column="2" border class="mb-6 hidden md:block">
-            <!-- 核心信息 -->
-            <ElDescriptionsItem label="租金">
-              <span class="text-red-600 font-semibold">
-                {{ formatPriceRange(property.minRent, property.maxRent) }}/月
-              </span>
-            </ElDescriptionsItem>
-            <ElDescriptionsItem label="户型">
-              {{ formatRoomType(property.roomType) }}
-            </ElDescriptionsItem>
-            <ElDescriptionsItem v-if="property.totalCount" label="总套数">
-              {{ property.totalCount }} 套
-            </ElDescriptionsItem>
-            <ElDescriptionsItem label="可租数量">
-              <span :class="property.kezuCount > 0 ? 'text-green-600' : 'text-gray-500'">
-                {{ property.kezuCount }} 套
-              </span>
-            </ElDescriptionsItem>
-            <ElDescriptionsItem label="开放状态">
-              {{ formatOpenQueue(property.openQueue) }}
-            </ElDescriptionsItem>
-            <!-- 位置信息 -->
-            <ElDescriptionsItem label="所属区域">
-              {{ property.layout || '-' }}
-            </ElDescriptionsItem>
-            <ElDescriptionsItem v-if="property.district" label="行政区">
-              {{ property.district }}
-            </ElDescriptionsItem>
-            <ElDescriptionsItem v-if="property.latitude && property.longitude" label="坐标">
-              {{ property.latitude }}, {{ property.longitude }}
-            </ElDescriptionsItem>
-            <ElDescriptionsItem label="地址">
-              {{ property.location || '-' }}
-            </ElDescriptionsItem>
-            <!-- 房屋属性 -->
-            <ElDescriptionsItem v-if="property.houseType" label="房屋类型">
-              {{ property.houseType }}
-            </ElDescriptionsItem>
-            <ElDescriptionsItem v-if="property.houseSource" label="房屋来源">
-              {{ property.houseSource }}
-            </ElDescriptionsItem>
-            <ElDescriptionsItem v-if="property.supply" label="供应对象">
-              {{ property.supply }}
-            </ElDescriptionsItem>
-            <!-- 规模信息 -->
-            <ElDescriptionsItem v-if="property.totalArea" label="总面积">
-              {{ property.totalArea }} m²
-            </ElDescriptionsItem>
-            <!-- 时间信息 -->
-            <ElDescriptionsItem v-if="property.openingDate" label="供应日期">
-              {{ property.openingDate }}
-            </ElDescriptionsItem>
-            <!-- 其他信息 -->
-            <ElDescriptionsItem label="项目编号">
-              {{ property.projectNo }}
-            </ElDescriptionsItem>
-          </ElDescriptions>
+          <!-- 桌面端: 信息表格 -->
+          <div class="mb-6 hidden md:block">
+            <div class="grid grid-cols-2 gap-4">
+              <!-- 核心信息 -->
+              <div class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">租金</span>
+                <span class="text-red-600 font-semibold">{{ formatPriceRange(property.minRent, property.maxRent) }}/月</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">户型</span>
+                <span class="text-gray-800">{{ formatRoomType(property.roomType) }}</span>
+              </div>
+              <div v-if="property.totalCount" class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">总套数</span>
+                <span class="text-gray-800">{{ property.totalCount }} 套</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">可租数量</span>
+                <span :class="property.kezuCount > 0 ? 'text-green-600' : 'text-gray-500'">{{ property.kezuCount }} 套</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">开放状态</span>
+                <span class="text-gray-800">{{ formatOpenQueue(property.openQueue) }}</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">所属区域</span>
+                <span class="text-gray-800">{{ property.layout || '-' }}</span>
+              </div>
+              <div v-if="property.district" class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">行政区</span>
+                <span class="text-gray-800">{{ property.district }}</span>
+              </div>
+              <div v-if="property.latitude && property.longitude" class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">坐标</span>
+                <span class="text-gray-800 font-mono">{{ property.latitude }}, {{ property.longitude }}</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">地址</span>
+                <span class="text-gray-800">{{ property.location || '-' }}</span>
+              </div>
+              <div v-if="property.houseType" class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">房屋类型</span>
+                <span class="text-gray-800">{{ property.houseType }}</span>
+              </div>
+              <div v-if="property.houseSource" class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">房屋来源</span>
+                <span class="text-gray-800">{{ property.houseSource }}</span>
+              </div>
+              <div v-if="property.supply" class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">供应对象</span>
+                <span class="text-gray-800">{{ property.supply }}</span>
+              </div>
+              <div v-if="property.totalArea" class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">总面积</span>
+                <span class="text-gray-800">{{ property.totalArea }} m²</span>
+              </div>
+              <div v-if="property.openingDate" class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">供应日期</span>
+                <span class="text-gray-800">{{ property.openingDate }}</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-gray-100">
+                <span class="text-gray-500">项目编号</span>
+                <span class="text-gray-800">{{ property.projectNo }}</span>
+              </div>
+            </div>
+          </div>
 
           <!-- 项目介绍 -->
           <div v-if="property.textContent" class="mb-6 p-4 bg-gray-50 rounded-lg">
@@ -441,25 +449,20 @@ function toggleNearby() {
             <div class="flex flex-wrap gap-3">
               <FavoriteButton v-if="property" :property="property" />
               <RouterLink to="/favorites">
-                <ElButton v-if="favoriteStore.count > 0" type="danger" plain size="default">
+                <UButton v-if="favoriteStore.count > 0" color="error" variant="outline">
                   查看收藏 ({{ favoriteStore.count }})
-                </ElButton>
+                </UButton>
               </RouterLink>
-              <ElButton :type="isInCompare ? 'primary' : 'default'" size="default" @click="handleToggleCompare">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                  />
-                </svg>
+              <UButton :color="isInCompare ? 'primary' : 'neutral'" variant="outline" @click="handleToggleCompare">
+                <UIcon name="i-lucide-clipboard-list" class="size-4 mr-1" />
                 {{ isInCompare ? '已添加对比' : '加入对比' }}
-              </ElButton>
+              </UButton>
             </div>
             <div class="flex flex-wrap gap-3">
               <RouterLink to="/compare">
-                <ElButton v-if="compareStore.compareList.length > 0" type="primary" size="default">
+                <UButton v-if="compareStore.compareList.length > 0" color="primary">
                   查看对比 ({{ compareStore.compareList.length }})
-                </ElButton>
+                </UButton>
               </RouterLink>
             </div>
           </div>
@@ -477,10 +480,10 @@ function toggleNearby() {
           >
             <!-- 房型分组信息 -->
             <div class="flex flex-wrap items-center gap-2 mb-4 pb-4 border-b border-gray-200">
-              <ElTag type="primary" size="large">
+              <UBadge color="primary" size="lg">
                 {{ formatHouseTypeName(detail.houseTypeList?.[0]?.houseTypeName || '')
                   || `房型 ${index + 1}` }}
-              </ElTag>
+              </UBadge>
               <span class="text-red-600 font-semibold">{{ formatPriceRange(detail.minRent, detail.maxRent) }}/月</span>
               <span class="text-gray-500 text-sm">总套数: {{ detail.totalCount }} 套</span>
               <span class="text-green-600 text-sm">可租: {{ detail.kezuCount }} 套</span>
@@ -501,21 +504,14 @@ function toggleNearby() {
                     loading="lazy" @click="openHouseTypeViewer(house)"
                   >
                   <div v-else class="w-full h-40 flex items-center justify-center text-gray-400">
-                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
+                    <UIcon name="i-lucide-image" class="size-12" />
                   </div>
                   <!-- 多图指示器 -->
                   <div
                     v-if="getHouseTypeImages(house).length > 1"
                     class="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1"
                   >
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                    <UIcon name="i-lucide-image" class="size-3" />
                     {{ getHouseTypeImages(house).length }} 张
                   </div>
                   <!-- VR 按钮 -->
@@ -523,16 +519,7 @@ function toggleNearby() {
                     v-if="house.vrUrl" class="absolute bottom-3 right-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer"
                     @click.stop="openVrUrl(house.vrUrl)"
                   >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
+                    <UIcon name="i-lucide-eye" class="size-4" />
                     VR看房
                   </button>
                 </div>
@@ -594,9 +581,7 @@ function toggleNearby() {
                 class="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors"
                 @click="toggleNearby"
               >
-                <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': showNearby }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
+                <UIcon name="i-lucide-chevron-down" class="size-4 transition-transform" :class="{ 'rotate-180': showNearby }" />
                 {{ showNearby ? '收起' : '展开' }}
               </button>
             </div>
@@ -604,12 +589,7 @@ function toggleNearby() {
               v-if="showNearby" class="px-4 py-2 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1"
               @click="openMap"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
+              <UIcon name="i-lucide-external-link" class="size-4" />
               打开地图
             </button>
           </div>
