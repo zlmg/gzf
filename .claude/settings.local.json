@@ -23,7 +23,10 @@
       "Bash(pnpm prepare:*)",
       "Bash(pnpm lint:*)",
       "Bash(railway logs:*)",
-      "Bash(sleep 30 && railway status --json | jq '.environments.edges[0].node.serviceInstances.edges[0].node.latestDeployment | {id, status, createdAt}')"
+      "Bash(sleep 30 && railway status --json | jq '.environments.edges[0].node.serviceInstances.edges[0].node.latestDeployment | {id, status, createdAt}')",
+      "Bash(pnpm --filter frontend type-check 2>&1 | head -100)",
+      "Bash(cd /Users/minos/File/WebFile/demo/gzf/apps/server && pnpm tsc --noEmit 2>&1 | head -100)",
+      "Bash(cd /Users/minos/File/WebFile/demo/gzf/apps/server && pnpm tsc --noEmit 2>&1 | head -50)"
     ]
   }
 }

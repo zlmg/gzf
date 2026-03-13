@@ -1,4 +1,4 @@
-import type { FavoriteItem, HistoryItem, Preferences, User } from '@/types/user'
+import type { FavoriteItem, FavoriteRef, HistoryItem, HistoryRef, Preferences, User } from '@/types/user'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { ApiError, authApi, userApi } from '@/api'
@@ -8,6 +8,18 @@ import { useHistoryStore } from './history'
 
 const TOKEN_KEY = 'gzf-token'
 const USER_KEY = 'gzf-user'
+
+// 云端数据可能为旧格式或新格式
+type CloudFavorite = FavoriteRef | FavoriteItem
+type CloudHistory = HistoryRef | HistoryItem
+
+function isFavoriteItem(item: CloudFavorite): item is FavoriteItem {
+  return 'projectName' in item
+}
+
+function isHistoryItem(item: CloudHistory): item is HistoryItem {
+  return 'projectName' in item
+}
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(localStorage.getItem(TOKEN_KEY))
@@ -110,12 +122,12 @@ export const useAuthStore = defineStore('auth', () => {
       if (response.success && response.data) {
         // 合并收藏（本地优先）
         if (Array.isArray(response.data.favorites)) {
-          mergeFavorites(response.data.favorites)
+          mergeFavorites(response.data.favorites as CloudFavorite[])
         }
 
         // 合并浏览记录（本地优先）
         if (Array.isArray(response.data.history)) {
-          mergeHistory(response.data.history)
+          mergeHistory(response.data.history as CloudHistory[])
         }
 
         // 合并筛选偏好
@@ -132,13 +144,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  // 合并收藏数据
-  const mergeFavorites = (cloudFavorites: FavoriteItem[]) => {
+  // 合并收藏数据（支持旧格式和新格式）
+  const mergeFavorites = (cloudFavorites: CloudFavorite[]) => {
     const favoriteStore = useFavoriteStore()
     const localFavorites = [...favoriteStore.favorites]
 
     // 创建合并 map，以 projectNo 为 key
-    const merged = new Map<string, FavoriteItem>()
+    const merged = new Map<string, FavoriteRef>()
 
     // 先加入本地数据
     for (const item of localFavorites) {
@@ -147,9 +159,14 @@ export const useAuthStore = defineStore('auth', () => {
 
     // 合并云端数据，比较时间戳
     for (const cloudItem of cloudFavorites) {
-      const localItem = merged.get(cloudItem.projectNo)
-      if (!localItem || (cloudItem.addedAt && cloudItem.addedAt > localItem.addedAt)) {
-        merged.set(cloudItem.projectNo, cloudItem)
+      // 转换为简化格式
+      const ref: FavoriteRef = isFavoriteItem(cloudItem)
+        ? { projectNo: cloudItem.projectNo, addedAt: cloudItem.addedAt }
+        : { projectNo: cloudItem.projectNo, addedAt: cloudItem.addedAt }
+
+      const localItem = merged.get(ref.projectNo)
+      if (!localItem || ref.addedAt > localItem.addedAt) {
+        merged.set(ref.projectNo, ref)
       }
     }
 
@@ -160,13 +177,13 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem('gzf-favorites', JSON.stringify(favoriteStore.favorites))
   }
 
-  // 合并浏览记录
-  const mergeHistory = (cloudHistory: HistoryItem[]) => {
+  // 合并浏览记录（支持旧格式和新格式）
+  const mergeHistory = (cloudHistory: CloudHistory[]) => {
     const historyStore = useHistoryStore()
     const localHistory = [...historyStore.history]
 
     // 创建合并 map，以 projectNo 为 key
-    const merged = new Map<string, HistoryItem>()
+    const merged = new Map<string, HistoryRef>()
 
     // 先加入本地数据
     for (const item of localHistory) {
@@ -175,9 +192,14 @@ export const useAuthStore = defineStore('auth', () => {
 
     // 合并云端数据，比较时间戳
     for (const cloudItem of cloudHistory) {
-      const localItem = merged.get(cloudItem.projectNo)
-      if (!localItem || (cloudItem.viewedAt && cloudItem.viewedAt > localItem.viewedAt)) {
-        merged.set(cloudItem.projectNo, cloudItem)
+      // 转换为简化格式
+      const ref: HistoryRef = isHistoryItem(cloudItem)
+        ? { projectNo: cloudItem.projectNo, viewedAt: cloudItem.viewedAt }
+        : { projectNo: cloudItem.projectNo, viewedAt: cloudItem.viewedAt }
+
+      const localItem = merged.get(ref.projectNo)
+      if (!localItem || ref.viewedAt > localItem.viewedAt) {
+        merged.set(ref.projectNo, ref)
       }
     }
 

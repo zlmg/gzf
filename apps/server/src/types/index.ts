@@ -2,6 +2,13 @@ import type { FastifyRequest } from 'fastify'
 import type { User } from '@prisma/client'
 
 // ============ 收藏相关类型 ============
+// 简化存储类型（只存储 projectNo + 时间戳）
+export interface FavoriteRef {
+  projectNo: string
+  addedAt: number
+}
+
+// 完整收藏类型（向后兼容）
 export interface FavoriteItem {
   projectNo: string
   projectName: string
@@ -25,6 +32,13 @@ export interface FavoriteItem {
 }
 
 // ============ 浏览记录相关类型 ============
+// 简化存储类型（只存储 projectNo + 时间戳）
+export interface HistoryRef {
+  projectNo: string
+  viewedAt: number
+}
+
+// 完整浏览记录类型（向后兼容）
 export interface HistoryItem {
   projectNo: string
   projectName: string
@@ -113,11 +127,11 @@ export interface LoginBody {
 }
 
 export interface SyncFavoritesBody {
-  favorites: FavoriteItem[]
+  favorites: FavoriteRef[]
 }
 
 export interface SyncHistoryBody {
-  history: HistoryItem[]
+  history: HistoryRef[]
 }
 
 export interface SyncPreferencesBody {
@@ -145,8 +159,8 @@ export interface AuthResponse {
 export interface UserDataResponse {
   success: boolean
   data: {
-    favorites: FavoriteItem[]
-    history: HistoryItem[]
+    favorites: FavoriteRef[]
+    history: HistoryRef[]
     preferences: Preferences
   }
 }

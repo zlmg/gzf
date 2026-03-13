@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Property } from '@/types/property'
 import { ElButton, ElEmpty, ElMessage } from 'element-plus'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -11,7 +12,8 @@ const router = useRouter()
 const historyStore = useHistoryStore()
 const compareStore = useCompareStore()
 
-const hasHistory = computed(() => historyStore.history.length > 0)
+const hasHistory = computed(() => historyStore.count > 0)
+const hasInvalidHistory = computed(() => historyStore.invalidCount > 0)
 
 function getThumbnailUrl(thumbnail: string): string {
   if (!thumbnail)
@@ -39,6 +41,13 @@ function handleClearAll() {
   }
 }
 
+function handleRemoveInvalid() {
+  const removed = historyStore.removeInvalidHistory()
+  if (removed > 0) {
+    ElMessage.success(`已移除 ${removed} 条失效记录`)
+  }
+}
+
 function formatViewedAt(timestamp: number): string {
   return new Date(timestamp).toLocaleString('zh-CN', {
     year: 'numeric',
@@ -51,11 +60,11 @@ function formatViewedAt(timestamp: number): string {
 }
 
 // 汇总所有房型的设备并去重
-function getEquipmentList(item: typeof historyStore.history[0]): string[] {
-  if (!item.roomTypeDetails)
+function getEquipmentList(property: Property): string[] {
+  if (!property.roomTypeDetails)
     return []
   const equipmentSet = new Set<string>()
-  item.roomTypeDetails.forEach((detail) => {
+  property.roomTypeDetails.forEach((detail) => {
     detail.houseTypeList?.forEach((houseType) => {
       if (houseType.roomEquipment) {
         houseType.roomEquipment.split(',').forEach((eq) => {
@@ -70,10 +79,10 @@ function getEquipmentList(item: typeof historyStore.history[0]): string[] {
 }
 
 // 检查房源是否有"近地铁"标签
-function hasSubwayLabel(item: typeof historyStore.history[0]): boolean {
-  if (!item.roomTypeDetails)
+function hasSubwayLabel(property: Property): boolean {
+  if (!property.roomTypeDetails)
     return false
-  for (const detail of item.roomTypeDetails) {
+  for (const detail of property.roomTypeDetails) {
     if (detail.houseTypeList) {
       for (const houseType of detail.houseTypeList) {
         if (houseType.roomLabel && houseType.roomLabel.includes('近地铁')) {
@@ -86,11 +95,11 @@ function hasSubwayLabel(item: typeof historyStore.history[0]): boolean {
 }
 
 // 提取房型的面积范围
-function getFormattedArea(item: typeof historyStore.history[0]): string | null {
-  if (!item.roomTypeDetails)
+function getFormattedArea(property: Property): string | null {
+  if (!property.roomTypeDetails)
     return null
   const areas = new Set<string>()
-  item.roomTypeDetails.forEach((detail) => {
+  property.roomTypeDetails.forEach((detail) => {
     detail.houseTypeList?.forEach((houseType) => {
       if (houseType.area) {
         areas.add(houseType.area.trim())
@@ -122,35 +131,9 @@ function isInCompare(projectNo: string): boolean {
 }
 
 // 切换对比状态
-function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
+function handleToggleCompare(e: Event, property: Property) {
   e.stopPropagation()
-  const property = {
-    projectNo: item.projectNo,
-    projectName: item.projectName,
-    location: item.location,
-    layout: item.layout,
-    roomType: item.roomType,
-    minRent: item.minRent,
-    maxRent: item.maxRent,
-    thumbnail: item.thumbnail,
-    mediaUrl: '',
-    latitude: '',
-    longitude: '',
-    kezuCount: item.kezuCount,
-    openQueue: item.openQueue,
-    district: item.district || '',
-    openingDate: item.openingDate || '',
-    houseType: item.houseType || '',
-    houseSource: item.houseSource || '',
-    supply: '',
-    totalCount: item.totalCount || '',
-    totalArea: item.totalArea || '',
-    textContent: '',
-    roomTypeCount: '',
-    roomTypeDetails: item.roomTypeDetails || [],
-  }
-
-  if (isInCompare(item.projectNo)) {
+  if (isInCompare(property.projectNo)) {
     compareStore.toggleCompare(property)
   }
   else {
@@ -174,9 +157,13 @@ function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
           </h1>
           <p class="text-sm md:text-base text-gray-600">
             共 <span class="font-semibold text-red-600">{{ historyStore.count }}</span> 条浏览记录
+            <span v-if="hasInvalidHistory" class="text-orange-500">（{{ historyStore.invalidCount }} 条已失效）</span>
           </p>
         </div>
         <div v-if="hasHistory" class="flex items-center gap-2 md:gap-3">
+          <ElButton v-if="hasInvalidHistory" type="warning" plain size="small" class="!text-xs md:!text-sm" @click="handleRemoveInvalid">
+            清理失效
+          </ElButton>
           <ElButton type="danger" plain size="small" class="!text-xs md:!text-sm" @click="handleClearAll">
             清空全部
           </ElButton>
@@ -198,21 +185,44 @@ function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
       <div v-else class="space-y-3 md:space-y-4">
         <TransitionGroup name="list">
           <div
-            v-for="item in historyStore.history"
-            :key="item.projectNo"
+            v-for="item in historyStore.historyWithProperties"
+            :key="item.ref.projectNo"
             class="bg-white rounded-xl shadow-sm md:shadow-md overflow-hidden hover:shadow-lg transition-shadow active:scale-[0.99] md:active:scale-100"
+            :class="{ 'opacity-60': !item.property }"
           >
-            <!-- Mobile Layout -->
-            <div class="md:hidden">
+            <!-- Invalid history item -->
+            <div v-if="!item.property" class="p-4 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500">
+                    房源已失效或已下架
+                  </p>
+                  <p class="text-xs text-gray-400">
+                    编号: {{ item.ref.projectNo }}
+                  </p>
+                </div>
+              </div>
+              <ElButton type="danger" plain size="small" @click="handleRemove(item.ref.projectNo)">
+                删除
+              </ElButton>
+            </div>
+
+            <!-- Valid history - Mobile Layout -->
+            <div v-else class="md:hidden">
               <!-- Image with status badge -->
               <div class="relative h-40 bg-gray-100">
                 <img
-                  v-if="item.thumbnail"
-                  :src="getThumbnailUrl(item.thumbnail)"
-                  :alt="item.projectName"
+                  v-if="item.property.thumbnail"
+                  :src="getThumbnailUrl(item.property.thumbnail)"
+                  :alt="item.property.projectName"
                   class="w-full h-full object-cover cursor-pointer"
                   loading="lazy"
-                  @click="goToDetail(item.projectNo)"
+                  @click="goToDetail(item.property.projectNo)"
                 >
                 <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
                   <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -226,12 +236,12 @@ function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
                 <div class="absolute top-2 left-2">
                   <span
                     class="px-2 py-1 text-xs font-medium rounded-full shadow-sm" :class="[
-                      (item.openQueue === '1' || item.openQueue === '是')
+                      (item.property.openQueue === '1' || item.property.openQueue === '是')
                         ? 'bg-green-500 text-white'
                         : 'bg-gray-500/80 text-white',
                     ]"
                   >
-                    {{ (item.openQueue === '1' || item.openQueue === '是') ? '开放排队' : '暂未开放' }}
+                    {{ (item.property.openQueue === '1' || item.property.openQueue === '是') ? '开放排队' : '暂未开放' }}
                   </span>
                 </div>
               </div>
@@ -242,54 +252,54 @@ function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
                 <div class="flex items-baseline justify-between gap-2 mb-2">
                   <h3
                     class="text-base font-semibold text-gray-800 line-clamp-1 cursor-pointer hover:text-blue-600 transition-colors flex-1"
-                    @click="goToDetail(item.projectNo)"
+                    @click="goToDetail(item.property.projectNo)"
                   >
-                    {{ item.projectName }}
+                    {{ item.property.projectName }}
                   </h3>
                   <span class="text-lg font-bold text-red-600 whitespace-nowrap shrink-0">
-                    {{ formatPriceRange(item.minRent, item.maxRent) }}/月
+                    {{ formatPriceRange(item.property.minRent, item.property.maxRent) }}/月
                   </span>
                 </div>
 
                 <!-- Location and Opening Date -->
                 <div class="flex items-center justify-between gap-2 mb-2">
                   <p class="text-xs text-gray-500 line-clamp-1 flex-1">
-                    {{ item.location }}
+                    {{ item.property.location }}
                   </p>
-                  <span v-if="item.openingDate" class="text-xs text-gray-400 shrink-0">
-                    {{ item.openingDate }}
+                  <span v-if="item.property.openingDate" class="text-xs text-gray-400 shrink-0">
+                    {{ item.property.openingDate }}
                   </span>
                 </div>
 
                 <!-- 数量信息行：灰色不加粗 -->
                 <div class="flex items-center gap-3 text-xs text-gray-500 mb-2">
-                  <span>总套数: {{ item.totalCount || '-' }}</span>
-                  <span>可租: {{ item.kezuCount }}</span>
-                  <span>{{ getFormattedArea(item) || '-' }}</span>
+                  <span>总套数: {{ item.property.totalCount || '-' }}</span>
+                  <span>可租: {{ item.property.kezuCount }}</span>
+                  <span>{{ getFormattedArea(item.property) || '-' }}</span>
                 </div>
 
                 <!-- Tags: 单行显示，高度一致 -->
                 <div class="flex items-center gap-1.5 mb-2 overflow-x-auto">
                   <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs whitespace-nowrap shrink-0">
-                    {{ item.layout || '未知区域' }}
+                    {{ item.property.layout || '未知区域' }}
                   </span>
                   <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs whitespace-nowrap shrink-0">
-                    {{ formatRoomType(item.roomType) }}
+                    {{ formatRoomType(item.property.roomType) }}
                   </span>
-                  <span v-if="hasSubwayLabel(item)" class="px-2 py-1 bg-amber-50 text-amber-700 rounded text-xs whitespace-nowrap shrink-0">
+                  <span v-if="hasSubwayLabel(item.property)" class="px-2 py-1 bg-amber-50 text-amber-700 rounded text-xs whitespace-nowrap shrink-0">
                     近地铁
                   </span>
                 </div>
 
                 <!-- Equipment -->
-                <div v-if="getEquipmentList(item).length > 0" class="mb-2">
+                <div v-if="getEquipmentList(item.property).length > 0" class="mb-2">
                   <div class="flex items-start gap-1 text-xs text-gray-500">
                     <svg class="w-3.5 h-3.5 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div class="flex flex-wrap gap-1">
                       <span
-                        v-for="eq in getEquipmentList(item)"
+                        v-for="eq in getEquipmentList(item.property)"
                         :key="eq"
                         class="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded"
                       >
@@ -303,17 +313,17 @@ function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
                 <div class="flex items-center gap-2 pt-2 border-t border-gray-100">
                   <button
                     class="flex-1 py-2 text-sm rounded-lg transition-all active:scale-95" :class="[
-                      isInCompare(item.projectNo)
+                      isInCompare(item.property.projectNo)
                         ? 'bg-blue-500 text-white'
                         : 'bg-gray-100 text-gray-700 active:bg-gray-200',
                     ]"
-                    @click.stop="handleToggleCompare($event, item)"
+                    @click.stop="handleToggleCompare($event, item.property)"
                   >
-                    {{ isInCompare(item.projectNo) ? '已加入对比' : '加入对比' }}
+                    {{ isInCompare(item.property.projectNo) ? '已加入对比' : '加入对比' }}
                   </button>
                   <button
                     class="px-4 py-2 text-sm text-red-600 bg-red-50 rounded-lg transition-all active:scale-95 active:bg-red-100"
-                    @click.stop="handleRemove(item.projectNo)"
+                    @click.stop="handleRemove(item.property.projectNo)"
                   >
                     删除
                   </button>
@@ -321,22 +331,22 @@ function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
 
                 <!-- Timestamp -->
                 <div class="mt-2 text-xs text-gray-400 text-center">
-                  浏览于 {{ formatViewedAt(item.viewedAt) }}
+                  浏览于 {{ formatViewedAt(item.ref.viewedAt) }}
                 </div>
               </div>
             </div>
 
-            <!-- Desktop Layout -->
-            <div class="hidden md:flex flex-col md:flex-row">
+            <!-- Valid history - Desktop Layout -->
+            <div v-if="item.property" class="hidden md:flex flex-col md:flex-row">
               <!-- Image -->
               <div class="md:w-48 h-36 md:h-auto flex-shrink-0 bg-gray-100 relative">
                 <img
-                  v-if="item.thumbnail"
-                  :src="getThumbnailUrl(item.thumbnail)"
-                  :alt="item.projectName"
+                  v-if="item.property.thumbnail"
+                  :src="getThumbnailUrl(item.property.thumbnail)"
+                  :alt="item.property.projectName"
                   class="w-full h-full object-cover cursor-pointer"
                   loading="lazy"
-                  @click="goToDetail(item.projectNo)"
+                  @click="goToDetail(item.property.projectNo)"
                 >
                 <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
                   <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -351,54 +361,54 @@ function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
               <!-- Content -->
               <div class="flex-1 p-4">
                 <div class="flex items-start justify-between">
-                  <div class="flex-1 cursor-pointer" @click="goToDetail(item.projectNo)">
+                  <div class="flex-1 cursor-pointer" @click="goToDetail(item.property.projectNo)">
                     <div class="flex items-baseline justify-between gap-2 mb-2">
                       <h3 class="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors flex-1">
-                        {{ item.projectName }}
+                        {{ item.property.projectName }}
                       </h3>
                       <span class="text-lg font-bold text-red-600 whitespace-nowrap shrink-0">
-                        {{ formatPriceRange(item.minRent, item.maxRent) }}/月
+                        {{ formatPriceRange(item.property.minRent, item.property.maxRent) }}/月
                       </span>
                     </div>
                     <!-- Location and Opening Date -->
                     <div class="flex items-center justify-between gap-2 mb-3">
                       <p class="text-sm text-gray-500 line-clamp-1 flex-1">
-                        {{ item.location }}
+                        {{ item.property.location }}
                       </p>
-                      <span v-if="item.openingDate" class="text-xs text-gray-400 shrink-0">
-                        {{ item.openingDate }}
+                      <span v-if="item.property.openingDate" class="text-xs text-gray-400 shrink-0">
+                        {{ item.property.openingDate }}
                       </span>
                     </div>
                     <!-- 数量信息行：灰色不加粗 -->
                     <div class="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                      <span>总套数: {{ item.totalCount || '-' }}</span>
-                      <span>可租: {{ item.kezuCount }}</span>
-                      <span>{{ getFormattedArea(item) || '-' }}</span>
+                      <span>总套数: {{ item.property.totalCount || '-' }}</span>
+                      <span>可租: {{ item.property.kezuCount }}</span>
+                      <span>{{ getFormattedArea(item.property) || '-' }}</span>
                     </div>
                     <!-- 标签行：单行显示，高度一致 -->
                     <div class="flex items-center gap-2 mb-3 overflow-x-auto">
                       <span class="px-2 py-1 bg-blue-50 text-blue-700 rounded text-sm whitespace-nowrap shrink-0">
-                        {{ item.layout || '未知区域' }}
+                        {{ item.property.layout || '未知区域' }}
                       </span>
-                      <span v-if="item.district" class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-sm whitespace-nowrap shrink-0">
-                        {{ item.district }}
+                      <span v-if="item.property.district" class="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-sm whitespace-nowrap shrink-0">
+                        {{ item.property.district }}
                       </span>
                       <span class="px-2 py-1 bg-purple-50 text-purple-700 rounded text-sm whitespace-nowrap shrink-0">
-                        {{ formatRoomType(item.roomType) }}
+                        {{ formatRoomType(item.property.roomType) }}
                       </span>
-                      <span v-if="item.houseType" class="px-2 py-1 bg-cyan-50 text-cyan-700 rounded text-sm whitespace-nowrap shrink-0">
-                        {{ item.houseType }}
+                      <span v-if="item.property.houseType" class="px-2 py-1 bg-cyan-50 text-cyan-700 rounded text-sm whitespace-nowrap shrink-0">
+                        {{ item.property.houseType }}
                       </span>
-                      <span v-if="hasSubwayLabel(item)" class="px-2 py-1 bg-amber-50 text-amber-700 rounded text-sm whitespace-nowrap shrink-0">
+                      <span v-if="hasSubwayLabel(item.property)" class="px-2 py-1 bg-amber-50 text-amber-700 rounded text-sm whitespace-nowrap shrink-0">
                         近地铁
                       </span>
                     </div>
                     <!-- 设备 -->
-                    <div v-if="getEquipmentList(item).length > 0" class="mt-2 flex items-start gap-2 text-xs">
+                    <div v-if="getEquipmentList(item.property).length > 0" class="mt-2 flex items-start gap-2 text-xs">
                       <span class="text-gray-500 flex-shrink-0">设备:</span>
                       <div class="flex flex-wrap gap-1">
                         <span
-                          v-for="eq in getEquipmentList(item)"
+                          v-for="eq in getEquipmentList(item.property)"
                           :key="eq"
                           class="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded"
                         >
@@ -410,18 +420,18 @@ function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
                   <div class="ml-4 text-right flex flex-col items-end gap-2">
                     <div class="flex gap-2">
                       <ElButton
-                        :type="isInCompare(item.projectNo) ? 'primary' : 'default'"
+                        :type="isInCompare(item.property.projectNo) ? 'primary' : 'default'"
                         plain
                         size="small"
-                        @click.stop="handleToggleCompare($event, item)"
+                        @click.stop="handleToggleCompare($event, item.property)"
                       >
-                        {{ isInCompare(item.projectNo) ? '已加入对比' : '加入对比' }}
+                        {{ isInCompare(item.property.projectNo) ? '已加入对比' : '加入对比' }}
                       </ElButton>
                       <ElButton
                         type="danger"
                         plain
                         size="small"
-                        @click.stop="handleRemove(item.projectNo)"
+                        @click.stop="handleRemove(item.property.projectNo)"
                       >
                         删除
                       </ElButton>
@@ -430,14 +440,14 @@ function handleToggleCompare(e: Event, item: typeof historyStore.history[0]) {
                 </div>
                 <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
                   <span class="text-xs text-gray-400">
-                    浏览时间: {{ formatViewedAt(item.viewedAt) }}
+                    浏览时间: {{ formatViewedAt(item.ref.viewedAt) }}
                   </span>
                   <span
                     class="text-xs" :class="[
-                      item.openQueue === '1' || item.openQueue === '是' ? 'text-green-600' : 'text-gray-400',
+                      item.property.openQueue === '1' || item.property.openQueue === '是' ? 'text-green-600' : 'text-gray-400',
                     ]"
                   >
-                    {{ formatOpenQueue(item.openQueue) }}
+                    {{ formatOpenQueue(item.property.openQueue) }}
                   </span>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import type { AuthResponse, FavoriteItem, HistoryItem, Preferences, SyncResponse, UserDataResponse } from '@/types/user'
+import type { AuthResponse, FavoriteRef, HistoryRef, Preferences, SyncResponse, UserDataResponse } from '@/types/user'
 import type { PoiItem } from '@/composables/usePoiCache'
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001'
@@ -91,13 +91,13 @@ export const userApi = {
   getData: () =>
     request<UserDataResponse>('/api/user/data'),
 
-  syncFavorites: (favorites: FavoriteItem[]) =>
+  syncFavorites: (favorites: FavoriteRef[]) =>
     request<SyncResponse>('/api/user/favorites', {
       method: 'PUT',
       body: JSON.stringify({ favorites }),
     }),
 
-  syncHistory: (history: HistoryItem[]) =>
+  syncHistory: (history: HistoryRef[]) =>
     request<SyncResponse>('/api/user/history', {
       method: 'PUT',
       body: JSON.stringify({ history }),

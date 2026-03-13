@@ -1,42 +1,40 @@
-import type { Property, RoomTypeDetail } from '@/types/property'
+import type { HistoryRef } from '@/types/user'
+import type { Property } from '@/types/property'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import { usePropertyStore } from './property'
 
-export interface HistoryItem {
-  projectNo: string
-  projectName: string
-  location: string
-  layout: string
-  roomType: string
-  minRent: number
-  maxRent: number
-  thumbnail: string
-  kezuCount: number
-  openQueue: string
-  viewedAt: number // 浏览时间戳（毫秒）
-  // 可选字段
-  district?: string
-  houseType?: string
-  totalCount?: string
-  openingDate?: string
-  totalArea?: string
-  houseSource?: string
-  roomTypeDetails?: RoomTypeDetail[]
+// 带完整房源信息的浏览记录项
+export interface HistoryWithProperty {
+  ref: HistoryRef
+  property: Property | null // null 表示房源已失效
 }
 
 const STORAGE_KEY = 'gzf-history'
 const MAX_HISTORY = 100
 
 // 从 localStorage 加载
-function loadFromStorage(): HistoryItem[] {
+function loadFromStorage(): HistoryRef[] {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       const parsed = JSON.parse(stored)
-      // Validate data structure
+      // 支持新旧两种格式
       if (Array.isArray(parsed)) {
+        // 检测是旧格式（完整数据）还是新格式（简化数据）
+        const firstItem = parsed[0]
+        if (firstItem && 'projectName' in firstItem) {
+          // 旧格式，转换为简化格式
+          return parsed
+            .filter(item => item.projectNo && item.viewedAt)
+            .map(item => ({
+              projectNo: item.projectNo,
+              viewedAt: item.viewedAt,
+            }))
+        }
+        // 新格式
         return parsed.filter(item =>
-          item.projectNo && item.projectName && item.viewedAt,
+          item.projectNo && typeof item.viewedAt === 'number',
         )
       }
     }
@@ -48,7 +46,7 @@ function loadFromStorage(): HistoryItem[] {
 }
 
 // 保存到 localStorage
-function saveToStorage(list: HistoryItem[]) {
+function saveToStorage(list: HistoryRef[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
   }
@@ -58,9 +56,29 @@ function saveToStorage(list: HistoryItem[]) {
 }
 
 export const useHistoryStore = defineStore('history', () => {
-  const history = ref<HistoryItem[]>(loadFromStorage())
+  const history = ref<HistoryRef[]>(loadFromStorage())
+  const propertyStore = usePropertyStore()
+
+  // 带完整房源信息的浏览记录列表
+  const historyWithProperties = computed<HistoryWithProperty[]>(() => {
+    return history.value.map((ref) => {
+      const property = propertyStore.getPropertyByNo(ref.projectNo) ?? null
+      return { ref, property }
+    })
+  })
+
+  // 有效的浏览记录列表（排除已失效的房源）
+  const validHistory = computed<HistoryWithProperty[]>(() => {
+    return historyWithProperties.value.filter(item => item.property !== null)
+  })
+
+  // 失效的记录数量
+  const invalidCount = computed(() => {
+    return historyWithProperties.value.filter(item => item.property === null).length
+  })
 
   const count = computed(() => history.value.length)
+  const validCount = computed(() => validHistory.value.length)
 
   // 获取指定房源的浏览时间
   const getViewedAt = (projectNo: string): number | null => {
@@ -69,7 +87,7 @@ export const useHistoryStore = defineStore('history', () => {
   }
 
   // 获取指定房源的浏览记录
-  const getHistoryItem = (projectNo: string): HistoryItem | undefined => {
+  const getHistoryItem = (projectNo: string): HistoryRef | undefined => {
     return history.value.find(item => item.projectNo === projectNo)
   }
 
@@ -82,29 +100,12 @@ export const useHistoryStore = defineStore('history', () => {
     }
 
     // 添加到开头（最新的在前）
-    const item: HistoryItem = {
+    const ref: HistoryRef = {
       projectNo: property.projectNo,
-      projectName: property.projectName,
-      location: property.location,
-      layout: property.layout,
-      roomType: property.roomType,
-      minRent: property.minRent,
-      maxRent: property.maxRent,
-      thumbnail: property.thumbnail,
-      kezuCount: property.kezuCount,
-      openQueue: property.openQueue,
       viewedAt: Date.now(),
-      // 可选字段
-      district: property.district,
-      houseType: property.houseType,
-      totalCount: property.totalCount,
-      openingDate: property.openingDate,
-      totalArea: property.totalArea,
-      houseSource: property.houseSource,
-      roomTypeDetails: property.roomTypeDetails,
     }
 
-    history.value.unshift(item)
+    history.value.unshift(ref)
 
     // 超出上限时移除最旧的
     if (history.value.length > MAX_HISTORY) {
@@ -131,13 +132,41 @@ export const useHistoryStore = defineStore('history', () => {
     saveToStorage(history.value)
   }
 
+  /**
+   * 移除失效的浏览记录
+   */
+  const removeInvalidHistory = () => {
+    const before = history.value.length
+    history.value = history.value.filter((ref) => {
+      return propertyStore.getPropertyByNo(ref.projectNo) !== null
+    })
+    const removed = before - history.value.length
+    if (removed > 0) {
+      saveToStorage(history.value)
+    }
+    return removed
+  }
+
+  /**
+   * 获取用于云端同步的数据（简化格式）
+   */
+  const getSyncData = (): HistoryRef[] => {
+    return [...history.value]
+  }
+
   return {
     history,
+    historyWithProperties,
+    validHistory,
+    invalidCount,
     count,
+    validCount,
     getViewedAt,
     getHistoryItem,
     addToHistory,
     removeFromHistory,
     clearHistory,
+    removeInvalidHistory,
+    getSyncData,
   }
 })

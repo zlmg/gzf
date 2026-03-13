@@ -1,37 +1,28 @@
-import type { Property, RoomTypeDetail } from '@/types/property'
+import type { FavoriteRef, FavoriteItem } from '@/types/user'
+import type { Property } from '@/types/property'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { getImageUrl } from '@/config'
+import { usePropertyStore } from './property'
 
-export interface FavoriteItem {
-  projectNo: string
-  projectName: string
-  location: string
-  layout: string
-  roomType: string
-  minRent: number
-  maxRent: number
-  thumbnail: string
-  kezuCount: number
-  openQueue: string
-  addedAt: number // timestamp
-  // 新增字段
-  district?: string
-  houseType?: string
-  totalCount?: string
-  openingDate?: string
-  totalArea?: string
-  houseSource?: string
-  roomTypeDetails?: RoomTypeDetail[]
+// 导出数据结构 v1.0（完整数据，向后兼容）
+export interface FavoriteExportDataV1 {
+  version: '1.0'
+  exportTime: number
+  totalCount: number
+  entries: FavoriteItem[]
 }
 
-// 导出数据结构
-export interface FavoriteExportData {
-  version: string // "1.0"
-  exportTime: number // 导出时间戳
-  totalCount: number // 收藏总数
-  entries: FavoriteItem[] // 收藏数据
+// 导出数据结构 v2.0（简化格式）
+export interface FavoriteExportDataV2 {
+  version: '2.0'
+  exportTime: number
+  totalCount: number
+  entries: FavoriteRef[]
 }
+
+// 统一导出数据类型
+export type FavoriteExportData = FavoriteExportDataV1 | FavoriteExportDataV2
 
 // 导入结果
 export interface FavoriteImportResult {
@@ -50,18 +41,36 @@ export interface FavoriteImportPreview {
   total: number // 文件中总数
 }
 
+// 带完整房源信息的收藏项
+export interface FavoriteWithProperty {
+  ref: FavoriteRef
+  property: Property | null // null 表示房源已失效
+}
+
 const STORAGE_KEY = 'gzf-favorites'
 const MAX_FAVORITES = 50
 
-function loadFromStorage(): FavoriteItem[] {
+function loadFromStorage(): FavoriteRef[] {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) {
       const parsed = JSON.parse(stored)
-      // Validate data structure
+      // 支持新旧两种格式
       if (Array.isArray(parsed)) {
+        // 检测是旧格式（完整数据）还是新格式（简化数据）
+        const firstItem = parsed[0]
+        if (firstItem && 'projectName' in firstItem) {
+          // 旧格式，转换为简化格式
+          return parsed
+            .filter(item => item.projectNo && item.addedAt)
+            .map(item => ({
+              projectNo: item.projectNo,
+              addedAt: item.addedAt,
+            }))
+        }
+        // 新格式
         return parsed.filter(item =>
-          item.projectNo && item.projectName && item.addedAt,
+          item.projectNo && typeof item.addedAt === 'number',
         )
       }
     }
@@ -72,7 +81,7 @@ function loadFromStorage(): FavoriteItem[] {
   return []
 }
 
-function saveToStorage(list: FavoriteItem[]) {
+function saveToStorage(list: FavoriteRef[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list))
   }
@@ -82,14 +91,35 @@ function saveToStorage(list: FavoriteItem[]) {
 }
 
 export const useFavoriteStore = defineStore('favorite', () => {
-  const favorites = ref<FavoriteItem[]>(loadFromStorage())
+  const favorites = ref<FavoriteRef[]>(loadFromStorage())
   const notification = ref<{ show: boolean, message: string, type: 'success' | 'error' | 'warning' }>({
     show: false,
     message: '',
     type: 'success',
   })
 
+  const propertyStore = usePropertyStore()
+
+  // 带完整房源信息的收藏列表
+  const favoritesWithProperties = computed<FavoriteWithProperty[]>(() => {
+    return favorites.value.map((ref) => {
+      const property = propertyStore.getPropertyByNo(ref.projectNo) ?? null
+      return { ref, property }
+    })
+  })
+
+  // 有效的收藏列表（排除已失效的房源）
+  const validFavorites = computed<FavoriteWithProperty[]>(() => {
+    return favoritesWithProperties.value.filter(item => item.property !== null)
+  })
+
+  // 失效的收藏数量
+  const invalidCount = computed(() => {
+    return favoritesWithProperties.value.filter(item => item.property === null).length
+  })
+
   const count = computed(() => favorites.value.length)
+  const validCount = computed(() => validFavorites.value.length)
 
   const isFavorite = (projectNo: string): boolean => {
     return favorites.value.some(item => item.projectNo === projectNo)
@@ -115,29 +145,12 @@ export const useFavoriteStore = defineStore('favorite', () => {
       return { success: false, message: `收藏数量已达上限 (${MAX_FAVORITES} 个)` }
     }
 
-    const item: FavoriteItem = {
+    const ref: FavoriteRef = {
       projectNo: property.projectNo,
-      projectName: property.projectName,
-      location: property.location,
-      layout: property.layout,
-      roomType: property.roomType,
-      minRent: property.minRent,
-      maxRent: property.maxRent,
-      thumbnail: property.thumbnail,
-      kezuCount: property.kezuCount,
-      openQueue: property.openQueue,
       addedAt: Date.now(),
-      // 新增字段
-      district: property.district,
-      houseType: property.houseType,
-      totalCount: property.totalCount,
-      openingDate: property.openingDate,
-      totalArea: property.totalArea,
-      houseSource: property.houseSource,
-      roomTypeDetails: property.roomTypeDetails,
     }
 
-    favorites.value.unshift(item) // Add to beginning
+    favorites.value.unshift(ref) // Add to beginning
     saveToStorage(favorites.value)
     showNotification('收藏成功')
     return { success: true, message: '收藏成功' }
@@ -173,7 +186,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
     showNotification('已清空所有收藏')
   }
 
-  const getFavorite = (projectNo: string): FavoriteItem | undefined => {
+  const getFavorite = (projectNo: string): FavoriteRef | undefined => {
     return favorites.value.find(item => item.projectNo === projectNo)
   }
 
@@ -190,14 +203,30 @@ export const useFavoriteStore = defineStore('favorite', () => {
   }
 
   /**
-   * 导出收藏数据
+   * 移除失效的收藏
    */
-  const exportFavorites = (): FavoriteExportData | null => {
+  const removeInvalidFavorites = () => {
+    const before = favorites.value.length
+    favorites.value = favorites.value.filter((ref) => {
+      return propertyStore.getPropertyByNo(ref.projectNo) !== null
+    })
+    const removed = before - favorites.value.length
+    if (removed > 0) {
+      saveToStorage(favorites.value)
+      showNotification(`已移除 ${removed} 个失效收藏`)
+    }
+    return removed
+  }
+
+  /**
+   * 导出收藏数据（v2.0 格式）
+   */
+  const exportFavorites = (): FavoriteExportDataV2 | null => {
     if (favorites.value.length === 0) {
       return null
     }
     return {
-      version: '1.0',
+      version: '2.0',
       exportTime: Date.now(),
       totalCount: favorites.value.length,
       entries: [...favorites.value],
@@ -221,14 +250,13 @@ export const useFavoriteStore = defineStore('favorite', () => {
       return preview
     }
 
-    for (const entry of data.entries) {
-      // 验证必填字段
-      if (!entry.projectNo || !entry.projectName) {
-        preview.invalidCount++
-        continue
-      }
+    // 提取 projectNo 列表（兼容 v1.0 和 v2.0）
+    const projectNos = data.entries.map((entry) => {
+      return entry.projectNo
+    }).filter(Boolean)
 
-      if (isFavorite(entry.projectNo)) {
+    for (const projectNo of projectNos) {
+      if (isFavorite(projectNo)) {
         preview.existingCount++
       }
       else {
@@ -244,7 +272,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
   }
 
   /**
-   * 导入收藏数据
+   * 导入收藏数据（支持 v1.0 和 v2.0）
    */
   const importFavorites = (data: FavoriteExportData): FavoriteImportResult => {
     const result: FavoriteImportResult = {
@@ -255,8 +283,9 @@ export const useFavoriteStore = defineStore('favorite', () => {
     }
 
     // 验证版本
-    if (data.version !== '1.0') {
-      console.error('Unsupported favorites version:', data.version)
+    const version = data.version
+    if (version !== '1.0' && version !== '2.0') {
+      console.error('Unsupported favorites version:', version)
       result.errors = result.total
       return result
     }
@@ -271,14 +300,17 @@ export const useFavoriteStore = defineStore('favorite', () => {
 
     for (const entry of data.entries) {
       try {
-        // 验证必填字段
-        if (!entry.projectNo || !entry.projectName) {
+        // 提取 projectNo 和 addedAt（兼容 v1.0 和 v2.0）
+        const projectNo = entry.projectNo
+        const addedAt = entry.addedAt || Date.now()
+
+        if (!projectNo) {
           result.errors++
           continue
         }
 
         // 检查是否已存在
-        if (isFavorite(entry.projectNo)) {
+        if (isFavorite(projectNo)) {
           result.skipped++
           continue
         }
@@ -289,12 +321,9 @@ export const useFavoriteStore = defineStore('favorite', () => {
           continue
         }
 
-        // 添加收藏（设置新的 addedAt 时间）
-        const item: FavoriteItem = {
-          ...entry,
-          addedAt: entry.addedAt || Date.now(),
-        }
-        favorites.value.unshift(item)
+        // 添加收藏
+        const ref: FavoriteRef = { projectNo, addedAt }
+        favorites.value.unshift(ref)
         imported++
         result.imported++
       }
@@ -305,15 +334,28 @@ export const useFavoriteStore = defineStore('favorite', () => {
     }
 
     if (result.imported > 0) {
+      // 按时间排序
+      favorites.value.sort((a, b) => b.addedAt - a.addedAt)
       saveToStorage(favorites.value)
     }
 
     return result
   }
 
+  /**
+   * 获取用于云端同步的数据（简化格式）
+   */
+  const getSyncData = (): FavoriteRef[] => {
+    return [...favorites.value]
+  }
+
   return {
     favorites,
+    favoritesWithProperties,
+    validFavorites,
+    invalidCount,
     count,
+    validCount,
     notification,
     isFavorite,
     addToFavorites,
@@ -322,8 +364,10 @@ export const useFavoriteStore = defineStore('favorite', () => {
     clearAllFavorites,
     getFavorite,
     getThumbnailUrl,
+    removeInvalidFavorites,
     exportFavorites,
     previewImport,
     importFavorites,
+    getSyncData,
   }
 })

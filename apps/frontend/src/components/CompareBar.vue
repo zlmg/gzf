@@ -7,8 +7,10 @@ import { useCompareStore } from '@/stores/compare'
 const router = useRouter()
 const compareStore = useCompareStore()
 
-const isVisible = computed(() => compareStore.compareList.length > 0)
-const count = computed(() => compareStore.compareList.length)
+// 使用 validCompareList 获取完整数据（包含 images 数组）
+const compareList = computed(() => compareStore.validCompareList)
+const isVisible = computed(() => compareList.value.length > 0)
+const count = computed(() => compareList.value.length)
 
 function goToCompare() {
   router.push('/compare')
@@ -31,7 +33,7 @@ function clearAll() {
           <div class="flex items-center gap-2 min-w-0">
             <div class="flex -space-x-1">
               <div
-                v-for="(item, index) in compareStore.compareList.slice(0, 4)"
+                v-for="(item, index) in compareList.slice(0, 4)"
                 :key="item.projectNo"
                 class="w-8 h-8 rounded-full border-2 border-white bg-gray-100 overflow-hidden flex-shrink-0"
                 :style="{ zIndex: 4 - index }"
@@ -74,7 +76,7 @@ function clearAll() {
             </div>
             <div class="flex items-center gap-2">
               <div
-                v-for="item in compareStore.compareList.slice(0, 4)"
+                v-for="item in compareList.slice(0, 4)"
                 :key="item.projectNo"
                 class="w-10 h-10 bg-gray-100 rounded overflow-hidden"
               >

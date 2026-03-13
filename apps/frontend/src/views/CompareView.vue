@@ -8,7 +8,8 @@ import { formatArea, formatEquipmentList, formatLabelList, formatOpenQueue, form
 const router = useRouter()
 const compareStore = useCompareStore()
 
-const compareList = computed(() => compareStore.compareList)
+// 使用 validCompareList 获取完整数据（包含 images 数组）
+const compareList = computed(() => compareStore.validCompareList)
 const hasItems = computed(() => compareList.value.length > 0)
 
 function handleRemove(projectNo: string) {
