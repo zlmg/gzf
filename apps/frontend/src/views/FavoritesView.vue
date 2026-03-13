@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { FavoriteExportData } from '@/stores/favorite'
 import type { Property } from '@/types/property'
-import { ElButton, ElEmpty, ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getImageUrl } from '@/config'
+import { useAppToast } from '@/composables/useAppToast'
 import { useCompareStore } from '@/stores/compare'
 import { useFavoriteStore } from '@/stores/favorite'
 import { formatOpenQueue, formatPriceRange, formatRoomType } from '@/utils/format'
@@ -12,7 +12,15 @@ import { formatOpenQueue, formatPriceRange, formatRoomType } from '@/utils/forma
 const router = useRouter()
 const favoriteStore = useFavoriteStore()
 const compareStore = useCompareStore()
+const toast = useAppToast()
 const fileInput = ref<HTMLInputElement | null>(null)
+
+// 确认弹窗状态
+const confirmModal = ref({
+  open: false,
+  message: '',
+  onConfirm: () => {},
+})
 
 const hasFavorites = computed(() => favoriteStore.count > 0)
 const hasInvalidFavorites = computed(() => favoriteStore.invalidCount > 0)
@@ -38,15 +46,20 @@ function handleRemove(projectNo: string) {
 }
 
 function handleClearAll() {
-  if (confirm('确定要清空所有收藏吗？此操作不可撤销。')) {
-    favoriteStore.clearAllFavorites()
+  confirmModal.value = {
+    open: true,
+    message: '确定要清空所有收藏吗？此操作不可撤销。',
+    onConfirm: () => {
+      favoriteStore.clearAllFavorites()
+      toast.success('已清空所有收藏')
+    },
   }
 }
 
 function handleRemoveInvalid() {
   const removed = favoriteStore.removeInvalidFavorites()
   if (removed > 0) {
-    ElMessage.success(`已移除 ${removed} 个失效收藏`)
+    toast.success(`已移除 ${removed} 个失效收藏`)
   }
 }
 
@@ -139,7 +152,7 @@ function handleToggleCompare(e: Event, property: Property) {
   }
   else {
     if (compareStore.isFull) {
-      ElMessage.warning('对比列表已满，最多只能添加4个房源')
+      toast.warning('对比列表已满，最多只能添加4个房源')
       return
     }
     compareStore.toggleCompare(property)
@@ -150,7 +163,7 @@ function handleToggleCompare(e: Event, property: Property) {
 function handleExport() {
   const data = favoriteStore.exportFavorites()
   if (!data) {
-    ElMessage.warning('暂无收藏数据可导出')
+    toast.warning('暂无收藏数据可导出')
     return
   }
 
@@ -163,7 +176,7 @@ function handleExport() {
   link.download = `collections_${timestamp}.json`
   link.click()
   URL.revokeObjectURL(url)
-  ElMessage.success(`已导出 ${data.totalCount} 个收藏`)
+  toast.success(`已导出 ${data.totalCount} 个收藏`)
 }
 
 // 触发文件选择
@@ -183,7 +196,7 @@ async function handleImport(event: Event) {
 
     // 验证格式
     if (!data.version || !data.entries || !Array.isArray(data.entries)) {
-      ElMessage.error('无效的收藏文件格式')
+      toast.error('无效的收藏文件格式')
       return
     }
 
@@ -192,10 +205,10 @@ async function handleImport(event: Event) {
 
     if (preview.newCount === 0) {
       if (preview.existingCount > 0) {
-        ElMessage.info('所有收藏均已存在，无需导入')
+        toast.info('所有收藏均已存在，无需导入')
       }
       else {
-        ElMessage.warning('文件中没有有效的收藏数据')
+        toast.warning('文件中没有有效的收藏数据')
       }
       return
     }
@@ -205,38 +218,41 @@ async function handleImport(event: Event) {
       ? `发现 ${preview.newCount} 个新收藏，但收藏上限为50个，当前只能导入 ${preview.canImport} 个。是否继续？`
       : `发现 ${preview.newCount} 个新收藏，${preview.existingCount > 0 ? `${preview.existingCount} 个已存在将被跳过。` : ''}是否导入？`
 
-    await ElMessageBox.confirm(message, '导入收藏', {
-      confirmButtonText: '导入',
-      cancelButtonText: '取消',
-      type: 'info',
-    })
+    confirmModal.value = {
+      open: true,
+      message,
+      onConfirm: () => {
+        // 执行导入
+        const result = favoriteStore.importFavorites(data)
 
-    // 执行导入
-    const result = favoriteStore.importFavorites(data)
-
-    if (result.imported > 0) {
-      if (result.skipped > 0) {
-        ElMessage.success(`成功导入 ${result.imported} 个收藏，跳过 ${result.skipped} 个已存在的收藏`)
-      }
-      else {
-        ElMessage.success(`成功导入 ${result.imported} 个收藏`)
-      }
-    }
-    else if (result.skipped > 0) {
-      ElMessage.info(`所有收藏均已存在，无需导入`)
+        if (result.imported > 0) {
+          if (result.skipped > 0) {
+            toast.success(`成功导入 ${result.imported} 个收藏，跳过 ${result.skipped} 个已存在的收藏`)
+          }
+          else {
+            toast.success(`成功导入 ${result.imported} 个收藏`)
+          }
+        }
+        else if (result.skipped > 0) {
+          toast.info('所有收藏均已存在，无需导入')
+        }
+      },
     }
   }
   catch (e) {
-    if (e !== 'cancel') {
-      console.error('Import error:', e)
-      ElMessage.error('导入失败，请检查文件格式')
-    }
+    console.error('Import error:', e)
+    toast.error('导入失败，请检查文件格式')
   }
 
   // 清空文件选择，允许重复导入同一文件
   if (fileInput.value) {
     fileInput.value.value = ''
   }
+}
+
+function handleConfirm() {
+  confirmModal.value.onConfirm()
+  confirmModal.value.open = false
 }
 </script>
 
@@ -255,37 +271,40 @@ async function handleImport(event: Event) {
           </p>
         </div>
         <div v-if="hasFavorites" class="flex items-center gap-2 md:gap-3">
-          <ElButton plain size="small" class="!text-xs md:!text-sm" @click="triggerImport">
+          <UButton variant="outline" size="sm" @click="triggerImport">
             导入
-          </ElButton>
-          <ElButton plain size="small" class="!text-xs md:!text-sm" @click="handleExport">
+          </UButton>
+          <UButton variant="outline" size="sm" @click="handleExport">
             导出
-          </ElButton>
-          <ElButton v-if="hasInvalidFavorites" type="warning" plain size="small" class="!text-xs md:!text-sm" @click="handleRemoveInvalid">
+          </UButton>
+          <UButton v-if="hasInvalidFavorites" color="warning" variant="outline" size="sm" @click="handleRemoveInvalid">
             清理失效
-          </ElButton>
-          <ElButton type="danger" plain size="small" class="!text-xs md:!text-sm" @click="handleClearAll">
+          </UButton>
+          <UButton color="error" variant="outline" size="sm" @click="handleClearAll">
             清空全部
-          </ElButton>
+          </UButton>
         </div>
         <!-- 无收藏时也显示导入按钮 -->
         <div v-else class="flex items-center gap-2 md:gap-3">
-          <ElButton plain size="small" class="!text-xs md:!text-sm" @click="triggerImport">
+          <UButton variant="outline" size="sm" @click="triggerImport">
             导入
-          </ElButton>
+          </UButton>
         </div>
       </div>
 
       <!-- Empty state -->
-      <ElEmpty
+      <div
         v-if="!hasFavorites"
-        description="暂无收藏房源"
-        class="py-16 md:py-20"
+        class="flex flex-col items-center justify-center py-16 md:py-20"
       >
-        <ElButton type="primary" @click="router.push('/')">
+        <UIcon name="i-lucide-heart-off" class="size-16 text-gray-300 mb-4" />
+        <p class="text-gray-500 mb-4">
+          暂无收藏房源
+        </p>
+        <UButton color="primary" @click="router.push('/')">
           去浏览房源
-        </ElButton>
-      </ElEmpty>
+        </UButton>
+      </div>
 
       <!-- Favorites list -->
       <div v-else class="space-y-3 md:space-y-4">
@@ -300,9 +319,7 @@ async function handleImport(event: Event) {
             <div v-if="!item.property" class="p-4 flex items-center justify-between">
               <div class="flex items-center gap-3">
                 <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
+                  <UIcon name="i-lucide-alert-triangle" class="size-6 text-gray-400" />
                 </div>
                 <div>
                   <p class="text-sm text-gray-500">
@@ -313,9 +330,9 @@ async function handleImport(event: Event) {
                   </p>
                 </div>
               </div>
-              <ElButton type="danger" plain size="small" @click="handleRemove(item.ref.projectNo)">
+              <UButton color="error" variant="outline" size="sm" @click="handleRemove(item.ref.projectNo)">
                 移除
-              </ElButton>
+              </UButton>
             </div>
 
             <!-- Valid favorite - Mobile Layout -->
@@ -331,12 +348,7 @@ async function handleImport(event: Event) {
                   @click="goToDetail(item.property.projectNo)"
                 >
                 <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
-                  <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
+                  <UIcon name="i-lucide-image" class="size-12" />
                 </div>
                 <!-- Status badge -->
                 <div class="absolute top-2 left-2">
@@ -400,9 +412,7 @@ async function handleImport(event: Event) {
                 <!-- Equipment -->
                 <div v-if="getEquipmentList(item.property).length > 0" class="mb-2">
                   <div class="flex items-start gap-1 text-xs text-gray-500">
-                    <svg class="w-3.5 h-3.5 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <UIcon name="i-lucide-check-circle" class="size-3.5 mt-0.5 shrink-0" />
                     <div class="flex flex-wrap gap-1">
                       <span
                         v-for="eq in getEquipmentList(item.property)"
@@ -455,12 +465,7 @@ async function handleImport(event: Event) {
                   @click="goToDetail(item.property.projectNo)"
                 >
                 <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
-                  <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
+                  <UIcon name="i-lucide-image" class="size-12" />
                 </div>
               </div>
 
@@ -525,22 +530,22 @@ async function handleImport(event: Event) {
                   </div>
                   <div class="ml-4 text-right flex flex-col items-end gap-2">
                     <div class="flex gap-2">
-                      <ElButton
-                        :type="isInCompare(item.property.projectNo) ? 'primary' : 'default'"
-                        plain
-                        size="small"
+                      <UButton
+                        :color="isInCompare(item.property.projectNo) ? 'primary' : 'neutral'"
+                        variant="outline"
+                        size="sm"
                         @click.stop="handleToggleCompare($event, item.property)"
                       >
                         {{ isInCompare(item.property.projectNo) ? '已加入对比' : '加入对比' }}
-                      </ElButton>
-                      <ElButton
-                        type="danger"
-                        plain
-                        size="small"
+                      </UButton>
+                      <UButton
+                        color="error"
+                        variant="outline"
+                        size="sm"
                         @click.stop="handleRemove(item.property.projectNo)"
                       >
                         移除
-                      </ElButton>
+                      </UButton>
                     </div>
                   </div>
                 </div>
@@ -565,12 +570,7 @@ async function handleImport(event: Event) {
       <!-- Tips -->
       <div v-if="hasFavorites" class="mt-4 md:mt-6 p-3 md:p-4 bg-blue-50 rounded-lg">
         <div class="flex items-center gap-2 text-blue-700 text-sm">
-          <svg class="w-4 h-4 md:w-5 md:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <UIcon name="i-lucide-info" class="size-4 md:size-5 shrink-0" />
           <span>收藏数据保存在浏览器本地，清除浏览器数据后将会丢失，建议定期导出备份</span>
         </div>
       </div>
@@ -578,6 +578,23 @@ async function handleImport(event: Event) {
 
     <!-- 隐藏的文件输入 -->
     <input ref="fileInput" type="file" accept=".json" class="hidden" @change="handleImport">
+
+    <!-- 确认弹窗 -->
+    <UModal v-model:open="confirmModal.open" title="确认">
+      <template #body>
+        <p class="text-gray-600">
+          {{ confirmModal.message }}
+        </p>
+      </template>
+      <template #footer>
+        <UButton variant="ghost" @click="confirmModal.open = false">
+          取消
+        </UButton>
+        <UButton color="primary" @click="handleConfirm">
+          确认
+        </UButton>
+      </template>
+    </UModal>
   </div>
 </template>
 
