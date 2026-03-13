@@ -25,9 +25,14 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UApp: typeof import('./../../node_modules/.pnpm/@nuxt+ui@3.3.7_@babel+parser@7.29.0_async-validator@4.2.5_change-case@5.4.4_embla-carou_4138c946a49e353f813d86cc9285cb8c/node_modules/@nuxt/ui/dist/runtime/components/App.vue')['default']
+    UBadge: typeof import('./../../node_modules/.pnpm/@nuxt+ui@3.3.7_@babel+parser@7.29.0_async-validator@4.2.5_change-case@5.4.4_embla-carou_4138c946a49e353f813d86cc9285cb8c/node_modules/@nuxt/ui/dist/runtime/components/Badge.vue')['default']
     UButton: typeof import('./../../node_modules/.pnpm/@nuxt+ui@3.3.7_@babel+parser@7.29.0_async-validator@4.2.5_change-case@5.4.4_embla-carou_4138c946a49e353f813d86cc9285cb8c/node_modules/@nuxt/ui/dist/runtime/components/Button.vue')['default']
     UDropdownMenu: typeof import('./../../node_modules/.pnpm/@nuxt+ui@3.3.7_@babel+parser@7.29.0_async-validator@4.2.5_change-case@5.4.4_embla-carou_4138c946a49e353f813d86cc9285cb8c/node_modules/@nuxt/ui/dist/runtime/components/DropdownMenu.vue')['default']
+    UForm: typeof import('./../../node_modules/.pnpm/@nuxt+ui@3.3.7_@babel+parser@7.29.0_async-validator@4.2.5_change-case@5.4.4_embla-carou_4138c946a49e353f813d86cc9285cb8c/node_modules/@nuxt/ui/dist/runtime/components/Form.vue')['default']
+    UFormField: typeof import('./../../node_modules/.pnpm/@nuxt+ui@3.3.7_@babel+parser@7.29.0_async-validator@4.2.5_change-case@5.4.4_embla-carou_4138c946a49e353f813d86cc9285cb8c/node_modules/@nuxt/ui/dist/runtime/components/FormField.vue')['default']
     UIcon: typeof import('./../../node_modules/.pnpm/@nuxt+ui@3.3.7_@babel+parser@7.29.0_async-validator@4.2.5_change-case@5.4.4_embla-carou_4138c946a49e353f813d86cc9285cb8c/node_modules/@nuxt/ui/dist/runtime/vue/components/Icon.vue')['default']
+    UInput: typeof import('./../../node_modules/.pnpm/@nuxt+ui@3.3.7_@babel+parser@7.29.0_async-validator@4.2.5_change-case@5.4.4_embla-carou_4138c946a49e353f813d86cc9285cb8c/node_modules/@nuxt/ui/dist/runtime/components/Input.vue')['default']
     UModal: typeof import('./../../node_modules/.pnpm/@nuxt+ui@3.3.7_@babel+parser@7.29.0_async-validator@4.2.5_change-case@5.4.4_embla-carou_4138c946a49e353f813d86cc9285cb8c/node_modules/@nuxt/ui/dist/runtime/components/Modal.vue')['default']
+    USelect: typeof import('./../../node_modules/.pnpm/@nuxt+ui@3.3.7_@babel+parser@7.29.0_async-validator@4.2.5_change-case@5.4.4_embla-carou_4138c946a49e353f813d86cc9285cb8c/node_modules/@nuxt/ui/dist/runtime/components/Select.vue')['default']
   }
 }

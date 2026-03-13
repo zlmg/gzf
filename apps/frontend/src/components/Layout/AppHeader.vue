@@ -237,7 +237,7 @@ const userMenuItems = computed(() => {
           <div class="flex items-center">
             <template v-if="authStore.isAuthenticated">
               <UDropdownMenu :items="userMenuItems">
-                <UButton icon="i-lucide-chevron-down" variant="ghost" color="white">
+                <UButton icon="i-lucide-chevron-down" variant="ghost" class="text-white">
                   <UIcon name="i-lucide-user" class="size-4 mr-1.5" />
                   {{ authStore.user?.username }}
                 </UButton>

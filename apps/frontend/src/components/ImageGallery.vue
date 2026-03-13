@@ -21,6 +21,7 @@ const parsedImages = computed(() => {
   })
 })
 
+// @ts-expect-error emblaRef is used in the template via ref="emblaRef"
 const [emblaRef, emblaApi] = emblaCarouselVue({ loop: false })
 const activeIndex = ref(0)
 
