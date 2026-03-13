@@ -4,6 +4,7 @@ import path from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
+import ui from '@nuxt/ui/vite'
 import { defineConfig } from 'vite'
 
 // SPA history fallback 插件
@@ -32,7 +33,14 @@ function spaFallback(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), tailwindcss(), spaFallback()],
+  plugins: [
+    vue(),
+    tailwindcss(),
+    ui({
+      ui: { colors: { primary: 'blue', neutral: 'gray' } },
+    }),
+    spaFallback(),
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
