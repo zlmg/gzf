@@ -45,7 +45,9 @@ gzf/
 - **TypeScript 5.9** for type safety
 - **Vite 7** as build tool
 - **Tailwind CSS v4** (via `@tailwindcss/vite` plugin)
-- **Element Plus** for UI components (Chinese locale)
+- **Nuxt-UI v3** for UI components (standalone Vue/Vite mode)
+- **Zod** for form validation
+- **Embla Carousel** for image carousels
 - **Pinia 3** for state management (setup store syntax)
 - **Vue Router 5** with lazy-loaded routes
 - **VueUse Core** for utility composables
@@ -65,13 +67,15 @@ apps/frontend/src/
 │   ├── ImageViewer.vue
 │   ├── CompareBar.vue
 │   ├── AmapNearby.vue
+│   ├── ConfirmModal.vue
 │   └── FavoriteNotification.vue
 ├── composables/     # Vue composables
 │   ├── useProperty.ts
 │   ├── useStorage.ts
 │   ├── usePoiCache.ts
 │   ├── usePagination.ts
-│   └── useSync.ts
+│   ├── useSync.ts
+│   └── useAppToast.ts  # Toast notification wrapper
 ├── config/          # App configuration
 ├── router/          # Vue Router config
 ├── stores/          # Pinia stores (setup store syntax)
@@ -151,6 +155,12 @@ const computed = computed(() => ...)
 </script>
 ```
 
+**Nuxt-UI Components:**
+- All Nuxt-UI components use `U` prefix: `UButton`, `UInput`, `USelect`, `UModal`, etc.
+- `useToast()` is auto-imported globally via unplugin-auto-import
+- `useAppToast()` wraps `useToast()` with preset colors and icons for success/error/warning/info
+- Form validation uses Zod schemas with `UForm` and `UFormField` components
+
 **Data Sources:**
 - Frontend static data: `/data/bsgz.json` (in `apps/frontend/public/`)
 - Backend API: REST endpoints at `http://localhost:3001/api/*`
@@ -188,7 +198,7 @@ CompareRef   = { projectNo: string }
 - Tailwind CSS utility classes (primary styling method)
 - Custom container class `.container-app` (max-width: 1500px)
 - Scoped CSS only when necessary (e.g., line-clamp, transitions)
-- Element Plus theme customized via CSS variables
+- Nuxt-UI components with `U` prefix (UButton, UInput, UModal, etc.)
 - Chinese is the primary UI language
 
 ### Data Types
