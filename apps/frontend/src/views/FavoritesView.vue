@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FavoriteExportData } from '@/stores/favorite'
 import type { Property } from '@/types/property'
-import { ElButton, ElEmpty, ElMessage, ElMessageBox } from 'element-plus'
+import { ElButton, ElEmpty, ElMessage, ElMessageBox, ElPopconfirm } from 'element-plus'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getImageUrl } from '@/config'
@@ -313,9 +313,18 @@ async function handleImport(event: Event) {
                   </p>
                 </div>
               </div>
-              <ElButton type="danger" plain size="small" @click="handleRemove(item.ref.projectNo)">
-                移除
-              </ElButton>
+              <ElPopconfirm
+                title="确定要移除这个收藏吗？"
+                confirm-button-text="确定"
+                cancel-button-text="取消"
+                @confirm="handleRemove(item.ref.projectNo)"
+              >
+                <template #reference>
+                  <ElButton type="danger" plain size="small">
+                    移除
+                  </ElButton>
+                </template>
+              </ElPopconfirm>
             </div>
 
             <!-- Valid favorite - Mobile Layout -->
@@ -427,12 +436,21 @@ async function handleImport(event: Event) {
                   >
                     {{ isInCompare(item.property.projectNo) ? '已加入对比' : '加入对比' }}
                   </button>
-                  <button
-                    class="px-4 py-2 text-sm text-red-600 bg-red-50 rounded-lg transition-all active:scale-95 active:bg-red-100"
-                    @click.stop="handleRemove(item.property.projectNo)"
+                  <ElPopconfirm
+                    title="确定要移除这个收藏吗？"
+                    confirm-button-text="确定"
+                    cancel-button-text="取消"
+                    @confirm="handleRemove(item.property.projectNo)"
                   >
-                    移除
-                  </button>
+                    <template #reference>
+                      <button
+                        class="px-4 py-2 text-sm text-red-600 bg-red-50 rounded-lg transition-all active:scale-95 active:bg-red-100"
+                        @click.stop
+                      >
+                        移除
+                      </button>
+                    </template>
+                  </ElPopconfirm>
                 </div>
 
                 <!-- Timestamp -->
@@ -533,14 +551,23 @@ async function handleImport(event: Event) {
                       >
                         {{ isInCompare(item.property.projectNo) ? '已加入对比' : '加入对比' }}
                       </ElButton>
-                      <ElButton
-                        type="danger"
-                        plain
-                        size="small"
-                        @click.stop="handleRemove(item.property.projectNo)"
+                      <ElPopconfirm
+                        title="确定要移除这个收藏吗？"
+                        confirm-button-text="确定"
+                        cancel-button-text="取消"
+                        @confirm="handleRemove(item.property.projectNo)"
                       >
-                        移除
-                      </ElButton>
+                        <template #reference>
+                          <ElButton
+                            type="danger"
+                            plain
+                            size="small"
+                            @click.stop
+                          >
+                            移除
+                          </ElButton>
+                        </template>
+                      </ElPopconfirm>
                     </div>
                   </div>
                 </div>
