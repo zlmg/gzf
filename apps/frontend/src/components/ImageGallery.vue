@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ElCarousel, ElCarouselItem } from 'element-plus'
-import { computed, ref } from 'vue'
+import emblaCarouselVue from 'embla-carousel-vue'
+import { computed, ref, watch } from 'vue'
 import ImageViewer from '@/components/ImageViewer.vue'
 import { getImageUrl } from '@/config'
 
@@ -21,17 +21,23 @@ const parsedImages = computed(() => {
   })
 })
 
-// Carousel 组件引用，用于调用 setActiveItem 方法
-const carouselRef = ref<InstanceType<typeof ElCarousel> | null>(null)
+const [emblaRef, emblaApi] = emblaCarouselVue({ loop: false })
 const activeIndex = ref(0)
 
 const showViewer = ref(false)
 const viewerIndex = ref(0)
 
-// 点击缩略图切换到对应图片
-function handleThumbnailClick(index: number) {
-  activeIndex.value = index
-  carouselRef.value?.setActiveItem(index)
+// Sync active index
+watch(emblaApi, (api) => {
+  if (api) {
+    api.on('select', () => {
+      activeIndex.value = api.selectedScrollSnap()
+    })
+  }
+})
+
+function scrollTo(index: number) {
+  emblaApi.value?.scrollTo(index)
 }
 
 function openViewer(index: number) {
@@ -45,57 +51,49 @@ function closeViewer() {
 </script>
 
 <template>
-  <div class="gallery-container">
-    <ElCarousel
-      v-if="parsedImages.length > 0"
-      ref="carouselRef"
-      :autoplay="false"
-      indicator-position="outside"
-      height="400px"
-      class="rounded-lg overflow-hidden"
-      @change="(current: number) => activeIndex = current"
-    >
-      <ElCarouselItem
-        v-for="(image, index) in parsedImages"
-        :key="index"
-      >
+  <div v-if="parsedImages.length > 0" class="gallery-container">
+    <!-- Carousel -->
+    <div ref="emblaRef" class="overflow-hidden rounded-lg">
+      <div class="flex">
         <div
-          class="w-full h-full bg-gray-100 cursor-pointer"
-          @click="openViewer(index)"
+          v-for="(image, index) in parsedImages"
+          :key="index"
+          class="flex-[0_0_100%] min-w-0"
         >
-          <img
-            :src="image"
-            :alt="title || `图片 ${index + 1}`"
-            class="w-full h-full object-contain"
-            loading="lazy"
+          <div
+            class="h-[400px] bg-gray-100 cursor-pointer"
+            @click="openViewer(index)"
           >
+            <img
+              :src="image"
+              :alt="title || `图片 ${index + 1}`"
+              class="w-full h-full object-contain"
+              loading="lazy"
+            >
+          </div>
         </div>
-      </ElCarouselItem>
-    </ElCarousel>
-
-    <div
-      v-else
-      class="w-full h-80 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400"
-    >
-      <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-        />
-      </svg>
+      </div>
     </div>
 
-    <!-- Thumbnail strip -->
-    <div
-      v-if="parsedImages.length > 1"
-      class="flex gap-2 mt-3 overflow-x-auto pb-2"
-    >
-      <div
+    <!-- Dot indicators -->
+    <div v-if="parsedImages.length > 1" class="flex justify-center gap-2 mt-4">
+      <button
+        v-for="(_, index) in parsedImages"
+        :key="index"
+        class="w-2.5 h-2.5 rounded-full transition-colors"
+        :class="activeIndex === index ? 'bg-blue-500' : 'bg-gray-300 hover:bg-gray-400'"
+        @click="scrollTo(index)"
+      />
+    </div>
+
+    <!-- Thumbnails -->
+    <div v-if="parsedImages.length > 1" class="flex gap-2 mt-3 overflow-x-auto pb-2">
+      <button
         v-for="(image, index) in parsedImages"
         :key="index"
-        class="flex-shrink-0 w-20 h-14 rounded overflow-hidden cursor-pointer border-2 transition-colors"
+        class="flex-shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-colors"
         :class="activeIndex === index ? 'border-blue-500' : 'border-transparent hover:border-gray-300'"
-        @click="handleThumbnailClick(index)"
+        @click="scrollTo(index)"
       >
         <img
           :src="image"
@@ -103,10 +101,10 @@ function closeViewer() {
           class="w-full h-full object-cover"
           loading="lazy"
         >
-      </div>
+      </button>
     </div>
 
-    <!-- 使用统一的图片查看器组件 -->
+    <!-- Image Viewer -->
     <ImageViewer
       v-if="showViewer"
       :images="parsedImages"
@@ -115,12 +113,12 @@ function closeViewer() {
       @close="closeViewer"
     />
   </div>
-</template>
 
-<style scoped>
-.gallery-container :deep(.el-carousel__button) {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-</style>
+  <!-- Empty state -->
+  <div
+    v-else
+    class="w-full h-80 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400"
+  >
+    <UIcon name="i-lucide-image" class="size-20" />
+  </div>
+</template>
