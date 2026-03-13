@@ -228,29 +228,6 @@ async function handleImport(event: Event) {
             </svg>
             房源对比
           </RouterLink>
-          <!-- 导出按钮 -->
-          <button
-            class="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-1.5 text-sm"
-            title="导出POI缓存"
-            @click="handleExport"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            导出
-          </button>
-          <!-- 导入按钮 -->
-          <button
-            class="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-1.5 text-sm"
-            title="导入POI缓存"
-            @click="triggerImport"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-            </svg>
-            导入
-          </button>
-          <input ref="fileInput" type="file" accept=".json" class="hidden" @change="handleImport">
           <!-- 登录/用户入口 -->
           <div class="flex items-center">
             <template v-if="authStore.isAuthenticated">
@@ -266,9 +243,25 @@ async function handleImport(event: Event) {
                 </button>
                 <template #dropdown>
                   <el-dropdown-menu>
+                    <el-dropdown-item @click="handleExport">
+                      <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        导出缓存
+                      </div>
+                    </el-dropdown-item>
+                    <el-dropdown-item @click="triggerImport">
+                      <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                        导入缓存
+                      </div>
+                    </el-dropdown-item>
                     <!-- 管理员菜单 -->
                     <template v-if="isAdmin">
-                      <el-dropdown-item @click="handleDbExport">
+                      <el-dropdown-item divided @click="handleDbExport">
                         <div class="flex items-center gap-2">
                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -285,7 +278,7 @@ async function handleImport(event: Event) {
                         </div>
                       </el-dropdown-item>
                     </template>
-                    <el-dropdown-item :divided="isAdmin" @click="handleLogout">
+                    <el-dropdown-item :divided="!isAdmin" @click="handleLogout">
                       退出登录
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -302,6 +295,7 @@ async function handleImport(event: Event) {
               </svg>
               登录
             </RouterLink>
+            <input ref="fileInput" type="file" accept=".json" class="hidden" @change="handleImport">
           </div>
         </nav>
 
@@ -393,26 +387,6 @@ async function handleImport(event: Event) {
               </svg>
               房源对比
             </RouterLink>
-            <!-- 移动端导出按钮 -->
-            <button
-              class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left"
-              @click="handleExport"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              导出缓存
-            </button>
-            <!-- 移动端导入按钮 -->
-            <button
-              class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left"
-              @click="triggerImport"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
-              导入缓存
-            </button>
             <!-- 移动端登录入口 -->
             <template v-if="authStore.isAuthenticated">
               <div class="px-4 py-3 flex items-center justify-between">
@@ -429,6 +403,26 @@ async function handleImport(event: Event) {
                   退出
                 </button>
               </div>
+              <!-- 移动端缓存管理 -->
+              <div class="border-t border-white/20 my-1" />
+              <button
+                class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left w-full"
+                @click="handleExport(); closeMobileMenu()"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                导出缓存
+              </button>
+              <button
+                class="px-4 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2 text-left w-full"
+                @click="triggerImport(); closeMobileMenu()"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+                导入缓存
+              </button>
               <!-- 移动端管理员菜单 -->
               <template v-if="isAdmin">
                 <div class="border-t border-white/20 my-1" />
