@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import type { FavoriteExportData } from '@/stores/favorite'
 import type { Property } from '@/types/property'
-import { ElButton, ElEmpty, ElMessage, ElMessageBox, ElPopconfirm } from 'element-plus'
+import { ElButton, ElEmpty, ElMessage, ElMessageBox, ElPopconfirm, ElSkeleton } from 'element-plus'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getImageUrl } from '@/config'
 import { useCompareStore } from '@/stores/compare'
 import { useFavoriteStore } from '@/stores/favorite'
+import { usePropertyStore } from '@/stores/property'
 import { formatOpenQueue, formatPriceRange, formatRoomType } from '@/utils/format'
 
 const router = useRouter()
 const favoriteStore = useFavoriteStore()
 const compareStore = useCompareStore()
+const propertyStore = usePropertyStore()
 const fileInput = ref<HTMLInputElement | null>(null)
+
+// 检查房源数据是否已加载
+const isPropertyDataLoaded = computed(() => propertyStore.properties.length > 0 || !propertyStore.loading)
 
 const hasFavorites = computed(() => favoriteStore.count > 0)
 const hasInvalidFavorites = computed(() => favoriteStore.invalidCount > 0)
@@ -276,9 +281,16 @@ async function handleImport(event: Event) {
         </div>
       </div>
 
+      <!-- Loading state - 等待房源数据加载 -->
+      <div v-if="!isPropertyDataLoaded" class="space-y-3 md:space-y-4">
+        <div v-for="i in 3" :key="i" class="bg-white rounded-xl shadow-sm md:shadow-md overflow-hidden p-4">
+          <ElSkeleton :rows="5" animated />
+        </div>
+      </div>
+
       <!-- Empty state -->
       <ElEmpty
-        v-if="!hasFavorites"
+        v-else-if="!hasFavorites"
         description="暂无收藏房源"
         class="py-16 md:py-20"
       >

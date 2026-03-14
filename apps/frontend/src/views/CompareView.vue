@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { ElButton, ElEmpty, ElTag } from 'element-plus'
+import { ElButton, ElEmpty, ElSkeleton, ElTag } from 'element-plus'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCompareStore } from '@/stores/compare'
+import { usePropertyStore } from '@/stores/property'
 import { formatArea, formatEquipmentList, formatLabelList, formatOpenQueue, formatPriceRange, formatRoomType, formatRoomTypeCode } from '@/utils/format'
 
 const router = useRouter()
 const compareStore = useCompareStore()
+const propertyStore = usePropertyStore()
+
+// 检查房源数据是否已加载
+const isPropertyDataLoaded = computed(() => propertyStore.properties.length > 0 || !propertyStore.loading)
 
 // 使用 validCompareList 获取完整数据（包含 images 数组）
 const compareList = computed(() => compareStore.validCompareList)
@@ -52,9 +57,14 @@ function goToDetail(projectNo: string) {
         </div>
       </div>
 
+      <!-- Loading state - 等待房源数据加载 -->
+      <div v-if="!isPropertyDataLoaded" class="bg-white rounded-xl shadow-md overflow-hidden p-4">
+        <ElSkeleton :rows="10" animated />
+      </div>
+
       <!-- Empty state -->
       <ElEmpty
-        v-if="!hasItems"
+        v-else-if="!hasItems"
         description="还没有选择要对比的房源"
         class="py-20"
       >
@@ -64,7 +74,7 @@ function goToDetail(projectNo: string) {
       </ElEmpty>
 
       <!-- Mobile: Card layout -->
-      <div v-if="hasItems" class="md:hidden space-y-4">
+      <div v-else-if="hasItems" class="md:hidden space-y-4">
         <div
           v-for="item in compareList"
           :key="item.projectNo"
@@ -244,7 +254,7 @@ function goToDetail(projectNo: string) {
       </div>
 
       <!-- Desktop: Comparison table -->
-      <div v-if="hasItems" class="hidden md:block bg-white rounded-xl shadow-md overflow-hidden">
+      <div v-else-if="hasItems" class="hidden md:block bg-white rounded-xl shadow-md overflow-hidden">
         <!-- Image row -->
         <div class="grid border-b border-gray-200" :style="{ gridTemplateColumns: `200px repeat(${compareList.length}, 1fr)` }">
           <div class="p-4 bg-gray-50 font-semibold text-gray-700 border-r border-gray-200">

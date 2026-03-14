@@ -6,9 +6,11 @@ import PropertyCard from '@/components/PropertyCard.vue'
 import PropertyFilter from '@/components/PropertyFilter.vue'
 import { useProperty } from '@/composables/useProperty'
 import { useFilterStore } from '@/stores/filter'
+import { usePropertyStore } from '@/stores/property'
 
 const { filteredProperties, loading, error, fetchProperties } = useProperty()
 const filterStore = useFilterStore()
+const propertyStore = usePropertyStore()
 
 const pageSize = 12
 const displayedCount = ref(pageSize)
@@ -73,7 +75,10 @@ watch(
 )
 
 onMounted(() => {
-  fetchProperties()
+  // 只在数据未加载时获取（App.vue 可能已经加载过了）
+  if (propertyStore.properties.length === 0) {
+    fetchProperties()
+  }
   setupObserver()
 })
 

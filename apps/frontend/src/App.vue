@@ -4,12 +4,22 @@ import FavoriteNotification from '@/components/FavoriteNotification.vue'
 import AppFooter from '@/components/Layout/AppFooter.vue'
 import AppHeader from '@/components/Layout/AppHeader.vue'
 import { useSync } from '@/composables/useSync'
+import { usePropertyStore } from '@/stores/property'
+import { onMounted } from 'vue'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 const { startAutoSync } = useSync()
 
 // 启动自动同步
 startAutoSync()
+
+// 初始化房源数据，确保在任何页面都能获取
+const propertyStore = usePropertyStore()
+onMounted(() => {
+  if (propertyStore.properties.length === 0) {
+    propertyStore.fetchProperties()
+  }
+})
 </script>
 
 <template>

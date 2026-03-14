@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import type { Property } from '@/types/property'
-import { ElButton, ElEmpty, ElMessage } from 'element-plus'
+import { ElButton, ElEmpty, ElMessage, ElSkeleton } from 'element-plus'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { getImageUrl } from '@/config'
 import { useCompareStore } from '@/stores/compare'
 import { useHistoryStore } from '@/stores/history'
+import { usePropertyStore } from '@/stores/property'
 import { formatOpenQueue, formatPriceRange, formatRoomType } from '@/utils/format'
 
 const router = useRouter()
 const historyStore = useHistoryStore()
 const compareStore = useCompareStore()
+const propertyStore = usePropertyStore()
+
+// 检查房源数据是否已加载
+const isPropertyDataLoaded = computed(() => propertyStore.properties.length > 0 || !propertyStore.loading)
 
 const hasHistory = computed(() => historyStore.count > 0)
 const hasInvalidHistory = computed(() => historyStore.invalidCount > 0)
@@ -170,9 +175,16 @@ function handleToggleCompare(e: Event, property: Property) {
         </div>
       </div>
 
+      <!-- Loading state - 等待房源数据加载 -->
+      <div v-if="!isPropertyDataLoaded" class="space-y-3 md:space-y-4">
+        <div v-for="i in 3" :key="i" class="bg-white rounded-xl shadow-sm md:shadow-md overflow-hidden p-4">
+          <ElSkeleton :rows="5" animated />
+        </div>
+      </div>
+
       <!-- Empty state -->
       <ElEmpty
-        v-if="!hasHistory"
+        v-else-if="!hasHistory"
         description="暂无浏览记录"
         class="py-16 md:py-20"
       >
