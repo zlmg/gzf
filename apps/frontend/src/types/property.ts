@@ -50,6 +50,7 @@ export interface Property {
 
 export type OpenStatus = '' | 'open' | 'closed'
 export type AvailableStatus = '' | 'available' | 'unavailable'
+export type FavoriteStatus = '' | 'favorited' | 'unfavorited'
 
 export interface FilterState {
   layout: string[] // 区域筛选
@@ -58,6 +59,7 @@ export interface FilterState {
   keyword: string // 关键词搜索
   availableStatus: AvailableStatus // 可租状态筛选
   openStatus: OpenStatus // 开放状态筛选
+  favoriteStatus: FavoriteStatus // 收藏状态筛选
   // 新增筛选字段
   equipment: string[] // 设备筛选
   label: string[] // 标签筛选

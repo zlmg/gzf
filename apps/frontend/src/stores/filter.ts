@@ -1,6 +1,7 @@
-import type { FilterState, Property, SortField, SortOrder } from '@/types/property'
+import type { FavoriteStatus, FilterState, Property, SortField, SortOrder } from '@/types/property'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useFavoriteStore } from './favorite'
 
 const STORAGE_KEY = 'gzf-filters'
 const SORT_STORAGE_KEY = 'gzf-sort'
@@ -38,6 +39,7 @@ const defaultFilters: FilterState = {
   keyword: '',
   availableStatus: '',
   openStatus: '',
+  favoriteStatus: '',
   // 新增筛选字段
   equipment: [],
   label: [],
@@ -230,6 +232,17 @@ export const useFilterStore = defineStore('filter', () => {
     }
     else if (filters.value.openStatus === 'closed') {
       result = result.filter(p => p.openQueue === '0')
+    }
+
+    // Filter by favorite status (收藏状态)
+    if (filters.value.favoriteStatus) {
+      const favoriteStore = useFavoriteStore()
+      if (filters.value.favoriteStatus === 'favorited') {
+        result = result.filter(p => favoriteStore.isFavorite(p.projectNo))
+      }
+      else if (filters.value.favoriteStatus === 'unfavorited') {
+        result = result.filter(p => !favoriteStore.isFavorite(p.projectNo))
+      }
     }
 
     // Filter by equipment (设备)

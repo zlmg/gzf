@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AvailableStatus, OpenStatus } from '@/types/property'
+import type { AvailableStatus, FavoriteStatus, OpenStatus } from '@/types/property'
 import { ElButton, ElInput, ElOption, ElSelect, ElSlider } from 'element-plus'
 import { computed, ref, watch } from 'vue'
 import { useFilterStore } from '@/stores/filter'
@@ -17,8 +17,14 @@ const availableStatusOptions: { label: string, value: AvailableStatus }[] = [
   { label: '无房', value: 'unavailable' },
 ]
 
+const favoriteStatusOptions: { label: string, value: FavoriteStatus }[] = [
+  { label: '全部', value: '' },
+  { label: '已收藏', value: 'favorited' },
+  { label: '未收藏', value: 'unfavorited' },
+]
+
 // 固定的户型选项
-const roomTypeOptions = ['一', '二', '三', '四', '五']
+const roomTypeOptions = ['一', '二', '三', '四']
 
 const propertyStore = usePropertyStore()
 const filterStore = useFilterStore()
@@ -30,6 +36,7 @@ const localFilters = ref({
   keyword: filterStore.filters.keyword || '',
   availableStatus: (filterStore.filters.availableStatus || '') as AvailableStatus,
   openStatus: (filterStore.filters.openStatus || '') as OpenStatus,
+  favoriteStatus: (filterStore.filters.favoriteStatus || '') as FavoriteStatus,
   // 新增筛选字段
   equipment: [...(filterStore.filters.equipment || [])],
   label: [...(filterStore.filters.label || [])],
@@ -86,6 +93,7 @@ function applyFilters() {
     keyword: localFilters.value.keyword,
     availableStatus: localFilters.value.availableStatus,
     openStatus: localFilters.value.openStatus,
+    favoriteStatus: localFilters.value.favoriteStatus,
     equipment: localFilters.value.equipment,
     label: localFilters.value.label,
     areaRange: localFilters.value.areaRange,
@@ -107,6 +115,7 @@ function resetFilters() {
     keyword: '',
     availableStatus: '',
     openStatus: '',
+    favoriteStatus: '',
     equipment: [],
     label: [],
     areaRange: [areaRange.value[0], areaRange.value[1]],
@@ -236,7 +245,7 @@ watch(() => localFilters.value.keyword, (newVal) => {
       </div>
     </div>
 
-    <!-- Second row: 可租状态、开放状态、朝向 -->
+    <!-- Second row: 可租状态、开放状态、收藏状态 -->
     <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-6 mt-4">
       <!-- Available status filter -->
       <div>
@@ -270,34 +279,18 @@ watch(() => localFilters.value.keyword, (newVal) => {
         </div>
       </div>
 
-      <!-- 朝向筛选 -->
+      <!-- Favorite status filter -->
       <div>
-        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
-          朝向
-          <input
-            v-model="localFilters.excludeTowards"
-            type="checkbox"
-            class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
-            title="勾选表示排除所选朝向"
-          >
-          <span v-if="localFilters.excludeTowards" class="text-xs text-red-500">(排除)</span>
-        </label>
-        <div class="flex items-center gap-1 flex-wrap">
+        <label class="block text-sm font-medium text-gray-700 mb-1">收藏状态</label>
+        <div class="flex items-center gap-1">
           <span
+            v-for="option in favoriteStatusOptions"
+            :key="option.value"
             class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
-            :class="localFilters.towards.length === 0 ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
-            @click="() => { localFilters.towards = []; filterStore.updateFilters({ towards: [] }) }"
+            :class="localFilters.favoriteStatus === option.value ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
+            @click="() => { localFilters.favoriteStatus = option.value; filterStore.updateFilters({ favoriteStatus: option.value }) }"
           >
-            全部
-          </span>
-          <span
-            v-for="t in towards"
-            :key="t"
-            class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
-            :class="localFilters.towards.includes(t) ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
-            @click="toggleTowards(t)"
-          >
-            {{ t }}
+            {{ option.label }}
           </span>
         </div>
       </div>
@@ -305,7 +298,39 @@ watch(() => localFilters.value.keyword, (newVal) => {
 
     <!-- Expandable section: 新增筛选条件 -->
     <div v-show="isExpanded" class="mt-4 pt-4 border-t border-gray-200">
-      <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
+      <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-3 md:gap-6">
+        <!-- 朝向筛选 -->
+        <div>
+          <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
+            朝向
+            <input
+              v-model="localFilters.excludeTowards"
+              type="checkbox"
+              class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500 cursor-pointer"
+              title="勾选表示排除所选朝向"
+            >
+            <span v-if="localFilters.excludeTowards" class="text-xs text-red-500">(排除)</span>
+          </label>
+          <div class="flex items-center gap-1 flex-wrap">
+            <span
+              class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
+              :class="localFilters.towards.length === 0 ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
+              @click="() => { localFilters.towards = []; filterStore.updateFilters({ towards: [] }) }"
+            >
+              全部
+            </span>
+            <span
+              v-for="t in towards"
+              :key="t"
+              class="text-sm cursor-pointer px-2 py-0.5 rounded transition-colors"
+              :class="localFilters.towards.includes(t) ? 'bg-blue-100 text-blue-600' : 'text-gray-500 hover:bg-gray-100'"
+              @click="toggleTowards(t)"
+            >
+              {{ t }}
+            </span>
+          </div>
+        </div>
+
         <!-- 设备筛选 -->
         <div>
           <label class="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1">
