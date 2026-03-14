@@ -1,4 +1,4 @@
-import type { FavoriteStatus, FilterState, Property, SortField, SortOrder } from '@/types/property'
+import type { FilterState, Property, SortField, SortOrder } from '@/types/property'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useFavoriteStore } from './favorite'
